@@ -18,11 +18,11 @@ RUN pip install --upgrade pip
 RUN pip install flake8
 
 # install dependencies
-COPY ./requirements.txt .
+COPY core/requirements.txt .
 RUN pip install -r requirements.txt
 
 # copy project
-COPY . .
+COPY core/ .
 
 RUN flake8 --ignore=E501,F401 .
 
