@@ -13,7 +13,7 @@ DEBUG = bool(int(os.environ.get("DEBUG", default=0)))
 
 CSRF_TRUSTED_ORIGINS = ['http://*']
 
-HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS")
+HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", default="*")
 
 ALLOWED_HOSTS = [HOSTS]
 

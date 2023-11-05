@@ -16,8 +16,6 @@ RUN apt-get update -y \
 # lint
 RUN pip install --upgrade pip
 RUN pip install flake8
-COPY . .
-RUN flake8 --ignore=E501,F401 .
 
 # install dependencies
 COPY ./requirements.txt .
@@ -26,4 +24,8 @@ RUN pip install -r requirements.txt
 # copy project
 COPY . .
 
-CMD ["python", "manage.py", "runserver"]
+RUN flake8 --ignore=E501,F401 .
+
+EXPOSE 80
+
+ENTRYPOINT ["python", "manage.py", "runserver", "0.0.0.0:80"]
