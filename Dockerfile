@@ -28,6 +28,6 @@ RUN flake8 --ignore=E501,F401 .
 
 COPY ./nginx.conf /etc/nginx/conf.d/
 
-EXPOSE 8000
+EXPOSE 80
 
-ENTRYPOINT ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+ENTRYPOINT ["python", "manage.py", "runserver", "0.0.0.0:80"]
