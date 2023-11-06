@@ -26,6 +26,6 @@ COPY core/ .
 
 RUN flake8 --ignore=E501,F401 .
 
-EXPOSE 80
+EXPOSE 8000
 
-ENTRYPOINT ["python", "manage.py", "runserver", "0.0.0.0:80"]
+ENTRYPOINT ["python", "manage.py", "runserver", "0.0.0.0:8000"]
