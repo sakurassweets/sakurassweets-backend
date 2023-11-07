@@ -27,8 +27,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    # Custom Apps
     'base.apps.BaseConfig',
+
+    # REST Framework
     'rest_framework',
+
+    # CORS Headers
     'corsheaders',
 ]
 
