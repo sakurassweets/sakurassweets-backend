@@ -14,7 +14,6 @@ DEBUG = bool(int(os.environ.get("DEBUG", default=0)))
 CSRF_TRUSTED_ORIGINS = ['http://*', 'https://*']
 
 HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", default="*")
-
 ALLOWED_HOSTS = [HOSTS]
 
 CORS_ALLOW_ALL_ORIGINS = True
@@ -73,9 +72,16 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    "default": {
+        "ENGINE": os.environ.get("DB_ENGINE", "django.db.backends.sqlite3"),
+        "NAME": os.environ.get("DB_NAME", os.path.join(BASE_DIR, "db.sqlite3")),
+        "USER": os.environ.get("DB_USER", "user"),
+        "PASSWORD": os.environ.get("DB_PASS", "password"),
+        "HOST": os.environ.get("DB_HOST", "localhost"),
+        "PORT": os.environ.get("DB_PORT", "5432"),
+        'OPTIONS': {
+            'client_encoding': 'UTF8',
+        },
     }
 }
 
