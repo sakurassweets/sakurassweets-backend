@@ -5,4 +5,4 @@ from rest_framework.response import Response
 class Home(APIView):
 
     def get(self, request):
-        return Response({"message": "hello world"})
+        return Response({"message": "hello from backend"})
