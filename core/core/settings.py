@@ -11,12 +11,12 @@ SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 
 DEBUG = bool(int(os.environ.get("DEBUG", default=0)))
 
-CSRF_TRUSTED_ORIGINS = ['http://*', 'https://*']
+CSRF_TRUSTED_ORIGINS = os.environ.get("CSRF_TRUSTED", default="").split(',')
 
-HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", default="*")
-ALLOWED_HOSTS = [HOSTS]
+HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", default="").split(',')
+ALLOWED_HOSTS = HOSTS
 
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOWED_ORIGINS = os.environ.get("CORS_ORIGINS", default="").split(',')
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -79,9 +79,6 @@ DATABASES = {
         "PASSWORD": os.environ.get("DB_PASS", "password"),
         "HOST": os.environ.get("DB_HOST", "localhost"),
         "PORT": os.environ.get("DB_PORT", "5432"),
-        'OPTIONS': {
-            'client_encoding': 'UTF8',
-        },
     }
 }
 
