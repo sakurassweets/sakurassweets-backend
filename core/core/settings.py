@@ -11,13 +11,12 @@ SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 
 DEBUG = bool(int(os.environ.get("DEBUG", default=0)))
 
-CSRF_TRUSTED_ORIGINS = ['http://*', 'https://*']
+CSRF_TRUSTED_ORIGINS = os.environ.get("CSRF_TRUSTED", default="").split(',')
 
-HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", default="*")
+HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", default="").split(',')
+ALLOWED_HOSTS = HOSTS
 
-ALLOWED_HOSTS = [HOSTS]
-
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOWED_ORIGINS = os.environ.get("CORS_ORIGINS", default="").split(',')
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -27,8 +26,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    # Custom Apps
     'base.apps.BaseConfig',
+
+    # REST Framework
     'rest_framework',
+
+    # CORS Headers
     'corsheaders',
 ]
 
@@ -68,9 +72,13 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    "default": {
+        "ENGINE": os.environ.get("DB_ENGINE", "django.db.backends.sqlite3"),
+        "NAME": os.environ.get("DB_NAME", os.path.join(BASE_DIR, "db.sqlite3")),
+        "USER": os.environ.get("DB_USER", "user"),
+        "PASSWORD": os.environ.get("DB_PASS", "password"),
+        "HOST": os.environ.get("DB_HOST", "localhost"),
+        "PORT": os.environ.get("DB_PORT", "5432"),
     }
 }
 
