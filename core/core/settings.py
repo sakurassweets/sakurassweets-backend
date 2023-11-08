@@ -11,6 +11,8 @@ SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 
 DEBUG = bool(int(os.environ.get("DEBUG", default=0)))
 
+print(f"DEBUG VALUE : {DEBUG}")
+
 CSRF_TRUSTED_ORIGINS = os.environ.get("CSRF_TRUSTED", default="").split(',')
 
 HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", default="").split(',')
@@ -136,7 +138,7 @@ STATICFILES_DIRS = [
     BASE_DIR / '/static/',
     'app/static/',
 ]
-
+print(f"STATICFILES_DIRS VALUE : {STATICFILES_DIRS}")
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
