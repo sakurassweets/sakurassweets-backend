@@ -134,6 +134,7 @@ STATIC_URL = '/staticfiles/'
 
 STATICFILES_DIRS = [
     BASE_DIR / '/staticfiles/',
+    'app/staticfiles/',
 ]
 
 # Default primary key field type
