@@ -35,7 +35,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # Custom Apps
-    'base.apps.BaseConfig',
     'user.apps.UserConfig',
 
     # REST Framework
