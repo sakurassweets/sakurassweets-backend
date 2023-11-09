@@ -33,6 +33,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField("Персонал", default=False)
     is_active = models.BooleanField("Активний", default=True)
 
+    groups = models.ManyToManyField(Group, related_name='custom_user_groups')
+    user_permissions = models.ManyToManyField(Permission, related_name='custom_user_permissions')
+
     objects = CustomUserManager()
 
     USERNAME_FIELD = 'email'
