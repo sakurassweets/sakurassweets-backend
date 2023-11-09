@@ -34,6 +34,7 @@ INSTALLED_APPS = [
 
     # Custom Apps
     'base.apps.BaseConfig',
+    'user.apps.UserConfig',
 
     # REST Framework
     'rest_framework',
