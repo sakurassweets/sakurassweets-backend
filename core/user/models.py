@@ -1,7 +1,7 @@
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin, Group, Permission
 from django.db import models
 
-from user.validators import PasswordValidator
+from components.user.validators import PasswordValidator
 
 
 class CustomUserManager(BaseUserManager):
@@ -28,8 +28,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField("Email адреса", unique=True)
     password = models.CharField("Пароль", max_length=128)
 
-    created_at = models.DateTimeField("Створено", auto_now=True)
-    updated_at = models.DateTimeField("Оновлено", auto_now_add=True)
+    created_at = models.DateTimeField("Створено", auto_now_add=True)
+    updated_at = models.DateTimeField("Оновлено", auto_now=True)
 
     is_superuser = models.BooleanField("Супер користувач", default=False)
     is_staff = models.BooleanField("Персонал", default=False)
