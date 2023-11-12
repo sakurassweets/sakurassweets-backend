@@ -9,6 +9,11 @@ from components.user.utils import update_last_login
 
 
 class CustomTokenRefreshSerializer(TokenRefreshSerializer):
+    """
+    Custom TokenRefreshSerializer provides a `last login` updating
+    when refreshing token
+    """
+
     def validate(self, attrs):
         data = super().validate(attrs)
         update_last_login(self.user)
@@ -16,6 +21,11 @@ class CustomTokenRefreshSerializer(TokenRefreshSerializer):
 
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    """
+    Custom TokenObtainPairSerializer provides a `last login` updating
+    when getting new token
+    """
+
     def validate(self, attrs):
         data = super().validate(attrs)
         update_last_login(self.user)
@@ -36,7 +46,19 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class CreateUserSerializer(serializers.ModelSerializer):
-
+    """
+    Serializer provides `create` action for User model
+    """
     class Meta:
         model = User
         fields = ['email', 'password']
+
+
+class UpdateUserSerializer(serializers.ModelSerializer):
+    """
+    Serializer provides `update` and `partial_update` actions
+    for User model
+    """
+    class Meta:
+        model = User
+        fields = ['email', 'password', 'is_staff', 'is_active']

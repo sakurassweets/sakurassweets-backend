@@ -2,7 +2,11 @@ from rest_framework import viewsets, permissions, status, mixins
 from django.http import HttpRequest
 from rest_framework.response import Response
 from user.models import User
-from user.serializers import UserSerializer, CreateUserSerializer
+from user.serializers import (
+    UserSerializer,
+    CreateUserSerializer,
+    UpdateUserSerializer,
+)
 from components.user.mixins import UpdateRetrieveDestroyListUserMixin
 from user.managers import UserCreateManager
 
@@ -12,6 +16,12 @@ class UserViewSet(UpdateRetrieveDestroyListUserMixin,
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = [permissions.AllowAny,]
+
+    def get_serializer_class(self):
+        if self.action in ['update', 'partial_update']:
+            return UpdateUserSerializer
+        else:
+            return self.serializer_class
 
     def retrieve(self, request, *args, **kwargs):
         """
