@@ -17,7 +17,8 @@ CSRF_TRUSTED_ORIGINS = os.environ.get("CSRF_TRUSTED", default="").split(',')
 HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", default="").split(',')
 ALLOWED_HOSTS = HOSTS
 
-CORS_ALLOWED_ORIGINS = os.environ.get("CORS_ORIGINS", default="").split(',')
+# CORS_ALLOWED_ORIGINS = os.environ.get("CORS_ORIGINS", default="").split(',')
+CORS_ALLOW_ALL_ORIGINS = True
 
 STORAGES = {
     "staticfiles": {
