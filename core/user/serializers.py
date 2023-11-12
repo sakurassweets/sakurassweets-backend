@@ -1,18 +1,24 @@
 from rest_framework import serializers
 from user.models import User
 
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from django.utils import timezone
+from rest_framework_simplejwt.serializers import (
+    TokenObtainPairSerializer,
+    TokenRefreshSerializer
+)
+from components.user.utils import update_last_login
+
+
+class CustomTokenRefreshSerializer(TokenRefreshSerializer):
+    def validate(self, attrs):
+        data = super().validate(attrs)
+        update_last_login(self.user)
+        return data
 
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
         data = super().validate(attrs)
-
-        if self.user:
-            self.user.last_login = timezone.now()
-            self.user.save()
-
+        update_last_login(self.user)
         return data
 
 
