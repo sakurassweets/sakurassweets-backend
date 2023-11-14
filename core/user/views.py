@@ -70,7 +70,7 @@ class UserViewSet(UpdateRetrieveDestroyListUserMixin,
 
         **Has permissions:** Anyone
         """
-        return super().update(request, *args, **kwargs)
+        return super().partial_update(request, *args, **kwargs)
 
     def destroy(self, request, *args, **kwargs):
         """
