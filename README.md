@@ -14,6 +14,10 @@ Welcome to the Sakuras Sweets! Below are instructions on setting up and running 
 - [Python](https://www.python.org/) (v3.12.0 or later)
 - [PostgreSQL](https://www.postgresql.org/) (v16 or later)
 
+### API Documentation endpoints:
+- **SwaggerUI:** `/swagger/`
+- **Redoc:** `/redoc/` 
+
 ### Installation
 - Clone the repository:
 ```bash
