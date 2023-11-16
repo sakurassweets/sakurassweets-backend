@@ -1,11 +1,11 @@
-from rest_framework import serializers
-from user.models import User
-
 from rest_framework_simplejwt.serializers import (
     TokenObtainPairSerializer,
     TokenRefreshSerializer
 )
+from rest_framework import serializers
+
 from components.user.utils import update_last_login
+from user.models import User
 
 
 class CustomTokenRefreshSerializer(TokenRefreshSerializer):

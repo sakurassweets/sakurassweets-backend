@@ -1,11 +1,13 @@
-from rest_framework_simplejwt.tokens import RefreshToken
-from user.models import User
 from django.utils import timezone
+
+from rest_framework_simplejwt.tokens import RefreshToken
+
 from user.serializers import CreateUserSerializer
+from user.models import User
 
 
 class UserCreateManager:
-
+    # TODO: add more validation methods
     @classmethod
     def create_user(cls, serializer: CreateUserSerializer) -> dict:
         """

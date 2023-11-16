@@ -1,29 +1,34 @@
-from rest_framework import viewsets, permissions, status, mixins
 from django.http import HttpRequest
+
+from rest_framework import viewsets, permissions, status, mixins
+from rest_framework.serializers import Serializer
 from rest_framework.response import Response
+
+from components.user.mixins import UpdateRetrieveDestroyListUserMixin
+
+from user.managers import UserCreateManager
 from user.models import User
 from user.serializers import (
     UserSerializer,
     CreateUserSerializer,
     UpdateUserSerializer,
 )
-from components.user.mixins import UpdateRetrieveDestroyListUserMixin
-from user.managers import UserCreateManager
 
 
 class UserViewSet(UpdateRetrieveDestroyListUserMixin,
                   viewsets.GenericViewSet):
+    # TODO: Logg user updating/creating/deleting operations
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = [permissions.AllowAny,]
 
-    def get_serializer_class(self):
+    def get_serializer_class(self) -> Serializer:
         if self.action in ['update', 'partial_update']:
             return UpdateUserSerializer
         else:
             return self.serializer_class
 
-    def retrieve(self, request, *args, **kwargs):
+    def retrieve(self, request: HttpRequest, *args, **kwargs) -> Response:
         """
         Endpoint to retrieve user
 
@@ -35,14 +40,13 @@ class UserViewSet(UpdateRetrieveDestroyListUserMixin,
         """
         return super().retrieve(request, *args, **kwargs)
 
-    def update(self, request, *args, **kwargs):
+    def update(self, request: HttpRequest, *args, **kwargs) -> Response:
         """
         Endpoint to update user
 
-        PUT method required **ALL** fields to get successful update but since we have
-        only one field: `email`, it's one and only field required
+        PUT method required **ALL** fields to get successful update
 
-        **Input:** `email`
+        **Input:** `email`, `password` (raw)
 
         **Output:** `id`, `user_url`, `last_login`, `email`,
         `created_at`, `updated_at`, `is_superuser`, `is_staff`,
@@ -54,7 +58,7 @@ class UserViewSet(UpdateRetrieveDestroyListUserMixin,
         """
         return super().update(request, *args, **kwargs)
 
-    def partial_update(self, request, *args, **kwargs):
+    def partial_update(self, request: HttpRequest, *args, **kwargs) -> Response:
         """
         Endpoint to update user
 
@@ -72,7 +76,7 @@ class UserViewSet(UpdateRetrieveDestroyListUserMixin,
         """
         return super().partial_update(request, *args, **kwargs)
 
-    def destroy(self, request, *args, **kwargs):
+    def destroy(self, request: HttpRequest, *args, **kwargs) -> Response:
         """
         Endpoint to delete user
 
@@ -86,7 +90,7 @@ class UserViewSet(UpdateRetrieveDestroyListUserMixin,
         """
         return super().destroy(request, *args, **kwargs)
 
-    def list(self, request, *args, **kwargs):
+    def list(self, request: HttpRequest, *args, **kwargs) -> Response:
         """
         Endpoint to list users
 
