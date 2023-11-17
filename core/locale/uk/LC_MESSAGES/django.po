@@ -1,0 +1,90 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-11-17 15:57+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != "
+"11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % "
+"100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || "
+"(n % 100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
+
+#: .\components\user\services.py:23
+msgid "Password should be not None."
+msgstr "Пароль не може бути None."
+
+#: .\components\user\services.py:24
+msgid "Password is too common."
+msgstr "Пароль занадто простий."
+
+#: .\components\user\services.py:85
+#, python-format
+msgid ""
+"\n"
+"        Password must be at least %(value)s characters long.\n"
+"        Got %(len)s instead.\n"
+"        "
+msgstr ""
+"\n"
+"        Пароль повинен мати як мінімум %(value)s символів.\n"
+"        Отримано лише %(len)s символів.\n"
+"        "
+
+#: .\components\user\services.py:91
+#, python-format
+msgid ""
+"\n"
+"        Password must be shorter than %(value)s characters long.\n"
+"         Got %(len)s instead.\n"
+"        "
+msgstr ""
+"\n"
+"        Пароль повинен бути коротший %(value)s символів.\n"
+"         Отримано %(len)s символів.\n"
+"        "
+
+#: .\components\user\services.py:118
+#, python-format
+msgid ""
+"\n"
+"            Your password should have minimum %(min_len)d characters and "
+"maximum %(max_len)d characters\n"
+"            "
+msgstr ""
+"\n"
+"            Ваш пароль повинен мати від %(min_len)d до %(max_len)d символів\n"
+"            "
+
+#: .\components\user\services.py:138
+#, python-format
+msgid ""
+"\n"
+"                Password must contain at least %(min_upper)d uppercase "
+"letter and %(min_lower)d lowercase letter.\n"
+"                "
+msgstr ""
+"\n"
+"                Пароль повинен мати як мінімум %(min_upper)d символ "
+"верхнього регістру та %(min_lower)d символ нижнього регістру.\n"
+"                "
+
+#: .\components\user\services.py:148
+#, python-format
+msgid ""
+"Your password must contain at least %(min_upper)d uppercase letter and "
+"%(min_lower)d lowercase letter."
+msgstr ""
+"Пароль повинен мати як мінімум %(min_upper)d имвол верхнього регістру та "
+"%(min_lower)d символ нижнього регістру."

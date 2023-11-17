@@ -10,8 +10,7 @@ class CustomUserManager(BaseUserManager):
             raise ValueError('The Email field must be set')
         email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)
-
-        PasswordValidator.validate_password_length(password)
+        PasswordValidator.validate(password, user)
         user.set_password(password)
 
         user.save(using=self._db)
@@ -25,7 +24,7 @@ class CustomUserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-    email = models.EmailField("Email адреса", unique=True)
+    email = models.EmailField("Email", unique=True)
     password = models.CharField("Пароль", max_length=128)
 
     created_at = models.DateTimeField("Створено", auto_now_add=True)
