@@ -5,13 +5,16 @@ from django.utils.translation import gettext as _
 email_errors = {
     "too_many_at_symbols": _("Your email have %(value)d '@' symbols, only 1 allowed."),
     "no_at_symbols": _("Your email doesn\'t have any '@' symbol."),
-    "no_character": _("%(object)s should have at least one non-digit character."),
+    "too_many_symbols_in_a_row": _("You'r %(object)s contains too many special characters in a row"),
     "start_or_end_with": _("%(object)s can\'t start or end with '%(symbols)s' symbols."),
-    "domain_name_no_underscore": _("Domain should not contain an underscore."),
     "not_enough_characters_in_domain_address": _("Domain address should contain at least 2 characters"),
-    "email_regex": _("Email contains some unallowed special characters."),
+    "too_many_characters_in_domain_address": _("Domain address should contain maximum 6 characters"),
+    "no_character": _("%(object)s should have at least one non-digit character."),
+    "domain_name_no_underscore": _("Domain should not contain an underscore."),
     "domain_parts": _("Domain should contain domain name and domain address splitted by dot"),
-    "too_many_symbols_in_a_row": _("You'r %(object)s contains too many special characters in a row")
+    "domain_addres_no_special_symbols": _("Domain address should not contain any special characters"),
+    "domain_addres_no_digits": _("Domain address should not contain any digits"),
+    "email_regex": _("Email contains some unallowed special characters."),
 }
 
 
@@ -121,9 +124,18 @@ class EmailValidatorService:
         """
         object_name = _('Email domain address')
         self._validate_email_object(domain_address, object_name)
+        if any(c in self._special_characters for c in domain_address):
+            self._errors.append(
+                email_errors['domain_addres_no_special_symbols'])
+        if any(c.isdigit() for c in domain_address):
+            self._errors.append(
+                email_errors['domain_addres_no_digits'])
         if len(domain_address) < 2:
             self._errors.append(
                 email_errors['not_enough_characters_in_domain_address'])
+        if len(domain_address) > 6:
+            self._errors.append(
+                email_errors['too_many_characters_in_domain_address'])
 
     def _validate_email_domain_name(self, domain_name: str) -> None:
         """
