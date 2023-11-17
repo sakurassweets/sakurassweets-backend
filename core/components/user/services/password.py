@@ -2,8 +2,6 @@ import re
 
 from django.utils.translation import gettext as _
 
-from rest_framework.validators import ValidationError
-
 from django.contrib.auth.password_validation import (
     CommonPasswordValidator,
     UserAttributeSimilarityValidator
@@ -29,15 +27,21 @@ class PasswordValidatorService:
         self.password = password
         self.user = user
 
-    def validate(self) -> None:
+    def validate(self) -> list | None:
 
         self._validate_password()
         if len(self._errors) > 0:
-            _errors = list(self._errors)
-            self._errors.clear()
-            raise ValidationError({"errors": _errors})
+            return self._return_errors()
+
+    def _return_errors(self):
+        _errors = list(self._errors)
+        self._errors.clear()
+        return _errors
 
     def _validate_password(self) -> None:
+        """
+        Method contains all validation calls and trigger them one by one
+        """
         self._validate_password_length(
             self.password,
             self._constants['min_len'],
@@ -64,6 +68,10 @@ class PasswordValidatorService:
         self._validate_or_error(password, validator)
 
     def _validate_or_error(self, password: str, validator, *args, **kwargs) -> None:
+        """
+        Validate password with given validator and args
+        If error occurs they added to class errors list
+        """
         try:
             validator.validate(password, *args, **kwargs)
         except DjangoValidationError as error:
@@ -122,11 +130,20 @@ class ValidatePasswordLengthService:
 
 
 class ValidatePasswordCase:
+    """
+    min_upper - Minimal value of uppercase letters in
+
+    min_lower - Minimal value of lowercase letters in password
+    """
+
     def __init__(self, min_upper: int = 1, min_lower: int = 1) -> None:
         self.min_upper = min_upper
         self.min_lower = min_lower
 
     def validate(self, password: str) -> None:
+        """
+        Validate if password has not enough lower/upper case letters
+        """
         if not re.search(r'[A-Z]', password) or not re.search(r'[a-z]', password):
             error_message = _(
                 """

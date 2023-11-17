@@ -1,7 +1,7 @@
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin, Group, Permission
 from django.db import models
 
-from components.user.validators import PasswordValidator
+from components.user.validators import UserValidator
 
 
 class CustomUserManager(BaseUserManager):
@@ -10,7 +10,8 @@ class CustomUserManager(BaseUserManager):
             raise ValueError('The Email field must be set')
         email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)
-        PasswordValidator.validate(password, user)
+
+        UserValidator.validate(password, user)
         user.set_password(password)
 
         user.save(using=self._db)
@@ -24,7 +25,7 @@ class CustomUserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-    email = models.EmailField("Email", unique=True)
+    email = models.CharField("Email", unique=True, validators=[])
     password = models.CharField("Пароль", max_length=128)
 
     created_at = models.DateTimeField("Створено", auto_now_add=True)
