@@ -2,7 +2,7 @@ import re
 
 from django.utils.translation import gettext as _
 
-email_errors = {
+email_errors: dict = {
     "too_many_at_symbols": _("Your email have %(value)d '@' symbols, only 1 allowed."),
     "no_at_symbols": _("Your email doesn\'t have any '@' symbol."),
     "too_many_symbols_in_a_row": _("You'r %(object)s contains too many special characters in a row"),
@@ -20,9 +20,9 @@ email_errors = {
 
 class EmailValidatorService:
 
-    _special_characters = ['-', '_', '.']
+    _special_characters: list = ['-', '_', '.']
 
-    _errors = []
+    _errors: list = []
 
     def __init__(self, email: str = None):
         self.email = email

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-17 22:04+0200\n"
+"POT-Creation-Date: 2023-11-18 23:43+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,6 +20,7 @@ msgstr ""
 "11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % "
 "100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || "
 "(n % 100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
+
 #: .\components\user\services\email.py:6
 #, python-format
 msgid "Your email have %(value)d '@' symbols, only 1 allowed."
@@ -37,7 +38,8 @@ msgstr "Ваше %(object)s має забагато спеціальних пі�
 #: .\components\user\services\email.py:9
 #, python-format
 msgid "%(object)s can't start or end with '%(symbols)s' symbols."
-msgstr "%(object)s не можуть починатись або закінчуватись символами '%(symbols)s'."
+msgstr ""
+"%(object)s не можуть починатись або закінчуватись символами '%(symbols)s'."
 
 #: .\components\user\services\email.py:10
 msgid "Domain address should contain at least 2 characters"
@@ -58,7 +60,9 @@ msgstr "Домен не повинен мати нижнього тире."
 
 #: .\components\user\services\email.py:14
 msgid "Domain should contain domain name and domain address splitted by dot"
-msgstr "Домен повинен складатись з доменного ім`я та доменної адреси розділених крапкою."
+msgstr ""
+"Домен повинен складатись з доменного ім`я та доменної адреси розділених "
+"крапкою."
 
 #: .\components\user\services\email.py:15
 msgid "Domain address should not contain any special characters"
@@ -90,15 +94,15 @@ msgstr "Ім`я доменного адресу"
 msgid "Email domain name"
 msgstr "Ім`я домену"
 
-#: .\components\user\services\password.py:20
+#: .\components\user\services\password.py:31
 msgid "Password should be not None."
 msgstr "Пароль не може бути None."
 
-#: .\components\user\services\password.py:21
+#: .\components\user\services\password.py:32
 msgid "Password is too common."
 msgstr "Пароль занадто простий."
 
-#: .\components\user\services\password.py:87
+#: .\components\user\services\password.py:108
 #, python-format
 msgid ""
 "\n"
@@ -111,47 +115,65 @@ msgstr ""
 "        Отримано лише %(len)s символів.\n"
 "        "
 
-#: .\components\user\services\password.py:93
+#: .\components\user\services\password.py:114
 #, python-format
 msgid ""
 "\n"
 "        Password must be shorter than %(value)s characters long.\n"
-"         Got %(len)s instead.\n"
+"        Got %(len)s instead.\n"
 "        "
 msgstr ""
 "\n"
 "        Пароль повинен бути коротший %(value)s символів.\n"
-"         Отримано %(len)s символів.\n"
+"        Отримано %(len)s символів.\n"
 "        "
 
 #: .\components\user\services\password.py:120
 #, python-format
 msgid ""
 "\n"
-"            Your password should have minimum %(min_len)d characters and "
-"maximum %(max_len)d characters\n"
-"            "
+"        Your password should have minimum %(min_len)d characters and maximum "
+"%(max_len)d characters\n"
+"        "
 msgstr ""
 "\n"
-"            Ваш пароль повинен мати від %(min_len)d до %(max_len)d символів\n"
+"        Ваш пароль повинен мати від %(min_len)d до %(max_len)d символів\n"
 "            "
 
-#: .\components\user\services\password.py:149
+#: .\components\user\services\password.py:161
 #, python-format
 msgid ""
 "\n"
-"                Password must contain at least %(min_upper)d uppercase "
-"letter and %(min_lower)d lowercase letter.\n"
-"                "
+"        Password must contain at least %(min_upper)d uppercase letter and "
+"%(min_lower)d lowercase letter.\n"
+"        "
 msgstr ""
 "\n"
-"                Пароль повинен мати як мінімум %(min_upper)d символ "
-"верхнього регістру та %(min_lower)d символ нижнього регістру.\n"
-"                "
+"        Пароль повинен мати як мінімум %(min_upper)d символ верхнього "
+"регістру та %(min_lower)d символ нижнього регістру.\n"
+"        "
 
-#: .\components\user\services\password.py:159
+#: .\components\user\services\password.py:166
 #, python-format
 msgid ""
 "Your password must contain at least %(min_upper)d uppercase letter and "
 "%(min_lower)d lowercase letter."
-msgstr "Пароль повинен мати як мінімум %(min_upper)d имвол верхнього регістру та %(min_lower)d символ нижнього регістру."
+msgstr ""
+"Пароль повинен мати як мінімум %(min_upper)d имвол верхнього регістру та "
+"%(min_lower)d символ нижнього регістру."
+
+#: .\components\user\services\password.py:188
+msgid "Password should not contain any spacebars."
+msgstr "Пароль не може містити пробіли."
+
+#: .\components\user\services\password.py:190
+msgid "Your password should not contain any spacebars."
+msgstr "Ваш пароль не повинен містити пробіли."
+
+#: .\components\user\services\password.py:202
+msgid "Password should contain at least one digit."
+msgstr "Пароль повинен містити як мінімум одну цифру."
+
+#: .\components\user\services\password.py:203
+msgid "You`r password should contain at least one digit."
+msgstr "Ваш пароль повинен містити як мінімум одну цифру."
