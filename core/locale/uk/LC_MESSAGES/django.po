@@ -159,7 +159,7 @@ msgid ""
 "Your password must contain at least %(min_upper)d uppercase letter and "
 "%(min_lower)d lowercase letter."
 msgstr ""
-"Пароль повинен мати як мінімум %(min_upper)d имвол верхнього регістру та "
+"Пароль повинен мати як мінімум %(min_upper)d символ верхнього регістру та "
 "%(min_lower)d символ нижнього регістру."
 
 #: .\components\user\services\password.py:188
