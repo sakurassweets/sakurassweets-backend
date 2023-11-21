@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-18 23:43+0200\n"
+"POT-Creation-Date: 2023-11-21 23:20+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -94,15 +94,19 @@ msgstr "Ім`я доменного адресу"
 msgid "Email domain name"
 msgstr "Ім`я домену"
 
-#: .\components\user\services\password.py:31
+#: .\components\user\services\password.py:35
 msgid "Password should be not None."
 msgstr "Пароль не може бути None."
 
-#: .\components\user\services\password.py:32
-msgid "Password is too common."
-msgstr "Пароль занадто простий."
+#: .\components\user\services\password.py:129
+msgid "Only latin characters allowed in password"
+msgstr "Лише латинські букви дозволенні у паролі."
 
-#: .\components\user\services\password.py:108
+#: .\components\user\services\password.py:130
+msgid "Password must contain only latin characters"
+msgstr "Пароль може містити лише латинські букви."
+
+#: .\components\user\services\password.py:177
 #, python-format
 msgid ""
 "\n"
@@ -115,7 +119,7 @@ msgstr ""
 "        Отримано лише %(len)s символів.\n"
 "        "
 
-#: .\components\user\services\password.py:114
+#: .\components\user\services\password.py:183
 #, python-format
 msgid ""
 "\n"
@@ -128,7 +132,7 @@ msgstr ""
 "        Отримано %(len)s символів.\n"
 "        "
 
-#: .\components\user\services\password.py:120
+#: .\components\user\services\password.py:189
 #, python-format
 msgid ""
 "\n"
@@ -140,7 +144,7 @@ msgstr ""
 "        Ваш пароль повинен мати від %(min_len)d до %(max_len)d символів\n"
 "            "
 
-#: .\components\user\services\password.py:161
+#: .\components\user\services\password.py:230
 #, python-format
 msgid ""
 "\n"
@@ -153,7 +157,7 @@ msgstr ""
 "регістру та %(min_lower)d символ нижнього регістру.\n"
 "        "
 
-#: .\components\user\services\password.py:166
+#: .\components\user\services\password.py:235
 #, python-format
 msgid ""
 "Your password must contain at least %(min_upper)d uppercase letter and "
@@ -162,18 +166,43 @@ msgstr ""
 "Пароль повинен мати як мінімум %(min_upper)d символ верхнього регістру та "
 "%(min_lower)d символ нижнього регістру."
 
-#: .\components\user\services\password.py:188
+#: .\components\user\services\password.py:257
 msgid "Password should not contain any spacebars."
 msgstr "Пароль не може містити пробіли."
 
-#: .\components\user\services\password.py:190
+#: .\components\user\services\password.py:259
 msgid "Your password should not contain any spacebars."
 msgstr "Ваш пароль не повинен містити пробіли."
 
-#: .\components\user\services\password.py:202
-msgid "Password should contain at least one digit."
-msgstr "Пароль повинен містити як мінімум одну цифру."
+#: .\components\user\services\password.py:271
+#, python-format
+msgid "Password should contain at least %(value)d digit."
+msgstr "Пароль повинен містити як мінімум %(value)d цифру."
 
-#: .\components\user\services\password.py:203
-msgid "You`r password should contain at least one digit."
-msgstr "Ваш пароль повинен містити як мінімум одну цифру."
+#: .\components\user\services\password.py:273
+#, python-format
+msgid "You`r password should contain at least %(value)d digit."
+msgstr "Ваш пароль повинен містити як мінімум %(value)d цифру."
+
+#: .\components\user\validators.py:51
+msgid ""
+"\n"
+"        Email should be not None.\n"
+"        "
+msgstr ""
+"\n"
+"        Email не може бути None.\n"
+"        "
+
+#: .\components\user\validators.py:68
+msgid ""
+"\n"
+"        Password should be not None.\n"
+"        "
+msgstr ""
+"\n"
+"        Пароль не може бути None.\n"
+"        "
+
+#~ msgid "Password is too common."
+#~ msgstr "Пароль занадто простий."

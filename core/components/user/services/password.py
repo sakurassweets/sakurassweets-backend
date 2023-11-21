@@ -1,4 +1,5 @@
 import re
+from copy import copy
 from abc import ABC, abstractmethod
 
 from django.utils.translation import gettext as _
@@ -11,16 +12,19 @@ from django.core.exceptions import ValidationError as DjangoValidationError
 
 from components.user.utils import clean_error_message
 
-from components.user.constants import (
-    MAX_PASSWORD_LENGTH,
-    MIN_PASSWORD_LENGTH
-)
+from components.user.constants import constants_list_for_password_validation as password_constants
+
+
+password_constants = password_constants()
 
 
 class BasePasswordValidator(ABC):
     @abstractmethod
     def validate(self, password: str, *args, **kwargs) -> None:
         pass
+
+
+class PasswordValidator(BasePasswordValidator):
 
     @abstractmethod
     def get_help_text(self) -> None:
@@ -29,23 +33,21 @@ class BasePasswordValidator(ABC):
 
 class PasswordValidatorService:
     none_pass_error: str = _("Password should be not None.")
-    common_pass_error: str = _("Password is too common.")
-    _constants: dict = {"min_len": MIN_PASSWORD_LENGTH,
-                        "max_len": MAX_PASSWORD_LENGTH}
     _errors: list = []
+    constants = password_constants
 
     def __init__(self, password: str, user=None) -> None:
         self.password = str(password)
         self.user = user
+        self.set_validators()
 
     def validate(self) -> list | None:
-
         self._validate_password()
         if len(self._errors) > 0:
             return self._return_errors()
 
-    def _return_errors(self):
-        _errors = list(self._errors)
+    def _return_errors(self) -> list:
+        _errors = copy(self._errors)
         self._errors.clear()
         return _errors
 
@@ -53,40 +55,8 @@ class PasswordValidatorService:
         """
         Method contains all validation calls and trigger them one by one
         """
-        self._validate_password_length(
-            self.password,
-            self._constants['min_len'],
-            self._constants['max_len']
-        )
-        self._validate_password_spacebars(self.password)
-        self._validate_password_have_digit(self.password)
-        self._validate_password_not_common(self.password)
-        self._validate_password_user_similarity(self.password, self.user)
-        self._validate_password_case(self.password)
-
-    def _validate_password_have_digit(self, password: str) -> None:
-        validator = ValidatePasswordHaveDigit()
-        self._validate_or_error(password, validator)
-
-    def _validate_password_spacebars(self, password: str) -> None:
-        validator = ValidatePasswordSpecialCharacters()
-        self._validate_or_error(password, validator)
-
-    def _validate_password_length(self, password: str, min_len: int, max_len: int) -> None:
-        validator = ValidatePasswordLengthService(min_len, max_len)
-        self._validate_or_error(password, validator)
-
-    def _validate_password_not_common(self, password: str) -> None:
-        validator = CommonPasswordValidator()
-        self._validate_or_error(password, validator)
-
-    def _validate_password_user_similarity(self, password: str, user) -> None:
-        validator = UserAttributeSimilarityValidator(max_similarity=0.55)
-        self._validate_or_error(password, validator, user)
-
-    def _validate_password_case(self, password: str) -> None:
-        validator = ValidatePasswordCase()
-        self._validate_or_error(password, validator)
+        for validator in self._validators:
+            self._validate_or_error(self.password, validator)
 
     def _validate_or_error(self, password: str, validator, *args, **kwargs) -> None:
         """
@@ -96,14 +66,113 @@ class PasswordValidatorService:
         try:
             validator.validate(password, *args, **kwargs)
         except DjangoValidationError as error:
-            if not isinstance(validator, CommonPasswordValidator):
-                error = str(error)
-                self._errors.append(str(error)[2:-2])
+            error = str(error)
+            self._errors.append(str(error)[2:-2])
+
+    def set_validators(self, validators: list[object] = None) -> None:
+        """
+        Input:
+        - validators - a list of validator instances.
+
+        example of list: [CommonValidator(), CaseValidator(), ...]
+
+        validator should have `validate()` method and get as arguments only
+        password. Other arguments should be defined through validator constructor.
+        """
+        default_validators = self._default_validators
+
+        if validators is not None:
+            if isinstance(validators, list):
+                self._validators = validators
             else:
-                self._errors.append(self.common_pass_error)
+                raise TypeError(
+                    f"validators should be a list, got '{type(validators).__name__}' instead")
+        else:
+            self._validators = default_validators
+
+    def add_validator(self, validator: BasePasswordValidator | PasswordValidator | object) -> None:
+        """
+        Input:
+        - validator - a validator instance.
+
+        should be inputed like: CommonValidator()
+
+        validato should have `validate()` method and get as arguments only
+        password. Other arguments should be defined through validator constructor.
+        """
+        self._validators.append(validator)
+
+    @property
+    def _default_validators(self) -> list:
+        default_validators = [
+            PasswordLengthValidator(
+                self.constants['min_len'],
+                self.constants['max_len']
+            ),
+            PasswordSpacebarsValidator(),
+            PasswordLatinValidator(),
+            PasswordHaveDigitValidator(
+                digits_amount=self.constants['min_digits']
+            ),
+            PasswordCommonValidator(),
+            PasswordUserAttributeSimilarityValidator(
+                user=self.user,
+                max_similarity=self.constants['max_similarity']
+            ),
+            PasswordCaseValidator(),
+        ]
+        return default_validators
 
 
-class ValidatePasswordLengthService(BasePasswordValidator):
+class PasswordLatinValidator(PasswordValidator):
+
+    error_message = _("Only latin characters allowed in password")
+    help_text = _("Password must contain only latin characters")
+
+    def validate(self, password: str) -> None:
+        regex_cyrillic = r'[А-Яа-яІЇЁёЄєҐґ]'
+
+        if re.search(regex_cyrillic, password):
+            raise DjangoValidationError(self.error_message)
+
+    def get_help_text(self) -> None:
+        return self.help_text
+
+
+class PasswordCommonValidator(PasswordValidator, CommonPasswordValidator):
+    """
+    This class gets all the `common password validation` from CommonPasswordValidator but also
+    inheirts from `PasswordValidator` which is interface for validators
+    """
+
+    def __init__(self, *args, **kwargs):
+        CommonPasswordValidator().__init__(*args, **kwargs)
+
+    def validate(self, password):
+        return CommonPasswordValidator().validate(password)
+
+    def get_help_text(self) -> None:
+        return CommonPasswordValidator().get_help_text()
+
+
+class PasswordUserAttributeSimilarityValidator(PasswordValidator, UserAttributeSimilarityValidator):
+    """
+    This class gets all the `user attribute similarity validation` from CommonPasswordValidator
+    but also inheirts from `PasswordValidator` which is interface for validators
+    """
+
+    def __init__(self, user, *args, **kwargs):
+        self.user = user
+        UserAttributeSimilarityValidator().__init__(*args, **kwargs)
+
+    def validate(self, password: str) -> None:
+        return UserAttributeSimilarityValidator().validate(password, self.user)
+
+    def get_help_text(self) -> None:
+        return UserAttributeSimilarityValidator().get_help_text()
+
+
+class PasswordLengthValidator(PasswordValidator):
     min_pass_error: str = _(
         """
         Password must be at least %(value)s characters long.
@@ -126,7 +195,7 @@ class ValidatePasswordLengthService(BasePasswordValidator):
         self.min_len = int(min_len)
         self.max_len = int(max_len)
 
-    def validate(self, password) -> None:
+    def validate(self, password: str) -> None:
         password_len = len(password)
 
         if password_len < self.min_len:
@@ -151,7 +220,7 @@ class ValidatePasswordLengthService(BasePasswordValidator):
         return cleaned_error
 
 
-class ValidatePasswordCase(BasePasswordValidator):
+class PasswordCaseValidator(PasswordValidator):
     """
     min_upper - Minimal value of uppercase letters in
 
@@ -182,7 +251,7 @@ class ValidatePasswordCase(BasePasswordValidator):
         return self.help_text % {'min_upper': (self.min_upper), 'min_lower': self.min_lower}
 
 
-class ValidatePasswordSpecialCharacters(BasePasswordValidator):
+class PasswordSpacebarsValidator(PasswordValidator):
 
     error_message: str = _(
         "Password should not contain any spacebars.")
@@ -190,33 +259,37 @@ class ValidatePasswordSpecialCharacters(BasePasswordValidator):
         "Your password should not contain any spacebars.")
 
     def validate(self, password: str) -> None:
-        if len(password.split(' ')) > 1:
+        if password.find(' ') != -1:
             raise DjangoValidationError(self.error_message)
 
     def get_help_text(self):
         return self.help_text
 
 
-class ValidatePasswordHaveDigit(BasePasswordValidator):
+class PasswordHaveDigitValidator(PasswordValidator):
 
-    error_message: str = _("Password should contain at least one digit.")
-    help_text: str = _("You`r password should contain at least one digit.")
-    digits_amount: int = 1
+    error_message: str = _("Password should contain at least %(value)d digit.")
+    help_text: str = _(
+        "You`r password should contain at least %(value)d digit.")
 
-    def __init__(self, digits_amount: int = None) -> None:
-        if digits_amount is not None:
-            try:
-                self.digits_amount = int(digits_amount)
-            except TypeError:
-                raise TypeError(
-                    f"digits_amount should be a int, but got {type(digits_amount).__name__}")
-            except ValueError:
-                raise TypeError(
-                    f"digits_amount should be a int, but got {type(digits_amount).__name__}")
+    def __init__(self, digits_amount: int = 0) -> None:
+        if isinstance(digits_amount, int):
+            self.digits_amount = digits_amount
+        else:
+            raise TypeError(
+                f"digits_amount should be 'int', got '{type(digits_amount).__name__}' instead")
 
-    def validate(self, password: str, *args, **kwargs) -> None:
-        if not any(c.isdigit() for c in password):
-            raise DjangoValidationError(self.error_message)
+    def validate(self, password: str) -> None:
+        digits = self._get_digits(password)
+        if len(digits) < self.digits_amount:
+            raise DjangoValidationError(self.error_message % {
+                "value": self.digits_amount
+            })
 
     def get_help_text(self) -> None:
         return self.help_text
+
+    @staticmethod
+    def _get_digits(password: str) -> list:
+        _digits = [c for c in password if c.isdigit()]
+        return _digits

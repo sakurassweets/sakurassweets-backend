@@ -1,3 +1,5 @@
+from django.utils.translation import gettext as _
+
 from rest_framework.validators import ValidationError
 
 from components.user.services.email import EmailValidatorService
@@ -6,7 +8,7 @@ from components.user.services.password import PasswordValidatorService
 
 class UserValidator:
 
-    _errors = {}
+    _errors: list = {}
 
     @classmethod
     def validate(cls, password: str, user) -> None:
@@ -45,7 +47,7 @@ class UserValidator:
 
 class EmailValidator:
     # TODO: Logg validation
-    none_email_error = (
+    none_email_error: str = _(
         """
         Email should be not None.
         """
@@ -62,7 +64,7 @@ class EmailValidator:
 
 class PasswordValidator:
     # TODO: Logg validation
-    none_pass_error = (
+    none_pass_error: str = _(
         """
         Password should be not None.
         """
