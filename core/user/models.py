@@ -7,8 +7,6 @@ from django.contrib.auth.models import (
 )
 from django.db import models
 
-from components.user.validators import UserValidator
-
 
 class CustomUserManager(BaseUserManager):
     def create_user(self, email: str, password: str = None, **extra_fields):
@@ -17,7 +15,6 @@ class CustomUserManager(BaseUserManager):
         email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)
 
-        UserValidator.validate(password, user)
         user.set_password(password)
 
         user.save(using=self._db)
@@ -55,3 +52,4 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     class Meta:
         db_table = "user"
+        ordering = ["-id"]

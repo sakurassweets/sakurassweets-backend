@@ -6,7 +6,7 @@ from rest_framework.response import Response
 
 from components.user.mixins import UpdateRetrieveDestroyListUserMixin
 
-from user.managers import UserCreateManager
+from user.managers import UserCreateManager, UserDeleteManager
 from user.models import User
 from user.serializers import (
     UserSerializer,
@@ -76,7 +76,7 @@ class UserViewSet(UpdateRetrieveDestroyListUserMixin,
         """
         return super().partial_update(request, *args, **kwargs)
 
-    def destroy(self, request: HttpRequest, *args, **kwargs) -> Response:
+    def destroy(self, request: HttpRequest, pk: int) -> Response:
         """
         Endpoint to delete user
 
@@ -88,7 +88,9 @@ class UserViewSet(UpdateRetrieveDestroyListUserMixin,
 
         **Has permissions:** Anyone
         """
-        return super().destroy(request, *args, **kwargs)
+        manager = UserDeleteManager()
+        response = manager.delete(request, pk)
+        return response
 
     def list(self, request: HttpRequest, *args, **kwargs) -> Response:
         """
@@ -111,7 +113,7 @@ class CreateUserViewSet(mixins.CreateModelMixin,
     serializer_class = CreateUserSerializer
     permission_classes = [permissions.AllowAny,]
 
-    def create(self, request: HttpRequest, *args, **kwargs) -> Response:
+    def create(self, request: HttpRequest) -> Response:
         """
         User register endpoint
 
@@ -124,6 +126,4 @@ class CreateUserViewSet(mixins.CreateModelMixin,
         serializer = self.get_serializer(data=request.data)
 
         context = UserCreateManager.create_user(serializer)
-
-        headers = self.get_success_headers(serializer.data)
-        return Response(context, status=status.HTTP_201_CREATED, headers=headers)
+        return Response(context, status=status.HTTP_201_CREATED)
