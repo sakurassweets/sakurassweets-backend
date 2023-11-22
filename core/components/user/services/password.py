@@ -1,6 +1,6 @@
 import re
-from copy import copy
 from abc import ABC, abstractmethod
+from copy import copy
 
 from django.utils.translation import gettext as _
 
@@ -10,9 +10,8 @@ from django.contrib.auth.password_validation import (
 )
 from django.core.exceptions import ValidationError as DjangoValidationError
 
-from components.user.utils import clean_error_message
-
 from components.user.constants import constants_list_for_password_validation as password_constants
+from components.user.utils import clean_error_message
 
 
 password_constants = password_constants()
@@ -25,13 +24,12 @@ class BasePasswordValidator(ABC):
 
 
 class PasswordValidator(BasePasswordValidator):
-
     @abstractmethod
-    def get_help_text(self) -> None:
+    def get_help_text(self) -> str:
         pass
 
 
-class PasswordValidatorService:
+class PasswordValidatorService(BasePasswordValidator):
     none_pass_error: str = _("Password should be not None.")
     _errors: list = []
     constants = password_constants
@@ -79,7 +77,7 @@ class PasswordValidatorService:
         validator should have `validate()` method and get as arguments only
         password. Other arguments should be defined through validator constructor.
         """
-        default_validators = self._default_validators
+        default_validators = self.__default_validators
 
         if validators is not None:
             if isinstance(validators, list):
@@ -103,7 +101,7 @@ class PasswordValidatorService:
         self._validators.append(validator)
 
     @property
-    def _default_validators(self) -> list:
+    def __default_validators(self) -> list:
         default_validators = [
             PasswordLengthValidator(
                 self.constants['min_len'],
@@ -126,17 +124,17 @@ class PasswordValidatorService:
 
 class PasswordLatinValidator(PasswordValidator):
 
-    error_message = _("Only latin characters allowed in password")
-    help_text = _("Password must contain only latin characters")
+    _error_message = _("Only latin characters allowed in password")
+    _help_text = _("Password must contain only latin characters")
 
     def validate(self, password: str) -> None:
         regex_cyrillic = r'[А-Яа-яІЇЁёЄєҐґ]'
 
         if re.search(regex_cyrillic, password):
-            raise DjangoValidationError(self.error_message)
+            raise DjangoValidationError(self._error_message)
 
     def get_help_text(self) -> None:
-        return self.help_text
+        return self._help_text
 
 
 class PasswordCommonValidator(PasswordValidator, CommonPasswordValidator):
@@ -173,19 +171,19 @@ class PasswordUserAttributeSimilarityValidator(PasswordValidator, UserAttributeS
 
 
 class PasswordLengthValidator(PasswordValidator):
-    min_pass_error: str = _(
+    _min_pass_error: str = _(
         """
         Password must be at least %(value)s characters long.
         Got %(len)s instead.
         """
     )
-    max_pass_error: str = _(
+    _max_pass_error: str = _(
         """
         Password must be shorter than %(value)s characters long.
         Got %(len)s instead.
         """
     )
-    help_text: str = _(
+    _help_text: str = _(
         """
         Your password should have minimum %(min_len)d characters and maximum %(max_len)d characters
         """
@@ -200,18 +198,18 @@ class PasswordLengthValidator(PasswordValidator):
 
         if password_len < self.min_len:
             message = self._generate_error(
-                self.min_pass_error, self.min_len, password_len)
+                self._min_pass_error, self.min_len, password_len)
 
             raise DjangoValidationError(message)
 
         if password_len > self.max_len:
             message = self._generate_error(
-                self.max_pass_error, self.max_len, password_len)
+                self._max_pass_error, self.max_len, password_len)
 
             raise DjangoValidationError(message)
 
     def get_help_text(self) -> str:
-        return self.help_text % {'min_len': self.min_len, 'max_len': self.max_len}
+        return self._help_text % {'min_len': self.min_len, 'max_len': self.max_len}
 
     @classmethod
     def _generate_error(cls, error: str, value: int, len_: int) -> str:
@@ -226,12 +224,12 @@ class PasswordCaseValidator(PasswordValidator):
 
     min_lower - Minimal value of lowercase letters in password
     """
-    error_message: str = _(
+    _error_message: str = _(
         """
         Password must contain at least %(min_upper)d uppercase letter and %(min_lower)d lowercase letter.
         """
     )
-    help_text: str = _(
+    _help_text: str = _(
         "Your password must contain at least %(min_upper)d uppercase letter and %(min_lower)d lowercase letter.")
 
     def __init__(self, min_upper: int = 1, min_lower: int = 1) -> None:
@@ -243,33 +241,34 @@ class PasswordCaseValidator(PasswordValidator):
         Validate if password has not enough lower/upper case letters
         """
         if not re.search(r'[A-Z]', password) or not re.search(r'[a-z]', password):
-            cleaned_error_message = clean_error_message(self.error_message)
+            cleaned_error_message = clean_error_message(self._error_message)
             raise DjangoValidationError(cleaned_error_message % {"min_upper": (self.min_upper),
                                                                  "min_lower": self.min_lower})
 
     def get_help_text(self) -> None:
-        return self.help_text % {'min_upper': (self.min_upper), 'min_lower': self.min_lower}
+        return self._help_text % {'min_upper': (self.min_upper), 'min_lower': self.min_lower}
 
 
 class PasswordSpacebarsValidator(PasswordValidator):
 
-    error_message: str = _(
+    _error_message: str = _(
         "Password should not contain any spacebars.")
-    help_text: str = _(
+    _help_text: str = _(
         "Your password should not contain any spacebars.")
 
     def validate(self, password: str) -> None:
         if password.find(' ') != -1:
-            raise DjangoValidationError(self.error_message)
+            raise DjangoValidationError(self._error_message)
 
     def get_help_text(self):
-        return self.help_text
+        return self._help_text
 
 
 class PasswordHaveDigitValidator(PasswordValidator):
 
-    error_message: str = _("Password should contain at least %(value)d digit.")
-    help_text: str = _(
+    _error_message: str = _(
+        "Password should contain at least %(value)d digit.")
+    _help_text: str = _(
         "You`r password should contain at least %(value)d digit.")
 
     def __init__(self, digits_amount: int = 0) -> None:
@@ -282,12 +281,12 @@ class PasswordHaveDigitValidator(PasswordValidator):
     def validate(self, password: str) -> None:
         digits = self._get_digits(password)
         if len(digits) < self.digits_amount:
-            raise DjangoValidationError(self.error_message % {
+            raise DjangoValidationError(self._error_message % {
                 "value": self.digits_amount
             })
 
     def get_help_text(self) -> None:
-        return self.help_text
+        return self._help_text
 
     @staticmethod
     def _get_digits(password: str) -> list:
