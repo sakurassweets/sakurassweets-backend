@@ -2,8 +2,8 @@ from django.utils.translation import gettext as _
 
 from rest_framework.validators import ValidationError
 
-from components.user.services.email import EmailValidatorService
-from components.user.services.password import PasswordValidatorService
+from components.user.services.email_validation import EmailValidatorService
+from components.user.services.password_validation import PasswordValidatorService
 
 
 class UserValidator:

@@ -4,7 +4,7 @@ from rest_framework_simplejwt.serializers import (
 )
 from rest_framework import serializers
 
-from components.user.utils import update_last_login
+from components.user import utils
 from user.models import User
 
 
@@ -16,7 +16,7 @@ class CustomTokenRefreshSerializer(TokenRefreshSerializer):
 
     def validate(self, attrs):
         data = super().validate(attrs)
-        update_last_login(self.user)
+        utils.update_last_login(self.user)
         return data
 
 
@@ -28,7 +28,7 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 
     def validate(self, attrs):
         data = super().validate(attrs)
-        update_last_login(self.user)
+        utils.update_last_login(self.user)
         return data
 
 

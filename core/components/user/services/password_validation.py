@@ -10,11 +10,10 @@ from django.contrib.auth.password_validation import (
 )
 from django.core.exceptions import ValidationError as DjangoValidationError
 
-from components.user.constants import constants_list_for_password_validation as password_constants
-from components.user.utils import clean_error_message
+from components.user import constants, utils
 
 
-password_constants = password_constants()
+password_constants = constants.constants_list_for_password_validation()
 
 
 class BasePasswordValidator(ABC):
@@ -214,7 +213,7 @@ class PasswordLengthValidator(PasswordValidator):
     @classmethod
     def _generate_error(cls, error: str, value: int, len_: int) -> str:
         error = error % {"value": value, "len": len_}
-        cleaned_error = clean_error_message(error)
+        cleaned_error = utils.clean_error_message(error)
         return cleaned_error
 
 
@@ -241,9 +240,9 @@ class PasswordCaseValidator(PasswordValidator):
         Validate if password has not enough lower/upper case letters
         """
         if not re.search(r'[A-Z]', password) or not re.search(r'[a-z]', password):
-            cleaned_error_message = clean_error_message(self._error_message)
-            raise DjangoValidationError(cleaned_error_message % {"min_upper": (self.min_upper),
-                                                                 "min_lower": self.min_lower})
+            error_message = utils.clean_error_message(self._error_message)
+            raise DjangoValidationError(error_message % {"min_upper": (self.min_upper),
+                                                         "min_lower": self.min_lower})
 
     def get_help_text(self) -> None:
         return self._help_text % {'min_upper': (self.min_upper), 'min_lower': self.min_lower}
