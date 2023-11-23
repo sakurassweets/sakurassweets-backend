@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-22 17:59+0200\n"
+"POT-Creation-Date: 2023-11-23 22:42+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,49 +21,49 @@ msgstr ""
 "100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || "
 "(n % 100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
 
-#: .\core\components\user\services\email.py:82
-#: .\core\components\user\services\email.py:366
+#: .\components\user\services\email_validation.py:82
+#: .\components\user\services\email_validation.py:366
 msgid "Email name"
-msgstr "Ім`я email адресу"
+msgstr "Імʼя email адресу"
 
-#: .\core\components\user\services\email.py:83
-#: .\core\components\user\services\email.py:375
+#: .\components\user\services\email_validation.py:83
+#: .\components\user\services\email_validation.py:375
 msgid "Email domain"
-msgstr "Ім`я домену"
+msgstr "Імʼя домену"
 
-#: .\core\components\user\services\email.py:133
+#: .\components\user\services\email_validation.py:133
 msgid "Domain should not contain an underscore."
 msgstr "Домен не повинен мати нижнього тире."
 
-#: .\core\components\user\services\email.py:146
+#: .\components\user\services\email_validation.py:146
 msgid "Email domain name"
-msgstr "Ім`я домену"
+msgstr "Імʼя домену"
 
-#: .\core\components\user\services\email.py:163
+#: .\components\user\services\email_validation.py:163
 msgid "Email contains some unallowed special characters."
 msgstr "Email має недозволенні спеціальні символи."
 
-#: .\core\components\user\services\email.py:167
+#: .\components\user\services\email_validation.py:167
 msgid "Email should not contain unallowed special characters."
 msgstr "Email не повинен мати недозволенні спеціальні символи."
 
-#: .\core\components\user\services\email.py:192
+#: .\components\user\services\email_validation.py:192
 msgid "Domain address should not contain any special characters"
 msgstr "Доменна адреса не може містити будь-які спеціальні символи."
 
-#: .\core\components\user\services\email.py:195
+#: .\components\user\services\email_validation.py:195
 msgid "Domain address should not contain any digits"
 msgstr "Доменна адреса не може містити будь-які числа."
 
-#: .\core\components\user\services\email.py:198
+#: .\components\user\services\email_validation.py:198
 msgid "Domain address should contain at least 2 characters"
 msgstr "Доменна адреса повинна складатись як мінімум з 2 символів."
 
-#: .\core\components\user\services\email.py:201
+#: .\components\user\services\email_validation.py:201
 msgid "Domain address should contain maximum 6 characters"
 msgstr "Доменна адреса може мати максимум 6 символів."
 
-#: .\core\components\user\services\email.py:204
+#: .\components\user\services\email_validation.py:204
 msgid ""
 "Email domain address should not contain special characters, any digits, "
 "should contain at least 2 characters and maximum 6 characters"
@@ -71,63 +71,64 @@ msgstr ""
 "Доменна адреса не повинна мати будь-які спеціальні символи, будь-які цифри "
 "та повинна мати від 2 до 6 символів."
 
-#: .\core\components\user\services\email.py:207
+#: .\components\user\services\email_validation.py:207
 msgid "Email domain address"
-msgstr "Ім`я доменного адресу"
+msgstr "Імʼя доменного адресу"
 
-#: .\core\components\user\services\email.py:271
+#: .\components\user\services\email_validation.py:271
 #, python-format
 msgid "%(object)s can't start or end with '%(symbols)s' symbols."
 msgstr ""
 "%(object)s не можуть починатись або закінчуватись символами '%(symbols)s'."
 
-#: .\core\components\user\services\email.py:273
+#: .\components\user\services\email_validation.py:273
 #, python-format
 msgid "%(object)s should have at least one non-digit character."
 msgstr "%(object)s повинно мати хоча б один не числовий символ."
 
-#: .\core\components\user\services\email.py:275
+#: .\components\user\services\email_validation.py:275
 #, python-format
 msgid "%(object)s shouldn't start or end with '%(symbols)s' symbols."
-msgstr "%(object)s не можуть починатись або закінчуватись символами '%(symbols)s'."
+msgstr ""
+"%(object)s не можуть починатись або закінчуватись символами '%(symbols)s'."
 
-#: .\core\components\user\services\email.py:319
+#: .\components\user\services\email_validation.py:319
 #, python-format
 msgid "Your email have %(value)d '@' symbols, only 1 allowed."
 msgstr "Ваш email має %(value)d символи '@', але лише 1 дозволенно"
 
-#: .\core\components\user\services\email.py:322
+#: .\components\user\services\email_validation.py:322
 msgid "Your email doesn't have any '@' symbol."
 msgstr "Ваш email немає жодного символу '@'."
 
-#: .\core\components\user\services\email.py:325
+#: .\components\user\services\email_validation.py:325
 msgid "Domain should contain domain name and domain address splitted by dot"
 msgstr ""
-"Домен повинен складатись з доменного ім`я та доменної адреси розділених "
+"Домен повинен складатись з доменного імʼя та доменної адреси розділених "
 "крапкою."
 
-#: .\core\components\user\services\email.py:328
+#: .\components\user\services\email_validation.py:328
 #, python-format
 msgid "You'r %(object)s contains too many special characters in a row"
 msgstr "Ваше %(object)s має забагато спеціальних підряд."
 
-#: .\core\components\user\services\email.py:330
+#: .\components\user\services\email_validation.py:330
 msgid "Your email should have only 1 '@' symbol"
 msgstr "Ваш email повинен мати лише 1 символ '@'."
 
-#: .\core\components\user\services\password.py:33
+#: .\components\user\services\password_validation.py:32
 msgid "Password should be not None."
 msgstr "Пароль не може бути None."
 
-#: .\core\components\user\services\password.py:127
+#: .\components\user\services\password_validation.py:126
 msgid "Only latin characters allowed in password"
-msgstr "Лише латинські букви дозволенні у паролі."
+msgstr "Лише латинські літери дозволенні у паролі."
 
-#: .\core\components\user\services\password.py:128
+#: .\components\user\services\password_validation.py:127
 msgid "Password must contain only latin characters"
-msgstr "Пароль може містити лише латинські букви."
+msgstr "Пароль може містити лише латинські літери."
 
-#: .\core\components\user\services\password.py:175
+#: .\components\user\services\password_validation.py:174
 #, python-format
 msgid ""
 "\n"
@@ -140,7 +141,7 @@ msgstr ""
 "        Отримано лише %(len)s символів.\n"
 "        "
 
-#: .\core\components\user\services\password.py:181
+#: .\components\user\services\password_validation.py:180
 #, python-format
 msgid ""
 "\n"
@@ -153,7 +154,7 @@ msgstr ""
 "        Отримано %(len)s символів.\n"
 "        "
 
-#: .\core\components\user\services\password.py:187
+#: .\components\user\services\password_validation.py:186
 #, python-format
 msgid ""
 "\n"
@@ -165,7 +166,7 @@ msgstr ""
 "        Ваш пароль повинен мати від %(min_len)d до %(max_len)d символів\n"
 "            "
 
-#: .\core\components\user\services\password.py:228
+#: .\components\user\services\password_validation.py:227
 #, python-format
 msgid ""
 "\n"
@@ -178,7 +179,7 @@ msgstr ""
 "регістру та %(min_lower)d символ нижнього регістру.\n"
 "        "
 
-#: .\core\components\user\services\password.py:233
+#: .\components\user\services\password_validation.py:232
 #, python-format
 msgid ""
 "Your password must contain at least %(min_upper)d uppercase letter and "
@@ -187,25 +188,25 @@ msgstr ""
 "Пароль повинен мати як мінімум %(min_upper)d символ верхнього регістру та "
 "%(min_lower)d символ нижнього регістру."
 
-#: .\core\components\user\services\password.py:255
+#: .\components\user\services\password_validation.py:254
 msgid "Password should not contain any spacebars."
 msgstr "Пароль не може містити пробіли."
 
-#: .\core\components\user\services\password.py:257
+#: .\components\user\services\password_validation.py:256
 msgid "Your password should not contain any spacebars."
 msgstr "Ваш пароль не повинен містити пробіли."
 
-#: .\core\components\user\services\password.py:270
+#: .\components\user\services\password_validation.py:269
 #, python-format
 msgid "Password should contain at least %(value)d digit."
 msgstr "Пароль повинен містити як мінімум %(value)d цифру."
 
-#: .\core\components\user\services\password.py:272
+#: .\components\user\services\password_validation.py:271
 #, python-format
-msgid "You`r password should contain at least %(value)d digit."
+msgid "Youʼr password should contain at least %(value)d digit."
 msgstr "Ваш пароль повинен містити як мінімум %(value)d цифру."
 
-#: .\core\components\user\validators.py:51
+#: .\components\user\validators.py:51
 msgid ""
 "\n"
 "        Email should be not None.\n"
@@ -215,7 +216,7 @@ msgstr ""
 "        Email не може бути None.\n"
 "        "
 
-#: .\core\components\user\validators.py:68
+#: .\components\user\validators.py:68
 msgid ""
 "\n"
 "        Password should be not None.\n"
@@ -224,6 +225,30 @@ msgstr ""
 "\n"
 "        Пароль не може бути None.\n"
 "        "
+
+#: .\user\managers.py:94
+msgid "You have no permission to update this user"
+msgstr "У Вас немає прав для оновлення цього користувача"
+
+#: .\user\managers.py:95
+msgid "New password can't be the same as old one."
+msgstr "Новий пароль не може бути такий самий, як минулий."
+
+#: .\user\managers.py:96
+msgid "This field can't be empty."
+msgstr "Це поле не може бути пустим."
+
+#: .\user\managers.py:98
+msgid "This field is required"
+msgstr "Це поле обовʼязково."
+
+#: .\user\managers.py:226
+msgid "Something went wrong during user delition"
+msgstr "Щось пішло не так під час видалення користувача"
+
+#: .\user\managers.py:227
+msgid "You have no permission to delete this user"
+msgstr "У Вас немає прав для видалення цього користувача"
 
 #~ msgid "Password is too common."
 #~ msgstr "Пароль занадто простий."

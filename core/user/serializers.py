@@ -56,9 +56,17 @@ class CreateUserSerializer(serializers.ModelSerializer):
 
 class UpdateUserSerializer(serializers.ModelSerializer):
     """
-    Serializer provides `update` and `partial_update` actions
-    for User model
+    Serializer provides `update` action for User model
     """
     class Meta:
         model = User
-        fields = ['email', 'password', 'is_staff', 'is_active']
+        fields = ['email', 'is_staff', 'is_active']
+
+
+class PartialUpdateUserSerializer(serializers.ModelSerializer):
+    """
+    Serializer provides `partial_update` action for User model
+    """
+    class Meta:
+        model = User
+        fields = ['is_staff', 'is_active']

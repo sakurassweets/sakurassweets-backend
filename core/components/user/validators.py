@@ -30,7 +30,7 @@ class UserValidator:
         if self._errors:
             _errors = dict(self._errors)
             self._errors.clear()
-            raise ValidationError({"errors": _errors})
+            raise ValidationError({"detail": _errors})
 
     @staticmethod
     def _validate_password(password: str, user) -> list | None:
