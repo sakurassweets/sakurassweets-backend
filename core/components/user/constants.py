@@ -2,6 +2,7 @@ MIN_PASSWORD_LENGTH: int = 8
 MAX_PASSWORD_LENGTH: int = 40
 MAX_SIMILARITY: float = 0.55
 MIN_DIGITS: int = 1
+REQUIRED_UPDATE_FIELDS = ['email']
 
 
 def constants_list_for_password_validation() -> dict:

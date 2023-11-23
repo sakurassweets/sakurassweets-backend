@@ -6,12 +6,17 @@ from rest_framework.response import Response
 
 from components.user.mixins import UpdateRetrieveDestroyListUserMixin
 
-from user.managers import UserCreateManager, UserDeleteManager
+from user.managers import (
+    UserCreateManager,
+    UserDeleteManager,
+    UserUpdateManager
+)
 from user.models import User
 from user.serializers import (
     UserSerializer,
     CreateUserSerializer,
     UpdateUserSerializer,
+    PartialUpdateUserSerializer
 )
 
 
@@ -23,8 +28,10 @@ class UserViewSet(UpdateRetrieveDestroyListUserMixin,
     permission_classes = [permissions.AllowAny,]
 
     def get_serializer_class(self) -> Serializer:
-        if self.action in ['update', 'partial_update']:
+        if self.action == 'update':
             return UpdateUserSerializer
+        elif self.action == 'partial_update':
+            return PartialUpdateUserSerializer
         else:
             return self.serializer_class
 
@@ -40,7 +47,7 @@ class UserViewSet(UpdateRetrieveDestroyListUserMixin,
         """
         return super().retrieve(request, *args, **kwargs)
 
-    def update(self, request: HttpRequest, *args, **kwargs) -> Response:
+    def update(self, request: HttpRequest, pk: int) -> Response:
         """
         Endpoint to update user
 
@@ -56,9 +63,12 @@ class UserViewSet(UpdateRetrieveDestroyListUserMixin,
 
         **Has permissions:** Anyone
         """
-        return super().update(request, *args, **kwargs)
+        serializer = self.get_serializer_class()
+        manager = UserUpdateManager()
+        response = manager.update(request, serializer, pk)
+        return response
 
-    def partial_update(self, request: HttpRequest, *args, **kwargs) -> Response:
+    def partial_update(self, request: HttpRequest, pk: int) -> Response:
         """
         Endpoint to update user
 
@@ -74,7 +84,10 @@ class UserViewSet(UpdateRetrieveDestroyListUserMixin,
 
         **Has permissions:** Anyone
         """
-        return super().partial_update(request, *args, **kwargs)
+        serializer = self.get_serializer_class()
+        manager = UserUpdateManager()
+        response = manager.partial_update(request, serializer, pk)
+        return response
 
     def destroy(self, request: HttpRequest, pk: int) -> Response:
         """

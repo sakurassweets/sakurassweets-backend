@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-22 21:08+0200\n"
+"POT-Creation-Date: 2023-11-23 22:42+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24,12 +24,12 @@ msgstr ""
 #: .\components\user\services\email_validation.py:82
 #: .\components\user\services\email_validation.py:366
 msgid "Email name"
-msgstr "Ім`я email адресу"
+msgstr "Імʼя email адресу"
 
 #: .\components\user\services\email_validation.py:83
 #: .\components\user\services\email_validation.py:375
 msgid "Email domain"
-msgstr "Ім`я домену"
+msgstr "Імʼя домену"
 
 #: .\components\user\services\email_validation.py:133
 msgid "Domain should not contain an underscore."
@@ -37,7 +37,7 @@ msgstr "Домен не повинен мати нижнього тире."
 
 #: .\components\user\services\email_validation.py:146
 msgid "Email domain name"
-msgstr "Ім`я домену"
+msgstr "Імʼя домену"
 
 #: .\components\user\services\email_validation.py:163
 msgid "Email contains some unallowed special characters."
@@ -73,7 +73,7 @@ msgstr ""
 
 #: .\components\user\services\email_validation.py:207
 msgid "Email domain address"
-msgstr "Ім`я доменного адресу"
+msgstr "Імʼя доменного адресу"
 
 #: .\components\user\services\email_validation.py:271
 #, python-format
@@ -104,7 +104,7 @@ msgstr "Ваш email немає жодного символу '@'."
 #: .\components\user\services\email_validation.py:325
 msgid "Domain should contain domain name and domain address splitted by dot"
 msgstr ""
-"Домен повинен складатись з доменного ім`я та доменної адреси розділених "
+"Домен повинен складатись з доменного імʼя та доменної адреси розділених "
 "крапкою."
 
 #: .\components\user\services\email_validation.py:328
@@ -122,11 +122,11 @@ msgstr "Пароль не може бути None."
 
 #: .\components\user\services\password_validation.py:126
 msgid "Only latin characters allowed in password"
-msgstr "Лише латинські букви дозволенні у паролі."
+msgstr "Лише латинські літери дозволенні у паролі."
 
 #: .\components\user\services\password_validation.py:127
 msgid "Password must contain only latin characters"
-msgstr "Пароль може містити лише латинські букви."
+msgstr "Пароль може містити лише латинські літери."
 
 #: .\components\user\services\password_validation.py:174
 #, python-format
@@ -203,7 +203,7 @@ msgstr "Пароль повинен містити як мінімум %(value)d
 
 #: .\components\user\services\password_validation.py:271
 #, python-format
-msgid "You`r password should contain at least %(value)d digit."
+msgid "Youʼr password should contain at least %(value)d digit."
 msgstr "Ваш пароль повинен містити як мінімум %(value)d цифру."
 
 #: .\components\user\validators.py:51
@@ -226,11 +226,27 @@ msgstr ""
 "        Пароль не може бути None.\n"
 "        "
 
-#: .\user\managers.py:91
+#: .\user\managers.py:94
+msgid "You have no permission to update this user"
+msgstr "У Вас немає прав для оновлення цього користувача"
+
+#: .\user\managers.py:95
+msgid "New password can't be the same as old one."
+msgstr "Новий пароль не може бути такий самий, як минулий."
+
+#: .\user\managers.py:96
+msgid "This field can't be empty."
+msgstr "Це поле не може бути пустим."
+
+#: .\user\managers.py:98
+msgid "This field is required"
+msgstr "Це поле обовʼязково."
+
+#: .\user\managers.py:226
 msgid "Something went wrong during user delition"
 msgstr "Щось пішло не так під час видалення користувача"
 
-#: .\user\managers.py:92
+#: .\user\managers.py:227
 msgid "You have no permission to delete this user"
 msgstr "У Вас немає прав для видалення цього користувача"
 
