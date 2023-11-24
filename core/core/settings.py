@@ -1,5 +1,4 @@
 import os
-
 from datetime import timedelta
 from pathlib import Path
 
@@ -29,6 +28,12 @@ STORAGES = {
 }
 
 AUTH_USER_MODEL = 'user.User'
+
+PASSWORD_HASHERS = [
+    "django.contrib.auth.hashers.Argon2PasswordHasher",
+    "django.contrib.auth.hashers.PBKDF2PasswordHasher",
+    "django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher"
+]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
