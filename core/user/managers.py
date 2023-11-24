@@ -23,12 +23,6 @@ class UserCreateManager:
     """
     @classmethod
     def create_user(cls, serializer: CreateUserSerializer) -> dict:
-        """
-        Method to create user account
-
-        Input:
-        - serializer - can be a serializer that targets only user creation
-        """
         email, password = cls._get_user_data(serializer)
         user = cls._create_user(password, email)
         cls._set_user_properties(password, user)
@@ -46,16 +40,6 @@ class UserCreateManager:
 
     @staticmethod
     def _create_user(password: str, email: str) -> User:
-        """
-        Create user after some validation
-
-        Input:
-        - password
-        - email
-
-        Output:
-        - created User model instance
-        """
         UserValidator.validate(password, email)
         return User.objects.create_user(password=password, email=email)
 
@@ -63,12 +47,6 @@ class UserCreateManager:
     def _build_context(user: User) -> dict:
         """
         Gets tokens for created user and sends it as response
-
-        Input:
-        - User model instance
-
-        Output:
-        - context dictionary
         """
         refresh_token = RefreshToken.for_user(user)
         access_token = refresh_token.access_token
@@ -82,10 +60,6 @@ class UserCreateManager:
     def _set_user_properties(password: str, user: User) -> None:
         """
         Setting up the hashed password for user and updating last login time
-
-        Input:
-        - password
-        - User instance
         """
         password = make_password(password)
         User.objects.filter(id=user.id).update(
@@ -226,13 +200,8 @@ class UserUpdateManager:
         """
         Validate new password
 
-        Input:
-        - user - instance of User model that is about to be updated, not the one
-        who sends request.
-        - new_password - new_password for user
-
         Output:
-        - dict - dict is an errors. If some errors occured they returned as dictionary
+        - dict - If some errors occured they returned as dictionary
         - None - returns None if everything okay and errors didn't occur.
         """
         check_password = user.check_password(new_password)
@@ -264,7 +233,7 @@ class UserDeleteManager:
         user.delete()
 
     def _check_permission(self, user, pk: str) -> bool:
-        if user.id == id or user.is_superuser:
+        if user.id == pk or user.is_superuser:
             return True
 
         return False

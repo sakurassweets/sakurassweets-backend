@@ -5,6 +5,8 @@ from rest_framework.serializers import Serializer
 from rest_framework.response import Response
 
 from components.user.mixins import UpdateRetrieveDestroyListUserMixin
+from components.user import constants
+from components.user import permissions as custom_permissions
 
 from user.managers import (
     UserCreateManager,
@@ -12,28 +14,34 @@ from user.managers import (
     UserUpdateManager
 )
 from user.models import User
-from user.serializers import (
-    UserSerializer,
-    CreateUserSerializer,
-    UpdateUserSerializer,
-    PartialUpdateUserSerializer
-)
+from user import serializers
 
 
 class UserViewSet(UpdateRetrieveDestroyListUserMixin,
                   viewsets.GenericViewSet):
     # TODO: Logg user updating/creating/deleting operations
     queryset = User.objects.all()
-    serializer_class = UserSerializer
-    permission_classes = [permissions.AllowAny,]
+    serializer_class = serializers.ListUserSerializer
+    permission_classes = [permissions.AllowAny]
+    serializers_map = {
+        'update': serializers.UpdateUserSerializer,
+        'partial_update': serializers.PartialUpdateUserSerializer,
+        'list': serializers.ListUserSerializer
+    }
 
     def get_serializer_class(self) -> Serializer:
-        if self.action == 'update':
-            return UpdateUserSerializer
-        elif self.action == 'partial_update':
-            return PartialUpdateUserSerializer
+        if self.action in self.serializers_map:
+            return self.serializers_map[self.action]
         else:
             return self.serializer_class
+
+    def get_permissions(self):
+        if self.action in constants.SAFE_ACTIONS:
+            return [permissions.AllowAny()]
+        elif self.action in constants.PRIVATE_ACTIONS:
+            return [custom_permissions.IsUserOrAdmin()]
+        else:
+            return []
 
     def retrieve(self, request: HttpRequest, *args, **kwargs) -> Response:
         """
@@ -63,10 +71,7 @@ class UserViewSet(UpdateRetrieveDestroyListUserMixin,
 
         **Has permissions:** Anyone
         """
-        serializer = self.get_serializer_class()
-        manager = UserUpdateManager()
-        response = manager.update(request, serializer, pk)
-        return response
+        return self._handle_update(request, pk, partial=False)
 
     def partial_update(self, request: HttpRequest, pk: int) -> Response:
         """
@@ -84,10 +89,7 @@ class UserViewSet(UpdateRetrieveDestroyListUserMixin,
 
         **Has permissions:** Anyone
         """
-        serializer = self.get_serializer_class()
-        manager = UserUpdateManager()
-        response = manager.partial_update(request, serializer, pk)
-        return response
+        return self._handle_update(request, pk, partial=True)
 
     def destroy(self, request: HttpRequest, pk: int) -> Response:
         """
@@ -118,12 +120,26 @@ class UserViewSet(UpdateRetrieveDestroyListUserMixin,
         """
         return super().list(request, *args, **kwargs)
 
+    def _handle_update(self, request: HttpRequest, pk: int, partial: bool) -> Response:
+        """
+        Common method to handle both full and partial updates.
+        """
+        serializer = self.get_serializer_class()
+        manager = UserUpdateManager()
+
+        if partial:
+            response = manager.partial_update(request, serializer, pk)
+        else:
+            response = manager.update(request, serializer, pk)
+
+        return response
+
 
 class CreateUserViewSet(mixins.CreateModelMixin,
                         viewsets.GenericViewSet):
 
     queryset = User.objects.all()
-    serializer_class = CreateUserSerializer
+    serializer_class = serializers.CreateUserSerializer
     permission_classes = [permissions.AllowAny,]
 
     def create(self, request: HttpRequest) -> Response:

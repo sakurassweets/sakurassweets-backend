@@ -13,9 +13,6 @@ from django.core.exceptions import ValidationError as DjangoValidationError
 from components.user import constants, utils
 
 
-password_constants = constants.constants_list_for_password_validation()
-
-
 class BasePasswordValidator(ABC):
     @abstractmethod
     def validate(self, password: str, *args, **kwargs) -> None:
@@ -31,7 +28,7 @@ class PasswordValidator(BasePasswordValidator):
 class PasswordValidatorService(BasePasswordValidator):
     none_pass_error: str = _("Password should be not None.")
     _errors: list = []
-    constants = password_constants
+    constants = constants.PASSWORD_CONSTANTS
 
     def __init__(self, password: str, user=None) -> None:
         self.password = str(password)
@@ -109,7 +106,7 @@ class PasswordValidatorService(BasePasswordValidator):
             PasswordSpacebarsValidator(),
             PasswordLatinValidator(),
             PasswordHaveDigitValidator(
-                digits_amount=self.constants['min_digits']
+                min_digits=self.constants['min_digits']
             ),
             PasswordCommonValidator(),
             PasswordUserAttributeSimilarityValidator(
@@ -270,18 +267,18 @@ class PasswordHaveDigitValidator(PasswordValidator):
     _help_text: str = _(
         "You`r password should contain at least %(value)d digit.")
 
-    def __init__(self, digits_amount: int = 0) -> None:
-        if isinstance(digits_amount, int):
-            self.digits_amount = digits_amount
+    def __init__(self, min_digits: int = 0) -> None:
+        if isinstance(min_digits, int):
+            self.min_digits = min_digits
         else:
             raise TypeError(
-                f"digits_amount should be 'int', got '{type(digits_amount).__name__}' instead")
+                f"min_digits should be 'int', got '{type(min_digits).__name__}' instead")
 
     def validate(self, password: str) -> None:
         digits = self._get_digits(password)
-        if len(digits) < self.digits_amount:
+        if len(digits) < self.min_digits:
             raise DjangoValidationError(self._error_message % {
-                "value": self.digits_amount
+                "value": self.min_digits
             })
 
     def get_help_text(self) -> None:
