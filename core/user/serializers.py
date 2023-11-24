@@ -32,7 +32,22 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         return data
 
 
-class UserSerializer(serializers.ModelSerializer):
+class AdminUserSerializer(serializers.ModelSerializer):
+    """
+    Serializer provides all actions for admins, except `create`,
+    related to User model
+
+    Admins have permission to extended list of fields
+    """
+    user_url = serializers.HyperlinkedIdentityField(
+        view_name='user-detail')
+
+    class Meta:
+        model = User
+        exclude = ['groups', 'user_permissions', 'password']
+
+
+class ListUserSerializer(serializers.ModelSerializer):
     """
     Serializer provides all actions, except `create`,
     related to User model
@@ -42,7 +57,8 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        exclude = ['groups', 'user_permissions', 'password']
+        fields = ['id', 'user_url', 'email',
+                  'last_login', 'is_staff', 'is_active']
 
 
 class CreateUserSerializer(serializers.ModelSerializer):
