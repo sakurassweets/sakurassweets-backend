@@ -30,12 +30,15 @@ class UserViewSet(UpdateRetrieveDestroyListUserMixin,
     }
 
     def get_serializer_class(self) -> Serializer:
+        if self.action in ['list', 'retrieve'] and self.request.user.is_staff:
+            return serializers.AdminUserSerializer
+
         if self.action in self.serializers_map:
             return self.serializers_map[self.action]
         else:
             return self.serializer_class
 
-    def get_permissions(self):
+    def get_permissions(self) -> list[permissions.BasePermission]:
         if self.action in constants.SAFE_ACTIONS:
             return [permissions.AllowAny()]
         elif self.action in constants.PRIVATE_ACTIONS:
@@ -52,6 +55,8 @@ class UserViewSet(UpdateRetrieveDestroyListUserMixin,
         `is_active`
 
         **Code:** `200`
+
+        **Has permissions:** Anyone
         """
         return super().retrieve(request, *args, **kwargs)
 
@@ -69,7 +74,7 @@ class UserViewSet(UpdateRetrieveDestroyListUserMixin,
 
         **Code:** `200`
 
-        **Has permissions:** Anyone
+        **Has permissions:** User itself or admin
         """
         return self._handle_update(request, pk, partial=False)
 
@@ -87,7 +92,7 @@ class UserViewSet(UpdateRetrieveDestroyListUserMixin,
 
         **Code:** `200`
 
-        **Has permissions:** Anyone
+        **Has permissions:** User itself or admin
         """
         return self._handle_update(request, pk, partial=True)
 
@@ -101,7 +106,7 @@ class UserViewSet(UpdateRetrieveDestroyListUserMixin,
 
         **Code:** `204`
 
-        **Has permissions:** Anyone
+        **Has permissions:** User itself or admin
         """
         manager = UserDeleteManager()
         response = manager.delete(request, pk)
