@@ -23,6 +23,7 @@ RUN pip install -r requirements.txt
 
 # copy project
 COPY core/ .
+COPY .config/gunicorn.py .
 
 RUN flake8 --ignore=E501,F401 .
 
@@ -30,4 +31,4 @@ EXPOSE 8000
 
 HEALTHCHECK CMD curl --fail http://localhost:8000/ || exit 1
 
-ENTRYPOINT ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+ENTRYPOINT ["gunicorn", "--config", "gunicorn.py", "core.wsgi:application"]
