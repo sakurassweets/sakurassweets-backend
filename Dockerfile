@@ -23,6 +23,7 @@ RUN pip install -r requirements.txt
 
 # copy project
 COPY core/ .
+RUN pwd
 COPY .config/gunicorn.py .
 
 RUN flake8 --ignore=E501,F401 .
