@@ -13,8 +13,6 @@ project_path = os.path.dirname(core_path)
 # Workers configuration
 bind = os.getenv("WEB_BIND", "0.0.0.0:8000")
 workers = multiprocessing.cpu_count() * 2 + 1
-threads = 2
-worker_class = "gthread"
 timeout = 30
 graceful_timeout = 30
 
@@ -42,7 +40,6 @@ capture_output = True
 # Output config variables
 logging.info("Gunicorn is starting.")
 logging.info(f"Gunicorn workers: {workers}")
-logging.info(f"Gunicorn threads: {threads}.")
 logging.info(f"Gunicorn bing: {bind}.")
 logging.info(f"Gunicorn access log path: {accesslog}.")
 logging.info(f"Gunicorn error log path: {errorlog}.")
