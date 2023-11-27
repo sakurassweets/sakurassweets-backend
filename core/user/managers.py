@@ -159,7 +159,7 @@ class UserUpdateManager:
         return self._updated_data, status.HTTP_200_OK
 
     def _validate_empty_fields(self, data: dict) -> dict | None:
-        errors = {}
+        errors: dict = {}
         for key, value in data.items():
             if not value:
                 errors[key] = self._empty_field_error
@@ -167,7 +167,7 @@ class UserUpdateManager:
         return errors if errors else None
 
     def _validate_required_fields(self, data: dict) -> dict | None:
-        errors = {}
+        errors: dict = {}
         for field in self._required_fields:
             if field not in data:
                 errors[field] = self._required_field_error

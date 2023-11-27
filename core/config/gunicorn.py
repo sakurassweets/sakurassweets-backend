@@ -20,17 +20,20 @@ graceful_timeout = 30
 logs_path = os.path.join(project_path, "logs")
 os.makedirs(logs_path, exist_ok=True)  # Ensure the "logs" directory exists
 
+
+def create_file_if_does_not_exists(file_path):
+    if not os.path.exists(file_path):
+        with open(file_path, 'w'):
+            pass
+        print(f"The file at {file_path} did not exist and has been created.")
+
+
 accesslog = os.path.join(logs_path, "gunicorn_access.log")
-if not os.path.exists(accesslog):
-    with open(accesslog, 'w'):
-        pass
-    print(f"The file at {accesslog} did not exist and has been created.")
+create_file_if_does_not_exists(accesslog)
 
 errorlog = os.path.join(logs_path, "gunicorn_error.log")
-if not os.path.exists(errorlog):
-    with open(errorlog, 'w'):
-        pass
-    print(f"The file at {errorlog} did not exist and has been created.")
+create_file_if_does_not_exists(errorlog)
+
 
 loglevel = "info"
 
