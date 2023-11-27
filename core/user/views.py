@@ -109,7 +109,7 @@ class UserViewSet(UpdateRetrieveDestroyListUserMixin,
         **Has permissions:** User itself or admin
         """
         manager = UserDeleteManager()
-        response = manager.delete(request, pk)
+        response = manager.delete(request=request, pk=pk)
         return response
 
     def list(self, request: HttpRequest, *args, **kwargs) -> Response:

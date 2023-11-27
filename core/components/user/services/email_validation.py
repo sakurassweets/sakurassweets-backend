@@ -18,7 +18,6 @@ class EmailValidator(BaseEmailValidator):
 
 
 class EmailValidatorService(BaseEmailValidator):
-    __slots__ = ['email']
     _errors: list = []
 
     def __init__(self, email: str = None):
@@ -130,7 +129,6 @@ class EmailDomainNameValidator(EmailValidator):
 
     Structure: <email_name>@<domain_name>.<domain_address>
     """
-    __slots__ = ['domain_name']
     _domain_name_underscore = _("Domain should not contain an underscore.")
 
     def __init__(self, domain_name: str) -> None:
@@ -160,7 +158,6 @@ class EmailRegexValidator(EmailValidator):
     """
     Validates if email has any unallowed special characters by RegEx
     """
-    __slots__ = ['email', 'email_regex']
     _error_message: str = _(
         "Email contains some unallowed special characters.")
     _email_regex: str = re.compile(
@@ -190,7 +187,6 @@ class EmailDomainAddressValidator(EmailValidator):
 
     Structure: <email_name>@<domain_name>.<domain_address>
     """
-    __slots__ = ['domain_address']
     _domain_address_special_symbols: str = _(
         "Domain address should not contain any special characters"
     )
@@ -270,7 +266,6 @@ class EmailStartOrEndWithValidator(EmailValidator):
 
     Domain contains domain name and address
     """
-    __slots__ = ['string', 'object_name']
     _error_message: str = _(
         "%(object)s can\'t start or end with '%(symbols)s' symbols.")
     _no_characters_error: str = _(
@@ -318,7 +313,6 @@ class EmailStructureValidator(EmailValidator):
     - Domain contains domain_name and domain_address splitted by dot
     - Email parts didn't have 2 or more special characters in a row
     """
-    __slots__ = ['email']
     too_many_at_error: str = _(
         "Your email have %(value)d '@' symbols, only 1 allowed."
     )

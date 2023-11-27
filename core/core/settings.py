@@ -35,6 +35,56 @@ PASSWORD_HASHERS = [
     "django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher"
 ]
 
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "main": {
+            "format": "{levelname} - [{asctime}] {module} [{processName} | {threadName}]: {message}",
+            "style": "{",
+        },
+        "user_create_formatter": {
+            "format": "{levelname} - [{asctime}] [{processName} | {threadName}]: {message}",
+            "style": "{",
+        }
+    },
+    "handlers": {
+        "file": {
+            "level": "INFO",
+            "class": "logging.FileHandler",
+            "filename": os.path.join(BASE_DIR, "logs/django/django_info.log"),
+            "formatter": "main",
+        },
+        "user_create_file": {
+            "level": "INFO",
+            "class": "logging.FileHandler",
+            "filename": os.path.join(BASE_DIR, "logs/django/user_create_info.log"),
+            "formatter": "user_create_formatter",
+        },
+        "user_delete_file": {
+            "level": "INFO",
+            "class": "logging.FileHandler",
+            "filename": os.path.join(BASE_DIR, "logs/django/user_delete_info.log"),
+            "formatter": "user_create_formatter",
+        }
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["file"],
+            "level": "INFO",
+        },
+        "user_create": {
+            "handlers": ["user_create_file"],
+            "level": "INFO",
+        },
+        "user_delete": {
+            "handlers": ["user_delete_file"],
+            "level": "INFO",
+        }
+    },
+}
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',

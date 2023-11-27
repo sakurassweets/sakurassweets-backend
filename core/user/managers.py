@@ -11,6 +11,10 @@ from rest_framework.serializers import Serializer
 from rest_framework.response import Response
 from rest_framework import status
 
+from components.user.logging.managers_decorators import (
+    log_user_creation,
+    log_user_deletion
+)
 from components.user.validators import UserValidator
 from components.user import constants
 from user.models import User
@@ -23,6 +27,7 @@ class UserCreateManager:
     Provides validation and other things behind the scene
     """
     @classmethod
+    @log_user_creation
     def create_user(cls, serializer: Serializer) -> dict:
         email, password = cls._get_user_data(serializer)
         user = cls._create_user(password, email)
@@ -73,6 +78,7 @@ class UserUpdateManager:
 
     _no_permission_error: str = _("You have no permission to update this user")
     _new_password_error: str = _("New password can't be the same as old one.")
+    _empty_data_error: str = _("You should send at least any data.")
     _empty_field_error: str = _("This field can't be empty.")
     _required_fields = constants.REQUIRED_UPDATE_FIELDS
     _required_field_error: str = _("This field is required")
@@ -158,15 +164,19 @@ class UserUpdateManager:
 
         return self._updated_data, status.HTTP_200_OK
 
-    def _validate_empty_fields(self, data: dict) -> dict | None:
+    def _validate_empty_fields(self, data: dict) -> dict[str, str] | None:
         errors: dict = {}
-        for key, value in data.items():
-            if not value:
-                errors[key] = self._empty_field_error
+
+        if not data:
+            errors["error"] = self._empty_data_error
+        else:
+            for key, value in data.items():
+                if not value:
+                    errors[key] = self._empty_field_error
 
         return errors if errors else None
 
-    def _validate_required_fields(self, data: dict) -> dict | None:
+    def _validate_required_fields(self, data: dict) -> dict[str, str] | None:
         errors: dict = {}
         for field in self._required_fields:
             if field not in data:
@@ -211,7 +221,7 @@ class UserUpdateManager:
             else:
                 return {"detail": error}, status.HTTP_400_BAD_REQUEST
 
-    def _validate_new_password(self, user: User, new_password: str) -> dict | None:
+    def _validate_new_password(self, user: User, new_password: str) -> dict[str, str] | None:
         """
         Validate new password
 
@@ -231,24 +241,28 @@ class UserDeleteManager:
     _error_message = _("Something went wrong during user delition")
     _permission_error_message = _("You have no permission to delete this user")
 
-    def delete(self, request: HttpRequest, pk: int) -> Response:
+    @log_user_deletion
+    def delete(self, *, request: HttpRequest, pk: int) -> Response:
         user = request.user
-
         if not self._check_permission(user, pk):
-            return Response({"detail": self._permission_error_message})
+            return Response({
+                "detail": self._permission_error_message
+            }, status=status.HTTP_400_BAD_REQUEST)
 
         self._delete_user(pk)
         if self._check_user_deleted:
             return Response(status=status.HTTP_204_NO_CONTENT)
 
-        return Response({"detail": self._error_message})
+        return Response({
+            "detail": self._error_message
+        }, status=status.HTTP_400_BAD_REQUEST)
 
     def _delete_user(self, pk: int) -> None:
         user = User.objects.get(id=pk)
         user.delete()
 
-    def _check_permission(self, user: User, pk: str) -> bool:
-        if user.id == pk or user.is_superuser:
+    def _check_permission(self, user: User, pk: id) -> bool:
+        if int(user.id) == int(pk) or user.is_superuser:
             return True
 
         return False

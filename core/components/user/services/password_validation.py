@@ -26,7 +26,6 @@ class PasswordValidator(BasePasswordValidator):
 
 
 class PasswordValidatorService(BasePasswordValidator):
-    __slots__ = ['password', 'user']
     none_pass_error: str = _("Password should be not None.")
     _errors: list = []
     constants = constants.PASSWORD_CONSTANTS
@@ -168,7 +167,6 @@ class PasswordUserAttributeSimilarityValidator(PasswordValidator, UserAttributeS
 
 
 class PasswordLengthValidator(PasswordValidator):
-    __slots__ = ['min_len', 'max_len']
     _min_pass_error: str = _(
         """
         Password must be at least %(value)s characters long.
@@ -222,7 +220,6 @@ class PasswordCaseValidator(PasswordValidator):
 
     min_lower - Minimal value of lowercase letters in password
     """
-    __slots__ = ['min_upper', 'min_lower']
     _error_message: str = _(
         """
         Password must contain at least %(min_upper)d uppercase letter and %(min_lower)d lowercase letter.
@@ -264,7 +261,6 @@ class PasswordSpacebarsValidator(PasswordValidator):
 
 
 class PasswordHaveDigitValidator(PasswordValidator):
-    __slots__ = ['min_digits']
     _error_message: str = _(
         "Password should contain at least %(value)d digit.")
     _help_text: str = _(
