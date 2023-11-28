@@ -4,6 +4,8 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
+from custom_logging.initializator import initialize_loggers
+
 load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -35,6 +37,8 @@ PASSWORD_HASHERS = [
     "django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher"
 ]
 
+
+LOGGING = initialize_loggers()
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',

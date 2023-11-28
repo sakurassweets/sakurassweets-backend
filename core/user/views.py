@@ -19,7 +19,6 @@ from user import serializers
 
 class UserViewSet(UpdateRetrieveDestroyListUserMixin,
                   viewsets.GenericViewSet):
-    # TODO: Logg user updating/creating/deleting operations
     queryset = User.objects.all()
     serializer_class = serializers.ListUserSerializer
     permission_classes = [permissions.AllowAny]
@@ -109,7 +108,7 @@ class UserViewSet(UpdateRetrieveDestroyListUserMixin,
         **Has permissions:** User itself or admin
         """
         manager = UserDeleteManager()
-        response = manager.delete(request, pk)
+        response = manager.delete(request=request, pk=pk)
         return response
 
     def list(self, request: HttpRequest, *args, **kwargs) -> Response:
@@ -133,9 +132,17 @@ class UserViewSet(UpdateRetrieveDestroyListUserMixin,
         manager = UserUpdateManager()
 
         if partial:
-            response = manager.partial_update(request, serializer, pk)
+            response = manager.partial_update(
+                request=request,
+                serializer=serializer,
+                pk=pk
+            )
         else:
-            response = manager.update(request, serializer, pk)
+            response = manager.update(
+                request=request,
+                serializer=serializer,
+                pk=pk
+            )
 
         return response
 
