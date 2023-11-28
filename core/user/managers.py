@@ -11,9 +11,11 @@ from rest_framework.serializers import Serializer
 from rest_framework.response import Response
 from rest_framework import status
 
+from components.general.logging.db_decorators import log_db_query
 from components.user.logging.managers_decorators import (
     log_user_creation,
-    log_user_deletion
+    log_user_deletion,
+    log_user_update,
 )
 from components.user.validators import UserValidator
 from components.user import constants
@@ -45,6 +47,7 @@ class UserCreateManager:
         return email, password
 
     @staticmethod
+    @log_db_query
     def _create_user(password: str, email: str) -> User:
         UserValidator.validate(password, email)
         return User.objects.create_user(password=password, email=email)
@@ -84,7 +87,8 @@ class UserUpdateManager:
     _required_field_error: str = _("This field is required")
     _updated_data: dict = {}
 
-    def partial_update(self, request: HttpRequest, serializer: Serializer, pk: int) -> Response:
+    @log_user_update
+    def partial_update(self, *, request: HttpRequest, serializer: Serializer, pk: int) -> Response:
         response = self._update_and_return_response(
             request=request,
             serializer=serializer,
@@ -93,7 +97,8 @@ class UserUpdateManager:
         )
         return response
 
-    def update(self, request: HttpRequest, serializer: Serializer, pk: int) -> Response:
+    @log_user_update
+    def update(self, *, request: HttpRequest, serializer: Serializer, pk: int) -> Response:
         response = self._update_and_return_response(request, serializer, pk)
         return response
 
@@ -137,6 +142,7 @@ class UserUpdateManager:
         if len(self._updated_data.items()) > 0:
             user.save()
 
+    @log_db_query
     def _update_user(self,
                      request_user: User,
                      data: dict,
@@ -257,6 +263,7 @@ class UserDeleteManager:
             "detail": self._error_message
         }, status=status.HTTP_400_BAD_REQUEST)
 
+    @log_db_query
     def _delete_user(self, pk: int) -> None:
         user = User.objects.get(id=pk)
         user.delete()
@@ -268,6 +275,7 @@ class UserDeleteManager:
         return False
 
     @staticmethod
+    @log_db_query
     def _check_user_deleted(pk: int) -> bool:
         try:
             User.objects.get(id=pk)

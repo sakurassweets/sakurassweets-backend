@@ -6,5 +6,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('user.urls')),
     # Swagger UI
-    path('', include('swagger.urls'))
+    path('', include('swagger.urls')),
 ]

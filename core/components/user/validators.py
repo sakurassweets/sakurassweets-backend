@@ -46,7 +46,6 @@ class UserValidator:
 
 
 class EmailValidator:
-    # TODO: Logg validation
     none_email_error: str = _("Email should be not None.")
 
     @classmethod
@@ -59,7 +58,6 @@ class EmailValidator:
 
 
 class PasswordValidator:
-    # TODO: Logg validation
     none_pass_error: str = _("Password should be not None.")
 
     @classmethod
