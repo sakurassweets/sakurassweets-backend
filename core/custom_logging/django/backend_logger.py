@@ -4,7 +4,7 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 
-def initialize_django_logger():
+def initialize_backend_logger():
     logger = {
         "version": 1,
         "disable_existing_loggers": False,
@@ -16,16 +16,16 @@ def initialize_django_logger():
         },
         "handlers": {
             "file": {
-                "level": "DEBUG",
+                "level": "INFO",
                 "class": "logging.FileHandler",
-                "filename": os.path.join(BASE_DIR, "logs/django/django.log"),
+                "filename": os.path.join(BASE_DIR, "logs/django/backend.log"),
                 "formatter": "main",
             },
         },
         "loggers": {
             "django": {
                 "handlers": ["file"],
-                "level": "DEBUG",
+                "level": "INFO",
             },
         },
     }

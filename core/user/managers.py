@@ -11,7 +11,7 @@ from rest_framework.serializers import Serializer
 from rest_framework.response import Response
 from rest_framework import status
 
-from components.general.logging.db_decorators import log_db_query
+from components.general.logging.backend_decorators import log_db_query
 from components.user.logging.managers_decorators import (
     log_user_creation,
     log_user_deletion,

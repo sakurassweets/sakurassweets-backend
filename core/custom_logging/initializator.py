@@ -1,13 +1,11 @@
 import copy
 from custom_logging.user.managers_logger import initialize_user_managers_logger
-from custom_logging.django.django_logger import initialize_django_logger
-from custom_logging.django.db_logger import initialize_db_logger
+from custom_logging.django.backend_logger import initialize_backend_logger
 
-django_logger = initialize_django_logger()
 user_managers_logger = initialize_user_managers_logger()
-db_logger = initialize_db_logger()
+backend_logger = initialize_backend_logger()
 
-loggers = [django_logger, user_managers_logger, db_logger]
+loggers = [backend_logger, user_managers_logger]
 keys = ['formatters', 'handlers', 'loggers']
 
 
