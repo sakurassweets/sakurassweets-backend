@@ -47,11 +47,7 @@ class UserValidator:
 
 class EmailValidator:
     # TODO: Logg validation
-    none_email_error: str = _(
-        """
-        Email should be not None.
-        """
-    )
+    none_email_error: str = _("Email should be not None.")
 
     @classmethod
     def validate(cls, email: str) -> list | None:
@@ -64,11 +60,7 @@ class EmailValidator:
 
 class PasswordValidator:
     # TODO: Logg validation
-    none_pass_error: str = _(
-        """
-        Password should be not None.
-        """
-    )
+    none_pass_error: str = _("Password should be not None.")
 
     @classmethod
     def validate(cls, password: str, user) -> list | None:

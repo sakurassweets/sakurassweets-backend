@@ -167,23 +167,9 @@ class PasswordUserAttributeSimilarityValidator(PasswordValidator, UserAttributeS
 
 
 class PasswordLengthValidator(PasswordValidator):
-    _min_pass_error: str = _(
-        """
-        Password must be at least %(value)s characters long.
-        Got %(len)s instead.
-        """
-    )
-    _max_pass_error: str = _(
-        """
-        Password must be shorter than %(value)s characters long.
-        Got %(len)s instead.
-        """
-    )
-    _help_text: str = _(
-        """
-        Your password should have minimum %(min_len)d characters and maximum %(max_len)d characters
-        """
-    )
+    _min_pass_error: str = _("Password must be at least %(value)s characters long.Got %(len)s instead.")  # NOQA
+    _max_pass_error: str = _("Password must be shorter than %(value)s characters long.Got %(len)s instead.")  # NOQA
+    _help_text: str = _("Your password should have minimum %(min_len)d characters and maximum %(max_len)d characters")  # NOQA
 
     def __init__(self, min_len: int, max_len: int) -> None:
         self.min_len = int(min_len)
@@ -220,13 +206,8 @@ class PasswordCaseValidator(PasswordValidator):
 
     min_lower - Minimal value of lowercase letters in password
     """
-    _error_message: str = _(
-        """
-        Password must contain at least %(min_upper)d uppercase letter and %(min_lower)d lowercase letter.
-        """
-    )
-    _help_text: str = _(
-        "Your password must contain at least %(min_upper)d uppercase letter and %(min_lower)d lowercase letter.")
+    _error_message: str = _("Password must contain at least %(min_upper)d uppercase letter and %(min_lower)d lowercase letter.")  # NOQA
+    _help_text: str = _("Your password must contain at least %(min_upper)d uppercase letter and %(min_lower)d lowercase letter.")  # NOQA
 
     def __init__(self, min_upper: int = 1, min_lower: int = 1) -> None:
         self.min_upper = int(min_upper)
@@ -247,10 +228,8 @@ class PasswordCaseValidator(PasswordValidator):
 
 class PasswordSpacebarsValidator(PasswordValidator):
 
-    _error_message: str = _(
-        "Password should not contain any spacebars.")
-    _help_text: str = _(
-        "Your password should not contain any spacebars.")
+    _error_message: str = _("Password should not contain any spacebars.")
+    _help_text: str = _("Your password should not contain any spacebars.")
 
     def validate(self, password: str) -> None:
         if password.find(' ') != -1:
@@ -261,10 +240,8 @@ class PasswordSpacebarsValidator(PasswordValidator):
 
 
 class PasswordHaveDigitValidator(PasswordValidator):
-    _error_message: str = _(
-        "Password should contain at least %(value)d digit.")
-    _help_text: str = _(
-        "You`r password should contain at least %(value)d digit.")
+    _error_message: str = _("Password should contain at least %(value)d digit.")  # NOQA
+    _help_text: str = _("You`r password should contain at least %(value)d digit.")  # NOQA
 
     def __init__(self, min_digits: int = 0) -> None:
         if isinstance(min_digits, int):

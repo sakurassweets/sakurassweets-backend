@@ -28,37 +28,46 @@ def log_user_deletion(func):
 
             user = _get_user_by_id(user_id)
             if not user:
+                message = "<%(qualname)s> - User %(request_user_id)d trying to delete User %(id)d but this user does not exists. CODE: %(code)d"  # NOQA
+                logger.warning(message % {
+                    "qualname": func.__qualname__,
+                    "request_user_id": request.user.id,
+                    "id": int(user_id),
+                    "code": 400,
+                })
                 return func(*args, **kwargs)
 
             result = func(*args, **kwargs)
             code = result.status_code
             if code == 204:
                 # qualname means qualified name and contains string structure like: `class.method`
-                info_message = "<%(qualname)s> - User deleted - [id: %(id)d - email:\
- %(email)s] by User [id: %(request_user_id)d]"
+                info_message = "<%(qualname)s> - User deleted - [id: %(id)d - email: %(email)s] by User [id: %(request_user_id)d]. CODE: %(code)d"  # NOQA
 
                 logger.info(info_message % {
                     "qualname": func.__qualname__,
                     "id": user['id'],
                     "request_user_id": request.user.id,
                     "email": user['email'],
+                    "code": code,
                 })
 
             elif code == 400:
-                warning_message = "<%(qualname)s> - User %(request_user_id)d trying to delete User %(id)d"
+                warning_message = "<%(qualname)s> - User %(request_user_id)d trying to delete User %(id)d. CODE: %(code)d"  # NOQA
                 logger.warning(warning_message % {
                     "qualname": func.__qualname__,
                     "request_user_id": request.user.id,
                     "id": user['id'],
+                    "code": code,
                 })
 
             return result
         except Exception as e:
-            error_message = "<%(qualname)s> - Error deleting user: %(e)s"
+            error_message = "<%(qualname)s> - Error deleting user: %(e)s. CODE: %(code)d"
             logger.exception(error_message % {
                 "qualname": func.__qualname__,
                 "method": func.__name__,
-                "e": e
+                "e": e,
+                "code": 400,
             })
             raise
 

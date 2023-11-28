@@ -104,17 +104,11 @@ class EmailValidatorService(BaseEmailValidator):
 
         name, domain = self.__get_name_and_domain(self.email)
         email_name, domain_name = self.__get_names()
-        domain_name_string, domain_address = self.__get_domain_name_and_address(
-            domain=domain
-        )
+        domain_name_string, domain_address = self.__get_domain_name_and_address(domain=domain)  # NOQA
 
         default_validators = [
-            EmailStartOrEndWithValidator(
-                name, email_name
-            ),
-            EmailStartOrEndWithValidator(
-                domain, domain_name
-            ),
+            EmailStartOrEndWithValidator(name, email_name),
+            EmailStartOrEndWithValidator(domain, domain_name),
             EmailDomainAddressValidator(domain_address),
             EmailDomainNameValidator(domain_name_string),
             EmailRegexValidator(self.email),
@@ -143,8 +137,7 @@ class EmailDomainNameValidator(EmailValidator):
 
     def _validate_domain_name_object(self) -> None:
         object_name = _("Email domain name")
-        validator = EmailStartOrEndWithValidator(
-            self.domain_name, object_name)
+        validator = EmailStartOrEndWithValidator(self.domain_name, object_name)
         validator.validate()
 
     def _validate_domain_name_underscore(self):
@@ -158,12 +151,9 @@ class EmailRegexValidator(EmailValidator):
     """
     Validates if email has any unallowed special characters by RegEx
     """
-    _error_message: str = _(
-        "Email contains some unallowed special characters.")
-    _email_regex: str = re.compile(
-        r'^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+$')
-    _help_text: str = _(
-        "Email should not contain unallowed special characters.")
+    _error_message: str = _("Email contains some unallowed special characters.")  # NOQA
+    _email_regex: str = re.compile(r'^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+$')  # NOQA
+    _help_text: str = _("Email should not contain unallowed special characters.")  # NOQA
 
     def __init__(self, email: str, email_regex: str = None) -> None:
         self.email = email
@@ -172,7 +162,9 @@ class EmailRegexValidator(EmailValidator):
 
     def validate(self) -> None:
         if not self._email_regex.match(self.email):
-            raise DjangoValidationError(self._error_message)
+            raise DjangoValidationError(
+                self._error_message
+            )
 
     def get_help_text(self) -> str:
         return self._help_text
@@ -187,22 +179,11 @@ class EmailDomainAddressValidator(EmailValidator):
 
     Structure: <email_name>@<domain_name>.<domain_address>
     """
-    _domain_address_special_symbols: str = _(
-        "Domain address should not contain any special characters"
-    )
-    _domain_address_digits: str = _(
-        "Domain address should not contain any digits"
-    )
-    _not_enough_characters_in_domain_address: str = _(
-        "Domain address should contain at least 2 characters"
-    )
-    _too_many_characters_in_domain_address: str = _(
-        "Domain address should contain maximum 6 characters"
-    )
-    _help_text: str = _(
-        "Email domain address should not contain special characters, any digits, \
-should contain at least 2 characters and maximum 6 characters"
-    )
+    _domain_address_special_symbols: str = _("Domain address should not contain any special characters")  # NOQA
+    _domain_address_digits: str = _("Domain address should not contain any digits")  # NOQA
+    _not_enough_characters_in_domain_address: str = _("Domain address should contain at least 2 characters")  # NOQA
+    _too_many_characters_in_domain_address: str = _("Domain address should contain maximum 6 characters")  # NOQA
+    _help_text: str = _("Email domain address should not contain special characters, any digits, should contain at least 2 characters and maximum 6 characters")  # NOQA
     _object_name: str = _('Email domain address')
     _special_characters: list = ['-', '_', '.']
 
@@ -266,12 +247,9 @@ class EmailStartOrEndWithValidator(EmailValidator):
 
     Domain contains domain name and address
     """
-    _error_message: str = _(
-        "%(object)s can\'t start or end with '%(symbols)s' symbols.")
-    _no_characters_error: str = _(
-        "%(object)s should have at least one non-digit character.")
-    _help_text: str = _(
-        "%(object)s shouldn't start or end with '%(symbols)s' symbols.")
+    _error_message: str = _("%(object)s can\'t start or end with '%(symbols)s' symbols.")  # NOQA
+    _no_characters_error: str = _("%(object)s should have at least one non-digit character.")  # NOQA
+    _help_text: str = _("%(object)s shouldn't start or end with '%(symbols)s' symbols.")  # NOQA
     _special_characters: list = ['-', '_', '.']
 
     def __init__(self, string: str, object_name: str) -> None:
@@ -313,18 +291,10 @@ class EmailStructureValidator(EmailValidator):
     - Domain contains domain_name and domain_address splitted by dot
     - Email parts didn't have 2 or more special characters in a row
     """
-    too_many_at_error: str = _(
-        "Your email have %(value)d '@' symbols, only 1 allowed."
-    )
-    no_at_error: str = _(
-        "Your email doesn\'t have any '@' symbol."
-    )
-    domain_parts_error: str = _(
-        "Domain should contain domain name and domain address splitted by dot"
-    )
-    too_many_symbols_in_a_row: str = _(
-        "You'r %(object)s contains too many special characters in a row"
-    )
+    too_many_at_error: str = _("Your email have %(value)d '@' symbols, only 1 allowed.")  # NOQA
+    no_at_error: str = _("Your email doesn\'t have any '@' symbol.")  # NOQA
+    domain_parts_error: str = _("Domain should contain domain name and domain address splitted by dot")  # NOQA
+    too_many_symbols_in_a_row: str = _("You'r %(object)s contains too many special characters in a row")  # NOQA
     _help_text: str = _("Your email should have only 1 '@' symbol")
 
     def __init__(self, email: str) -> None:
