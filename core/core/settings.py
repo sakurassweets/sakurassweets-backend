@@ -112,6 +112,26 @@ DATABASES = {
     }
 }
 
+REDIS_HOST = os.environ.get('REDIS_HOST', '127.0.0.1')
+REDIS_PORT = os.environ.get('REDIS_PORT', '6379')
+REDIS_DB = os.environ.get('REDIS_DB', '1')
+
+LOCATION = "redis://%(host)s:%(port)s/%(db)s" % {
+    "host": REDIS_HOST,
+    "port": REDIS_PORT,
+    "db": REDIS_DB
+}
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": LOCATION,
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient"
+        },
+    }
+}
+
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
