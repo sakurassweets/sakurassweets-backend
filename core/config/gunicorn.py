@@ -40,10 +40,26 @@ loglevel = "info"
 # Whether to send Django output to the error log
 capture_output = True
 
+# set up logger
+logger = logging.getLogger(__name__)
+
+logger.setLevel(logging.INFO)
+
+# Create a console handler and set the level
+console_handler = logging.StreamHandler()
+console_handler.setLevel(logging.INFO)
+
+# Create a formatter and add it to the handler
+formatter = logging.Formatter('%(levelname)s - [%(asctime)s]: %(message)s')
+console_handler.setFormatter(formatter)
+
+# Add the console handler to the logger
+logger.addHandler(console_handler)
+
 # Output config variables
-logging.info("Gunicorn is starting.")
-logging.info(f"Gunicorn workers: {workers}")
-logging.info(f"Gunicorn bing: {bind}.")
-logging.info(f"Gunicorn access log path: {accesslog}.")
-logging.info(f"Gunicorn error log path: {errorlog}.")
-logging.info("Gunicorn started!")
+logger.info("Gunicorn is starting.")
+logger.info(f"Gunicorn workers: {workers}")
+logger.info(f"Gunicorn bind: {bind}.")
+logger.info(f"Gunicorn access log path: {accesslog}.")
+logger.info(f"Gunicorn error log path: {errorlog}.")
+logger.info("Gunicorn started!")
