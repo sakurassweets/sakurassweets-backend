@@ -31,7 +31,7 @@ def log_user_update(func):
 
             user = _get_user_by_id(user_id)
             if not user:
-                _message = "<%(qualname)s> - User %(request_user_id)d trying to update User [id: %(id)d] but this user does not exists. CODE: %(code)d"  # NOQA
+                _message = "<%(qualname)s> - User %(request_user_id)s trying to update User [id: %(id)s] but this user does not exists. CODE: %(code)d"  # NOQA
                 warning_message = _message % {
                     "qualname": func.__qualname__,
                     "request_user_id": request.user.id,
@@ -45,7 +45,7 @@ def log_user_update(func):
             code = result.status_code
             if code == 200:
                 # qualname means qualified name and contains string structure like: `class.method`
-                _message = "<%(qualname)s> - User [id: %(id)d - email: %(email)s] updated by User [id: %(request_user_id)d]. changes: [%(changes)s] CODE: %(code)d"  # NOQA
+                _message = "<%(qualname)s> - User [id: %(id)s - email: %(email)s] updated by User [id: %(request_user_id)s]. changes: [%(changes)s] CODE: %(code)d"  # NOQA
 
                 info_message = _message % {
                     "qualname": func.__qualname__,
@@ -58,7 +58,7 @@ def log_user_update(func):
                 logger.info(info_message)
 
             elif code == 400:
-                _message = "<%(qualname)s> - User [id: %(request_user_id)d] trying to update User [id: %(id)d]. CODE: %(code)d"  # NOQA
+                _message = "<%(qualname)s> - User [id: %(request_user_id)s] trying to update User [id: %(id)s]. CODE: %(code)d"  # NOQA
                 warning_message = _message % {
                     "qualname": func.__qualname__,
                     "request_user_id": request.user.id,
@@ -92,7 +92,7 @@ def log_user_deletion(func):
 
             user = _get_user_by_id(user_id)
             if not user:
-                _message = "<%(qualname)s> - User [id: %(request_user_id)d] trying to delete User [id: %(id)d] but this user does not exists. CODE: %(code)d"  # NOQA
+                _message = "<%(qualname)s> - User [id: %(request_user_id)s] trying to delete User [id: %(id)s] but this user does not exists. CODE: %(code)d"  # NOQA
                 warning_message = _message % {
                     "qualname": func.__qualname__,
                     "request_user_id": request.user.id,
@@ -106,7 +106,7 @@ def log_user_deletion(func):
             code = result.status_code
             if code == 204:
                 # qualname means qualified name and contains string structure like: `class.method`
-                _message = "<%(qualname)s> - User [id: %(id)d - email: %(email)s] deleted by User [id: %(request_user_id)d]. CODE: %(code)d"  # NOQA
+                _message = "<%(qualname)s> - User [id: %(id)s- email: %(email)s] deleted by User [id: %(request_user_id)s]. CODE: %(code)d"  # NOQA
 
                 info_message = _message % {
                     "qualname": func.__qualname__,
@@ -118,7 +118,7 @@ def log_user_deletion(func):
                 logger.info(info_message)
 
             elif code == 400:
-                _message = "<%(qualname)s> - User [id: %(request_user_id)d] trying to delete User [id: %(id)d]. CODE: %(code)d"  # NOQA
+                _message = "<%(qualname)s> - User [id: %(request_user_id)s] trying to delete User [id: %(id)s]. CODE: %(code)d"  # NOQA
                 warning_message = _message % {
                     "qualname": func.__qualname__,
                     "request_user_id": request.user.id,
@@ -151,7 +151,7 @@ def log_user_creation(func):
             access_token = result.get('access')
             user = get_user_by_token(access_token)
             if user:
-                info_message = "<%(qualname)s> - User created: [User: %(id)d - %(email)s]"
+                info_message = "<%(qualname)s> - User created: [User: %(id)s - %(email)s]"
                 logger.info(info_message % {
                     "qualname": func.__qualname__,
                     "id": user['id'],
