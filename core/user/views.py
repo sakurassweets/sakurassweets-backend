@@ -5,8 +5,8 @@ from rest_framework.serializers import Serializer
 from rest_framework.response import Response
 
 from components.user.mixins import UpdateRetrieveDestroyListUserMixin
-from components.user import constants
-from components.user import permissions as custom_permissions
+from components.user import constants, permissions as custom_permissions
+from components.user.caching.caching_decorators import cache_method
 
 from user.managers import (
     UserCreateManager,
@@ -111,6 +111,7 @@ class UserViewSet(UpdateRetrieveDestroyListUserMixin,
         response = manager.delete(request=request, pk=pk)
         return response
 
+    @cache_method(cache_key='user_list', timeout=60 * 60)
     def list(self, request: HttpRequest, *args, **kwargs) -> Response:
         """
         Endpoint to list users

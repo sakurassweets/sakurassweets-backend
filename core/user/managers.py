@@ -269,6 +269,9 @@ class UserDeleteManager:
         user.delete()
 
     def _check_permission(self, user: User, pk: id) -> bool:
+        if not user.id:
+            return False
+
         if int(user.id) == int(pk) or user.is_superuser:
             return True
 
