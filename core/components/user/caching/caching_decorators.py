@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from functools import wraps
 
 
-def cache_method(cache_key=None, timeout=60 * 60):
+def cache_user_method(cache_key=None, timeout=60 * 60):
     """
     A decorator that caches the result of the function using Django's cache.
 
@@ -20,7 +20,9 @@ def cache_method(cache_key=None, timeout=60 * 60):
         @wraps(func)
         def wrapper(*args, **kwargs):
             # Generate a cache key based on the function qualname and its arguments
-            key = f"{cache_key}"
+            pk = kwargs.get('pk', '')
+            pk = f"_{pk}" if pk else ''
+            key = f"{cache_key + pk}"
             # Check if the data is already in the cache
             cached_data = cache.get(key)
             if cached_data is not None:
