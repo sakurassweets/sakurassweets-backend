@@ -37,6 +37,13 @@ PASSWORD_HASHERS = [
     "django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher"
 ]
 
+# SMTP Configuration
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = os.getenv('EMAIL_PORT')
+EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS')
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_PASSWORD')
 
 LOGGING = initialize_loggers()
 INSTALLED_APPS = [
@@ -79,10 +86,12 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'core.urls'
 
+CORE_TEMPLATES = os.path.join(BASE_DIR, 'templates/')
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [CORE_TEMPLATES],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

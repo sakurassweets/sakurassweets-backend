@@ -1,4 +1,6 @@
 from django.db.models.signals import pre_save, post_save, post_delete
+from django.template.loader import render_to_string
+from django.core.mail import send_mail
 from django.dispatch import receiver
 
 from rest_framework.exceptions import ValidationError
@@ -11,7 +13,7 @@ from user.models import User
 from django.core.cache import cache
 
 
-def delete_keys_with_prefix(prefix: str, pk: str) -> None:
+def _delete_keys_with_prefix(prefix: str, pk: str) -> None:
     all_keys = cache.keys('*')  # Get all keys in the cache
     # Filter keys that start with the specified prefix
     keys_to_delete = [key for key in all_keys if key.startswith(prefix)]
@@ -49,10 +51,31 @@ def validate_user_fields_after_update(sender, instance: User, **kwargs) -> None:
 @receiver(post_save, sender=User)
 def clear_cache_post_save(sender, instance: User, **kwargs) -> None:
     pk = instance.id if instance.id else ''
-    delete_keys_with_prefix('user_', pk=pk)
+    _delete_keys_with_prefix('user_', pk=pk)
 
 
 @receiver(post_delete, sender=User)
 def clear_cache_post_delete(sender, instance: User, **kwargs) -> None:
     pk = instance.id if instance.id else ''
-    delete_keys_with_prefix('user_', pk=pk)
+    _delete_keys_with_prefix('user_', pk=pk)
+
+
+@receiver(post_save, sender=User)
+def send_welcome_email(sender, instance, **kwargs) -> None:
+    user = instance
+    subject = 'Thanks for registering on Sakuras Sweets!'
+    email = user.email
+    user = email.split('@')[0]
+    website_url = 'https://sakurassweets.asion.tk/'
+    email_template = render_to_string('user/user_welcome_email.html', {
+        "user": user,
+        "website_url": website_url
+    })
+    send_mail(
+        subject,
+        '',
+        'Sakuras Sweets',
+        [email],
+        fail_silently=False,
+        html_message=email_template
+    )
