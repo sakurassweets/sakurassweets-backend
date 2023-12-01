@@ -34,7 +34,8 @@ class UserCreateManager:
         email, password = cls._get_user_data(serializer)
         user = cls._create_user(password, email)
         cls._set_user_properties(password, user)
-        return cls._build_context(user)
+        context = cls._build_context(user)
+        return context
 
     @staticmethod
     def _get_user_data(serializer: Serializer) -> tuple[str, str]:
