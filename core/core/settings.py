@@ -45,7 +45,12 @@ EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS')
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_PASSWORD')
 
+# Celery configuration
+CELERY_BROKER_URL = os.getenv('CELERY_BROKER')
+CELERY_RESULT_BACKEND = os.getenv('CELERY_RESULTS')
+
 LOGGING = initialize_loggers()
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
