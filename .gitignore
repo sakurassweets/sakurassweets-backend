@@ -15,6 +15,7 @@ data/u*
 # Backup files # 
 *.bak 
 *.rdb
+*.orig
 
 # If you are using PyCharm # 
 # User-specific stuff

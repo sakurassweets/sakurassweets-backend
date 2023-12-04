@@ -1,16 +1,14 @@
 from django.db.models.signals import pre_save, post_save, post_delete
-from django.template.loader import render_to_string
-from django.core.mail import send_mail
 from django.dispatch import receiver
+from django.core.cache import cache
 
 from rest_framework.exceptions import ValidationError
 
 from components.user.services.password_validation import PasswordValidatorService
 from components.user.services.email_validation import EmailValidatorService
+
 from user.models import User
-
-
-from django.core.cache import cache
+from user.tasks import send_welcome_email
 
 
 def _delete_keys_with_prefix(prefix: str, pk: str) -> None:
@@ -61,21 +59,8 @@ def clear_cache_post_delete(sender, instance: User, **kwargs) -> None:
 
 
 @receiver(post_save, sender=User)
-def send_welcome_email(sender, instance, **kwargs) -> None:
-    user = instance
-    subject = 'Thanks for registering on Sakuras Sweets!'
-    email = user.email
-    user = email.split('@')[0]
-    website_url = 'https://sakurassweets.asion.tk/'
-    email_template = render_to_string('user/user_welcome_email.html', {
-        "user": user,
-        "website_url": website_url
-    })
-    send_mail(
-        subject,
-        '',
-        'Sakuras Sweets',
-        [email],
-        fail_silently=False,
-        html_message=email_template
-    )
+def send_welcome_email_signal(sender, instance, **kwargs) -> None:
+    data = {
+        'user_email': instance.email
+    }
+    send_welcome_email.delay(data)
