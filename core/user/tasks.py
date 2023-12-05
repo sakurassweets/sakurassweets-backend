@@ -29,10 +29,8 @@ def send_welcome_email(data: dict) -> None:
             fail_silently=False,
             html_message=email_template
         )
-        return True
     except Exception as e:
         logger.exception(f"Error sending email to {email}: {e}")
-        return False
 
 
 @shared_task
