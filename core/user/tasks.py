@@ -1,14 +1,15 @@
 import logging
 
+from django.contrib.auth.hashers import make_password
 from django.template.loader import render_to_string
 from django.core.mail import send_mail
 
-from core.celery import celery
+from celery import shared_task
 
 logger = logging.getLogger('django')
 
 
-@celery.task
+@shared_task
 def send_welcome_email(data: dict) -> None:
     subject = 'Thanks for registering on Sakuras Sweets!'
     email = data['user_email']
@@ -32,3 +33,9 @@ def send_welcome_email(data: dict) -> None:
     except Exception as e:
         logger.exception(f"Error sending email to {email}: {e}")
         return False
+
+
+@shared_task
+def hash_password(password: str) -> str:
+    hashed_password = make_password(password)
+    return hashed_password

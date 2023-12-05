@@ -48,6 +48,7 @@ EMAIL_HOST_PASSWORD = os.getenv('EMAIL_PASSWORD')
 # Celery configuration
 CELERY_BROKER_URL = os.getenv('CELERY_BROKER')
 CELERY_RESULT_BACKEND = os.getenv('CELERY_RESULTS')
+CELERY_DISABLE_RATE_LIMITS = True
 
 LOGGING = initialize_loggers()
 

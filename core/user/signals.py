@@ -8,7 +8,6 @@ from components.user.services.password_validation import PasswordValidatorServic
 from components.user.services.email_validation import EmailValidatorService
 
 from user.models import User
-from user.tasks import send_welcome_email
 
 
 def _delete_keys_with_prefix(prefix: str, pk: str) -> None:
@@ -56,11 +55,3 @@ def clear_cache_post_save(sender, instance: User, **kwargs) -> None:
 def clear_cache_post_delete(sender, instance: User, **kwargs) -> None:
     pk = instance.id if instance.id else ''
     _delete_keys_with_prefix('user_', pk=pk)
-
-
-@receiver(post_save, sender=User)
-def send_welcome_email_signal(sender, instance, **kwargs) -> None:
-    data = {
-        'user_email': instance.email
-    }
-    send_welcome_email.delay(data)

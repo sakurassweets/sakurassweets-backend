@@ -1,6 +1,5 @@
 from typing import Literal
 
-from django.contrib.auth.hashers import make_password
 from django.utils.translation import gettext as _
 from django.http import HttpRequest
 from django.utils import timezone
@@ -11,6 +10,8 @@ from rest_framework.serializers import Serializer
 from rest_framework.response import Response
 from rest_framework import status
 
+from celery.result import AsyncResult
+
 from components.general.logging.backend_decorators import log_db_query
 from components.user.logging.managers_decorators import (
     log_user_creation,
@@ -19,6 +20,8 @@ from components.user.logging.managers_decorators import (
 )
 from components.user.validators import UserValidator
 from components.user import constants
+
+from user.tasks import hash_password, send_welcome_email
 from user.models import User
 
 
@@ -32,9 +35,11 @@ class UserCreateManager:
     @log_user_creation
     def create_user(cls, serializer: Serializer) -> dict:
         email, password = cls._get_user_data(serializer)
+        hash_result = hash_password.delay(password)
         user = cls._create_user(password, email)
-        cls._set_user_properties(password, user)
+        cls._set_user_properties(hash_result, user)
         context = cls._build_context(user)
+        cls._send_welcome_email(user)
         return context
 
     @staticmethod
@@ -67,15 +72,26 @@ class UserCreateManager:
         return context
 
     @staticmethod
-    def _set_user_properties(password: str, user: User) -> None:
+    def _set_user_properties(hash_result: str, user: User) -> None:
         """
         Setting up the hashed password for user and updating last login time
         """
-        password = make_password(password)
+        # wait until task compeleted to get the result value
+        async_result = AsyncResult(hash_result.task_id)
+        async_result.wait(interval=0.01)
+
+        password = hash_result.result
         User.objects.filter(id=user.id).update(
             last_login=timezone.now(),
             password=password
         )
+
+    @staticmethod
+    def _send_welcome_email(user: User) -> None:
+        data = {
+            'user_email': user.email
+        }
+        send_welcome_email.delay(data)
 
 
 class UserUpdateManager:
