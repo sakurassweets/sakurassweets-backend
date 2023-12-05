@@ -1,6 +1,5 @@
 import multiprocessing
 import logging
-import time
 import os
 
 from dotenv import load_dotenv
@@ -59,9 +58,9 @@ console_handler.setFormatter(formatter)
 logger.addHandler(console_handler)
 
 # Output config variables
-logger.info(f"[{time.asctime()}] Gunicorn is starting.")
-logger.info(f"[{time.asctime()}] Gunicorn workers: {workers}")
-logger.info(f"[{time.asctime()}] Gunicorn bind: {bind}.")
-logger.info(f"[{time.asctime()}] Gunicorn access log path: {accesslog}.")
-logger.info(f"[{time.asctime()}] Gunicorn error log path: {errorlog}.")
-logger.info(f"[{time.asctime()}] Gunicorn started!")
+logger.info("Gunicorn is starting.")
+logger.info(f"Gunicorn workers: {workers}")
+logger.info(f"Gunicorn bind: {bind}.")
+logger.info(f"Gunicorn access log path: {accesslog}.")
+logger.info(f"Gunicorn error log path: {errorlog}.")
+logger.info("Gunicorn started!")
