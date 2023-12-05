@@ -106,7 +106,7 @@ def log_user_deletion(func):
             code = result.status_code
             if code == 204:
                 # qualname means qualified name and contains string structure like: `class.method`
-                _message = "<%(qualname)s> - User [id: %(id)s- email: %(email)s] deleted by User [id: %(request_user_id)s]. CODE: %(code)d"  # NOQA
+                _message = "<%(qualname)s> - User [id: %(id)s - email: %(email)s] deleted by User [id: %(request_user_id)s]. CODE: %(code)d"  # NOQA
 
                 info_message = _message % {
                     "qualname": func.__qualname__,
