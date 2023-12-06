@@ -24,6 +24,9 @@ ALLOWED_HOSTS = HOSTS
 CORS_ALLOW_ALL_ORIGINS = True
 
 STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
     "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
@@ -62,6 +65,8 @@ INSTALLED_APPS = [
 
     # Custom Apps
     'user.apps.UserConfig',
+    'product.apps.ProductConfig',
+    'image.apps.ImageConfig',
 
     # REST Framework
     'rest_framework',
@@ -165,6 +170,8 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 STATICFILES_DIRS = [
     BASE_DIR / 'static/',
@@ -180,6 +187,7 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 9,
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
+        # ! remove `SessionAuthentication` when `JWTAuthentication` will be provided in frontend
         'rest_framework.authentication.SessionAuthentication'
     )
 }

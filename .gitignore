@@ -5,7 +5,7 @@ logs/*
 *.pyc
 __pycache__
 db.sqlite3
-media
+media/*
 .vscode
 local_settings.py
 *_new.html
