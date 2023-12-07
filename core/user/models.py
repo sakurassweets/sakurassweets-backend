@@ -48,7 +48,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = []
 
     def __str__(self):
-        return f"{self.id} | {self.email}"
+        return f"ID: {self.id} | Email: {self.email}"
 
     class Meta:
         db_table = "user"

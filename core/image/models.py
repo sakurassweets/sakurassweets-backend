@@ -20,4 +20,4 @@ class Image(models.Model):
                                    blank=False)
 
     def __str__(self):
-        return f'{self.id} | {self.image.name}'
+        return f'ID: {self.id} | Related to: {self.related_to.title} | Filename: {self.image.name}'

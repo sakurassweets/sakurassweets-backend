@@ -7,7 +7,7 @@ class ProductType(models.Model):
     title = models.CharField('Тип продукту', max_length=255)
 
     def __str__(self):
-        return f'{self.id} | {self.title}'
+        return f'ID: {self.id} | Type: {self.title}'
 
 
 class PriceCurrency(models.Model):
@@ -46,4 +46,7 @@ class Product(models.Model):
     #     pass
 
     def __str__(self):
-        return f'{self.id} | {self.title}'
+        return f'ID: {self.id} | Title: "{self.title}"'
+
+    class Meta:
+        ordering = ['-id']
