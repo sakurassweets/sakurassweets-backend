@@ -39,7 +39,7 @@ class Product(models.Model):
     quantity_in_stock = models.PositiveIntegerField('Кількість на складі', blank=False, null=False)  # NOQA
     product_quantity = models.CharField('Обсяг продукту', max_length=255, blank=False, null=False)  # NOQA
     discount = models.PositiveSmallIntegerField('Знижка', default=0, blank=True, null=True)  # NOQA
-    rating = models.SmallIntegerField('Рейтинг', blank=True, null=True)
+    rating = models.FloatField('Рейтинг', blank=True, null=True)
     components = models.TextField('Склад', blank=True, null=True)
 
     # def calculate_discount(self):
