@@ -13,6 +13,14 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
+            name='PriceCurrency',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('currency', models.CharField(max_length=255, verbose_name='Валюта')),
+                ('country', models.CharField(max_length=255, verbose_name='Країна')),
+            ],
+        ),
+        migrations.CreateModel(
             name='ProductType',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
@@ -27,10 +35,11 @@ class Migration(migrations.Migration):
                 ('price', models.DecimalField(decimal_places=2, max_digits=8, verbose_name='Ціна')),
                 ('description', models.TextField(blank=True, max_length=6000, verbose_name='Опис')),
                 ('quantity_in_stock', models.PositiveIntegerField(verbose_name='Кількість на складі')),
-                ('product_quantity', models.PositiveIntegerField(verbose_name='Обсяг продукту')),
+                ('product_quantity', models.CharField(max_length=255, verbose_name='Обсяг продукту')),
                 ('discount', models.PositiveSmallIntegerField(blank=True, default=0, null=True, verbose_name='Знижка')),
                 ('rating', models.SmallIntegerField(blank=True, null=True, verbose_name='Рейтинг')),
                 ('components', models.TextField(blank=True, null=True, verbose_name='Склад')),
+                ('price_currency', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='product.pricecurrency', verbose_name='Валюта')),
                 ('product_type', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='product.producttype', verbose_name='Тип продукту')),
             ],
         ),
