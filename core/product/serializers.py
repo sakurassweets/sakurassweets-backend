@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from product.models import Product, PriceCurrency, ProductType
+from image.serializers import ImageSerializer
 from image.models import Image
 
 
@@ -8,18 +9,19 @@ class ProductTypeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ProductType
-        fields = ['title']
+        fields = '__all__'
 
 
 class PriceCurrencySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PriceCurrency
-        fields = ['currency']
+        fields = '__all__'
 
 
-class ImageSerializer(serializers.ModelSerializer):
-    class Meta:
+class _CustomImageSerializer(ImageSerializer):
+
+    class Meta(ImageSerializer.Meta):
         model = Image
         fields = ['image']
 
@@ -31,7 +33,7 @@ class ProductSerializer(serializers.ModelSerializer):
     product_url = serializers.HyperlinkedIdentityField(view_name='product-detail')  # NOQA
     product_type = ProductTypeSerializer()
     price_currency = PriceCurrencySerializer()
-    images = ImageSerializer(many=True, read_only=True, source='image_set')
+    images = _CustomImageSerializer(many=True, read_only=True, source='image_set')  # NOQA
 
     class Meta:
         model = Product
@@ -42,4 +44,5 @@ class ProductSerializer(serializers.ModelSerializer):
         representation['discount'] = f'{instance.discount} %'
         representation['product_type'] = instance.product_type.title
         representation['price_currency'] = instance.price_currency.currency
+        representation['price_currency_symbol'] = instance.price_currency.currency_symbol  # NOQA
         return representation

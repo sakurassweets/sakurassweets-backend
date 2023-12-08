@@ -11,6 +11,12 @@ class ProductType(models.Model):
 
 
 class PriceCurrency(models.Model):
+    currency_symbol = models.CharField('Валютний символ',
+                                       unique=True,
+                                       max_length=10,
+                                       blank=False,
+                                       null=False,
+                                       default='₴')
     currency = models.CharField('Валюта', unique=True, max_length=255, blank=False, null=False)  # NOQA
     country = models.CharField('Країна', max_length=255, blank=False, null=False)  # NOQA
 
