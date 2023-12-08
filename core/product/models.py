@@ -1,7 +1,5 @@
 from django.db import models
 
-# Create your models here.
-
 
 class ProductType(models.Model):
     title = models.CharField('Тип продукту', max_length=255)

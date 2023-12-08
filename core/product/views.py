@@ -6,7 +6,7 @@ from product import serializers
 
 class PriceCurrencyViewset(viewsets.ModelViewSet):
     queryset = PriceCurrency.objects.all()
-    serializer_class = serializers.PriceCurrency
+    serializer_class = serializers.PriceCurrencySerializer
     permission_classes = [permissions.AllowAny,]
 
 
