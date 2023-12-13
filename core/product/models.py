@@ -31,14 +31,14 @@ class Product(models.Model):
                                 null=False)
     price_currency = models.ForeignKey(PriceCurrency,
                                        verbose_name='Валюта',
-                                       on_delete=models.DO_NOTHING,
+                                       on_delete=models.SET_NULL,
                                        blank=False,
-                                       null=False,)
+                                       null=True,)
     product_type = models.ForeignKey(ProductType,
                                      verbose_name='Тип продукту',
-                                     on_delete=models.DO_NOTHING,
+                                     on_delete=models.SET_NULL,
                                      blank=False,
-                                     null=False)
+                                     null=True,)
     description = models.TextField('Опис', max_length=6000, blank=True, null=False)  # NOQA
     quantity_in_stock = models.PositiveIntegerField('Кількість на складі', blank=False, null=False)  # NOQA
     product_quantity = models.CharField('Обсяг продукту', max_length=255, blank=False, null=False)  # NOQA
