@@ -1,7 +1,5 @@
 from django.db import models
 
-# Create your models here.
-
 
 class ProductType(models.Model):
     title = models.CharField('Тип продукту', max_length=255)
@@ -11,6 +9,12 @@ class ProductType(models.Model):
 
 
 class PriceCurrency(models.Model):
+    currency_symbol = models.CharField('Валютний символ',
+                                       unique=True,
+                                       max_length=10,
+                                       blank=False,
+                                       null=False,
+                                       default='₴')
     currency = models.CharField('Валюта', unique=True, max_length=255, blank=False, null=False)  # NOQA
     country = models.CharField('Країна', max_length=255, blank=False, null=False)  # NOQA
 
@@ -27,14 +31,14 @@ class Product(models.Model):
                                 null=False)
     price_currency = models.ForeignKey(PriceCurrency,
                                        verbose_name='Валюта',
-                                       on_delete=models.DO_NOTHING,
+                                       on_delete=models.SET_NULL,
                                        blank=False,
-                                       null=False,)
+                                       null=True,)
     product_type = models.ForeignKey(ProductType,
                                      verbose_name='Тип продукту',
-                                     on_delete=models.DO_NOTHING,
+                                     on_delete=models.SET_NULL,
                                      blank=False,
-                                     null=False)
+                                     null=True,)
     description = models.TextField('Опис', max_length=6000, blank=True, null=False)  # NOQA
     quantity_in_stock = models.PositiveIntegerField('Кількість на складі', blank=False, null=False)  # NOQA
     product_quantity = models.CharField('Обсяг продукту', max_length=255, blank=False, null=False)  # NOQA

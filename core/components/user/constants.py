@@ -11,10 +11,10 @@ SAFE_ACTIONS: Literal['create', 'list', 'retrieve'] = [
     'list',
     'retrieve'
 ]
-PRIVATE_ACTIONS: Literal['update', 'partial_update', 'delete'] = [
+PRIVATE_ACTIONS: Literal['update', 'partial_update', 'destroy'] = [
     'update',
     'partial_update',
-    'delete'
+    'destroy'
 ]
 
 
