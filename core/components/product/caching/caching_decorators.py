@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from functools import wraps
 
 
-def cache_user_method(cache_key=None, timeout=60 * 60):
+def cache_product_method(cache_key=None, timeout=60 * 60):
     """
     A decorator that caches the result of the function using Django's cache.
 
@@ -12,7 +12,7 @@ def cache_user_method(cache_key=None, timeout=60 * 60):
     - timeout: The duration for which the result should be cached. Time in `seconds`, can be specified as `60 * 60 * 12 (12 hours)`
 
     Usage:
-    @cache_user_method(timeout=60)  # Cache for 60 seconds
+    @cache_product_method(timeout=60)  # Cache for 60 seconds
     def your_function_or_method(*args, **kwargs):
         # Your logic here
         return result
