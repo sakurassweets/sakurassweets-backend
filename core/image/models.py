@@ -21,3 +21,6 @@ class Image(models.Model):
 
     def __str__(self):
         return f'ID: {self.id} | Related to: {self.related_to.title} | Filename: {self.image.name}'
+
+    class Meta:
+        ordering = ['-id']
