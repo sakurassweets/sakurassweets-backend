@@ -7,6 +7,9 @@ class ProductType(models.Model):
     def __str__(self):
         return f'ID: {self.id} | Type: {self.title}'
 
+    class Meta:
+        ordering = ['-id']
+
 
 class PriceCurrency(models.Model):
     currency_symbol = models.CharField('Валютний символ',
@@ -20,6 +23,9 @@ class PriceCurrency(models.Model):
 
     def __str__(self):
         return f'{self.currency}'
+
+    class Meta:
+        ordering = ['-id']
 
 
 class Product(models.Model):
@@ -46,11 +52,16 @@ class Product(models.Model):
     rating = models.FloatField('Рейтинг', blank=True, null=True)
     components = models.TextField('Склад', blank=True, null=True)
 
-    # def calculate_discount(self):
-    #     pass
-
     def __str__(self):
-        return f'ID: {self.id} | Title: "{self.title}"'
+        _title = self.title
+
+        if not _title.startswith('"'):
+            _title = f'"{_title}'
+
+        if not _title.endswith('"'):
+            _title = f'{_title}"'
+
+        return f'ID: {self.id} | Title: {_title}'
 
     class Meta:
         ordering = ['-id']

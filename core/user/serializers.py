@@ -39,8 +39,7 @@ class AdminUserSerializer(serializers.ModelSerializer):
 
     Admins have permission to extended list of fields
     """
-    user_url = serializers.HyperlinkedIdentityField(
-        view_name='user-detail')
+    user_url = serializers.HyperlinkedIdentityField(view_name='user-detail')  # NOQA
 
     class Meta:
         model = User
@@ -52,8 +51,7 @@ class ListUserSerializer(serializers.ModelSerializer):
     Serializer provides all actions, except `create`,
     related to User model
     """
-    user_url = serializers.HyperlinkedIdentityField(
-        view_name='user-detail')
+    user_url = serializers.HyperlinkedIdentityField(view_name='user-detail')  # NOQA
 
     class Meta:
         model = User
