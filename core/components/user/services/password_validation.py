@@ -4,10 +4,7 @@ from copy import copy
 
 from django.utils.translation import gettext as _
 
-from django.contrib.auth.password_validation import (
-    CommonPasswordValidator,
-    UserAttributeSimilarityValidator
-)
+from django.contrib.auth.password_validation import UserAttributeSimilarityValidator
 from django.core.exceptions import ValidationError as DjangoValidationError
 
 from components.user import constants, utils
@@ -68,33 +65,52 @@ class PasswordValidatorService(BasePasswordValidator):
         Input:
         - validators - a list of validator instances.
 
+        Return:
+        - True - if validators set
+
+        Raises:
+        - TypeError - if validator in list is not callable or `validators` isn't list instance
+
         example of list: [CommonValidator(), CaseValidator(), ...]
 
         validator should have `validate()` method and get as arguments only
         password. Other arguments should be defined through validator constructor.
         """
-        default_validators = self.__default_validators
+        _not_callable_error = "'validators' list should contain only classes with 'validate()' method."
+        _validators_misstype_error = "validators should be a list, got '%(type)s' instead"
 
-        if validators is not None:
-            if isinstance(validators, list):
-                self._validators = validators
-            else:
-                raise TypeError(
-                    f"validators should be a list, got '{type(validators).__name__}' instead")
-        else:
-            self._validators = default_validators
+        if validators is None:
+            validators = self.__default_validators
 
-    def add_validator(self, validator: BasePasswordValidator | PasswordValidator | object) -> None:
+        if not isinstance(validators, list):
+            raise TypeError(_validators_misstype_error % {
+                "type": type(validators).__name__
+            })
+
+        if not self.__check_validators(validators):
+            raise TypeError(_not_callable_error)
+
+        self._validators = validators
+        return True
+
+    def add_validator(self, validator: object) -> None:
         """
         Input:
         - validator - a validator instance.
 
         should be inputed like: CommonValidator()
 
-        validato should have `validate()` method and get as arguments only
+        validator should have `validate()` method and get as arguments only
         password. Other arguments should be defined through validator constructor.
         """
         self._validators.append(validator)
+
+    @staticmethod
+    def __check_validators(validators: list) -> bool:
+        for validator in validators:
+            if not hasattr(validator, 'validate'):
+                return False
+        return True
 
     @property
     def __default_validators(self) -> list:
@@ -108,7 +124,6 @@ class PasswordValidatorService(BasePasswordValidator):
             PasswordHaveDigitValidator(
                 min_digits=self.constants['min_digits']
             ),
-            PasswordCommonValidator(),
             PasswordUserAttributeSimilarityValidator(
                 user=self.user,
                 max_similarity=self.constants['max_similarity']
@@ -131,22 +146,6 @@ class PasswordLatinValidator(PasswordValidator):
 
     def get_help_text(self) -> None:
         return self._help_text
-
-
-class PasswordCommonValidator(PasswordValidator, CommonPasswordValidator):
-    """
-    This class gets all the `common password validation` from CommonPasswordValidator but also
-    inheirts from `PasswordValidator` which is interface for validators
-    """
-
-    def __init__(self, *args, **kwargs):
-        CommonPasswordValidator().__init__(*args, **kwargs)
-
-    def validate(self, password):
-        return CommonPasswordValidator().validate(password)
-
-    def get_help_text(self) -> None:
-        return CommonPasswordValidator().get_help_text()
 
 
 class PasswordUserAttributeSimilarityValidator(PasswordValidator, UserAttributeSimilarityValidator):
