@@ -1,5 +1,8 @@
 from django.db import models
 
+from rest_framework.exceptions import APIException
+from rest_framework import status
+
 from product.models import Product
 
 from user.models import User
@@ -11,6 +14,11 @@ class Cart(models.Model):
                                    on_delete=models.SET_NULL,
                                    null=True,
                                    blank=False)
+
+    def clean(self):
+        if not self.cart_owner:
+            raise APIException("Cart owner must be specified.",
+                               code=status.HTTP_400_BAD_REQUEST)
 
     def __str__(self):
         return f'Cart: {self.id} | Owner: [email: {self.cart_owner.email} - ID: {self.cart_owner.id}]'  # NOQA
@@ -34,6 +42,17 @@ class CartItem(models.Model):
                                            default=1,
                                            null=True,
                                            blank=True)
+
+    def clean(self):
+        if not self.cart:
+            raise APIException("Cart must be specified.",
+                               code=status.HTTP_400_BAD_REQUEST)
+        if not self.product:
+            raise APIException("Product must be specified.",
+                               code=status.HTTP_400_BAD_REQUEST)
+        if self.quantity <= 0:
+            raise APIException("Quantity must be a positive number.",
+                               code=status.HTTP_400_BAD_REQUEST)
 
     def __str__(self):
         _product_title = self.product.title
