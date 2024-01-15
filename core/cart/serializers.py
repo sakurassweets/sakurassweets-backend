@@ -4,7 +4,7 @@ from cart.models import Cart, CartItem
 
 
 class CartItemSerializer(serializers.ModelSerializer):
-
+    product_url = serializers.HyperlinkedRelatedField(view_name='product-detail', read_only=True, source='product')  # NOQA
     cart_item_url = serializers.HyperlinkedIdentityField(view_name='cart-item-detail')  # NOQA
 
     class Meta:
@@ -17,11 +17,11 @@ class CartItemSerializer(serializers.ModelSerializer):
         return representation
 
 
-class _CustomCartItemSerializer(serializers.ModelSerializer):
+class _CustomCartItemSerializer(CartItemSerializer):
 
     class Meta:
         model = CartItem
-        fields = ['product']
+        fields = ['product', 'product_url', 'cart_item_url']
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
