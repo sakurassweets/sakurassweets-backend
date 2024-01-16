@@ -6,16 +6,6 @@ MAX_SIMILARITY: float = 0.55
 MIN_DIGITS: int = 1
 # required fields in input for user update
 REQUIRED_UPDATE_FIELDS: list = ['email']
-SAFE_ACTIONS: Literal['create', 'list', 'retrieve'] = [
-    'create',
-    'list',
-    'retrieve'
-]
-PRIVATE_ACTIONS: Literal['update', 'partial_update', 'destroy'] = [
-    'update',
-    'partial_update',
-    'destroy'
-]
 
 
 def constants_list_for_password_validation() -> dict:

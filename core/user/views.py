@@ -5,7 +5,6 @@ from rest_framework.serializers import Serializer
 from rest_framework.response import Response
 
 from components.user.mixins import UpdateRetrieveDestroyListUserMixin
-from components.user import constants, permissions as custom_permissions
 from components.user.caching.caching_decorators import cache_user_method
 
 from user.managers import (
@@ -36,14 +35,6 @@ class UserViewSet(UpdateRetrieveDestroyListUserMixin,
             return self.serializers_map[self.action]
         else:
             return self.serializer_class
-
-    def get_permissions(self) -> list[permissions.BasePermission]:
-        if self.action in constants.SAFE_ACTIONS:
-            return [permissions.AllowAny()]
-        elif self.action in constants.PRIVATE_ACTIONS:
-            return [custom_permissions.IsUserOrAdmin()]
-        else:
-            return []
 
     @cache_user_method(cache_key='user_retrieve', timeout=60 * 60)
     def retrieve(self, request: HttpRequest, *args, **kwargs) -> Response:
