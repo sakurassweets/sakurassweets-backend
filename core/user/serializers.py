@@ -9,10 +9,7 @@ from user.models import User
 
 
 class CustomTokenRefreshSerializer(TokenRefreshSerializer):
-    """
-    Custom TokenRefreshSerializer provides a `last login` updating
-    when refreshing token
-    """
+    """Provides a `last login` updatingwhen refreshing token."""
 
     def validate(self, attrs):
         data = super().validate(attrs)
@@ -21,10 +18,7 @@ class CustomTokenRefreshSerializer(TokenRefreshSerializer):
 
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
-    """
-    Custom TokenObtainPairSerializer provides a `last login` updating
-    when getting new token
-    """
+    """Provides a `last login` updating when getting new token."""
 
     def validate(self, attrs):
         data = super().validate(attrs)
@@ -33,9 +27,7 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 
 
 class AdminUserSerializer(serializers.ModelSerializer):
-    """
-    Serializer provides all actions for admins, except `create`,
-    related to User model
+    """Provides all actions for admins, except `create` for User model.
 
     Admins have permission to extended list of fields
     """
@@ -47,10 +39,7 @@ class AdminUserSerializer(serializers.ModelSerializer):
 
 
 class ListUserSerializer(serializers.ModelSerializer):
-    """
-    Serializer provides all actions, except `create`,
-    related to User model
-    """
+    """Provides all actions, except `create` for User model."""
     user_url = serializers.HyperlinkedIdentityField(view_name='user-detail')  # NOQA
 
     class Meta:
@@ -60,27 +49,21 @@ class ListUserSerializer(serializers.ModelSerializer):
 
 
 class CreateUserSerializer(serializers.ModelSerializer):
-    """
-    Serializer provides `create` action for User model
-    """
+    """Provides `create` action for User model."""
     class Meta:
         model = User
         fields = ['email', 'password']
 
 
 class UpdateUserSerializer(serializers.ModelSerializer):
-    """
-    Serializer provides `update` action for User model
-    """
+    """Provides `update` action for User model."""
     class Meta:
         model = User
         fields = ['email', 'is_staff', 'is_active']
 
 
 class PartialUpdateUserSerializer(serializers.ModelSerializer):
-    """
-    Serializer provides `partial_update` action for User model
-    """
+    """Provides `partial_update` action for User model."""
     class Meta:
         model = User
         fields = ['is_staff', 'is_active']
