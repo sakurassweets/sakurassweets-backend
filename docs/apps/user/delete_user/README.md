@@ -1,0 +1,27 @@
+## Delete user reference
+
+## Delete user
+
+**Allow:** `GET, PUT, PATCH, DELETE, HEAD, OPTIONS`
+
+**Content-Type:** `application/json`
+
+**Vary:** `Accept`
+
+**Permissions required**: `Administrator or user itself`
+
+```http
+  DELETE https://api.sakurassweets.asion.tk/users/{id}/
+```
+
+**Response:**
+
+```json
+<empty response>
+```
+
+**CODES:**
+
+- `204` (No content)
+- `400` (Bad Request)
+- `405` (Method now Allowed)

@@ -1,6 +1,6 @@
 import re
+import copy
 from abc import ABC, abstractmethod
-from copy import copy
 
 from django.utils.translation import gettext as _
 
@@ -38,7 +38,7 @@ class PasswordValidatorService(BasePasswordValidator):
             return self._return_errors()
 
     def _return_errors(self) -> list:
-        _errors = copy(self._errors)
+        _errors = copy.deepcopy(self._errors)
         self._errors.clear()
         return _errors
 

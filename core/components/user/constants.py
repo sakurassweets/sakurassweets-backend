@@ -1,4 +1,3 @@
-from typing import Literal
 # variables for password validation
 MIN_PASSWORD_LENGTH: int = 8
 MAX_PASSWORD_LENGTH: int = 40
