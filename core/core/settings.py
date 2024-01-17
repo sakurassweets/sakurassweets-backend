@@ -76,9 +76,6 @@ INSTALLED_APPS = [
 
     # CORS Headers
     'corsheaders',
-
-    # Swagger UI
-    'drf_yasg',
 ]
 
 MIDDLEWARE = [

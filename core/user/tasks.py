@@ -11,6 +11,11 @@ logger = logging.getLogger('django')
 
 @shared_task
 def send_welcome_email(data: dict) -> None:
+    """Sends welcome email to user.
+
+    Args:
+        data: data: A dictionary with user data.
+    """
     subject = 'Thanks for registering on Sakuras Sweets!'
     email = data['user_email']
     user = email.split('@')[0]

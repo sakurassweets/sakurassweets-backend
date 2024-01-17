@@ -1,4 +1,5 @@
 from typing import Literal
+import copy
 
 from django.utils.translation import gettext as _
 from django.http import HttpRequest
@@ -18,7 +19,7 @@ from components.user.logging.managers_decorators import (
     log_user_deletion,
     log_user_update,
 )
-from components.user.validators import UserValidator
+from components.user.validators import UserValidator, PasswordValidator, EmailValidator
 from components.user import constants
 
 from user.tasks import hash_password, send_welcome_email
@@ -150,13 +151,14 @@ class UserUpdateManager:
         Updated all fields but don't set new password.
         Update only password by sending new_password.
     """
-
+    _previous_email_err: str = _("You'r email can't be same as previous one.")
     _no_permission_error: str = _("You have no permission to update this user")
     _new_password_error: str = _("New password can't be the same as old one.")
     _empty_data_error: str = _("You should send at least any data.")
     _empty_field_error: str = _("This field can't be empty.")
-    _required_fields: list = constants.REQUIRED_UPDATE_FIELDS
     _required_field_error: str = _("This field is required")
+
+    _required_fields: list = constants.REQUIRED_UPDATE_FIELDS
     _updated_data: dict = {}
 
     @log_user_update
@@ -170,8 +172,8 @@ class UserUpdateManager:
             pk: integer, primary key (id) of user that being updated.
 
         Returns:
-            `Response` object with json body and HTTP status code.
-                Codes: 200, 400.
+            `Response` object with json body (info or errors) and HTTP
+            status code. Codes: 200, 400.
         """
         response = self._update_and_return_response(
             request=request,
@@ -179,6 +181,7 @@ class UserUpdateManager:
             pk=pk,
             partial=True
         )
+        self._updated_data.clear()
         return response
 
     @log_user_update
@@ -192,48 +195,12 @@ class UserUpdateManager:
             pk: integer, primary key (id) of user that being updated.
 
         Returns:
-            `Response` object with json body and code.
-                Codes: 200, 400.
+            `Response` object with json body (info or errors) and HTTP
+            status code. Codes: 200, 400.
         """
         response = self._update_and_return_response(request, serializer, pk)
+        self._updated_data.clear()
         return response
-
-    def _update_and_return_response(self,
-                                    request: HttpRequest,
-                                    serializer: Serializer,
-                                    pk: int,
-                                    partial: bool = False) -> Response:
-        """Provides user updating.
-
-        Args:
-            request: KeyWord arg only, a Django's `HttpRequest` object.
-            serializer: KeyWord arg only, Serializer for user model
-                to validate data. `Serializer` instance with data from request.
-            pk: integer, primary key (id) of user that being updated.
-            partial: boolean, if True - user updating with partial_update
-                method (PATCH)
-        Returns:
-            `Response` object with json body and HTTP status code.
-                Codes: 200, 400.
-        """
-        request_user = request.user
-        data = request.data
-
-        if not partial:
-            response_required = self._validate_required_fields(data)
-            if response_required is not None:
-                return Response({"detail": response_required},
-                                status=status.HTTP_400_BAD_REQUEST)
-
-        response_empty = self._validate_empty_fields(data)
-        if response_empty is not None:
-            return Response({"detail": response_empty},
-                            status=status.HTTP_400_BAD_REQUEST)
-
-        data, status_ = self._update_user(request_user, data, serializer, pk)
-        if 'detail' in data:
-            return Response(data, status_)
-        return Response({"data": data}, status_)
 
     def perform_update(self, user: User, data: dict) -> None:
         """Performs update for fields if they updated
@@ -257,23 +224,22 @@ class UserUpdateManager:
     @log_db_query
     def _update_user(self,
                      request_user: User,
+                     user: User,
                      data: dict,
-                     serializer: Serializer,
-                     pk: int) -> tuple[dict[str, str], Literal[200, 400]]:
+                     serializer: Serializer,) -> tuple[dict[str, str], Literal[200, 400]]:
         """Update a user.
 
         Args:
-            request_user: user that made request.
+            request_user: user that made request, `User` instance.
+            user: user that being updated, `User` instance.
             data: A dictionary with user changed data.
             serializer: Serializer for user model to validate data.
                 `Serializer` instance with data from the request.
-            pk: Primary key (id) of the user being updated.
 
         Returns:
             A tuple containing a dictionary with information about the update
             and an HTTP status code. Codes: 200, 400.
         """
-        user = User.objects.get(id=pk)
         response = self._check_permission(request_user, user)
         if isinstance(response, tuple):
             response, status_ = response
@@ -294,6 +260,130 @@ class UserUpdateManager:
             self.perform_update(user, data)
 
         return self._updated_data, status.HTTP_200_OK
+
+    def _update_and_return_response(self,
+                                    request: HttpRequest,
+                                    serializer: Serializer,
+                                    pk: int,
+                                    partial: bool = False) -> Response:
+        """Provides user updating.
+
+        Args:
+            request: KeyWord arg only, a Django's `HttpRequest` object.
+            serializer: KeyWord arg only, Serializer for user model
+                to validate data. `Serializer` instance with data from request.
+            pk: integer, primary key (id) of user that being updated.
+            partial: boolean, if True - user updating with partial_update
+                method (PATCH)
+        Returns:
+            `Response` object with json body (info or errors) and HTTP
+            status code. Codes: 200, 400.
+        """
+        user = User.objects.get(id=pk)
+        request_user = request.user
+        data = request.data
+
+        if response_empty := self._validate_empty_fields(data):
+            return Response({"detail": response_empty},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        if not partial:
+            if result := self._validate_partial_update(user, data):
+                return Response({"detail": result},
+                                status=status.HTTP_400_BAD_REQUEST)
+
+        data_, status_ = self._update_user(request_user=request_user,
+                                           user=user,
+                                           data=data,
+                                           serializer=serializer)
+        data = copy.deepcopy(data_)
+        if 'detail' in data:
+            return Response(data, status_)
+
+        return Response({"data": data}, status_)
+
+    def _check_permission(self,
+                          request_user: User,
+                          user: User) -> tuple[dict[str, str], Literal[400]] | Literal[False]:
+        """Checks permission to update user.
+
+        If user that send request trying update other user he should be superuser.
+
+        Args:
+            requset_user: user that made request, `User` instance.
+            user: user that being changed, `User` instance.
+
+        Returns:
+            If check fails: A tuple containing a dictionary with errors
+            of checking and an HTTP status code. Codes: 400.
+
+            If check passes: Just returns `False`.
+        """
+        if request_user.id == user.id or request_user.is_superuser:
+            return False
+        else:
+            return {"detail": self._no_permission_error}, status.HTTP_400_BAD_REQUEST
+
+    def _change_password(self, user: User, new_password: str) -> tuple[dict[str, str], Literal[200, 400]]:
+        """Changes password for user.
+
+        Args:
+            user: user that being changed, `User` instance.
+            new_password: string object of new password for user.
+
+        Returns:
+            A tuple containing a dictionary with information about the
+            updated data or with errors and an HTTP status code.
+            Codes: 200, 400.
+        """
+        user.password = new_password
+        user.save()
+        self._updated_data['new_password'] = user.password
+        return self._updated_data, status.HTTP_200_OK
+
+    def _validate_data(self,
+                       user: User,
+                       data: dict,
+                       serializer: Serializer) -> tuple[dict[str, str], Literal[400]] | None:
+        """Validates data using serializer.
+
+        Args:
+            user: user that being changed, `User` instance.
+            data: a dictionary with user changed data.
+            serializer: Serializer for user model. `Serializer` instance with
+                data from request.
+
+        Returns:
+            If fails: A tuple containing a dictionary with errors and an
+            HTTP status code. Codes: 400.
+            If passes: Just returns False.
+        """
+        if new_password := data.get('new_password'):
+            response = self._validate_new_password(
+                new_password=new_password,
+                user=user
+            )
+            if response is not None:
+                return {"detail": response}, status.HTTP_400_BAD_REQUEST
+
+            return None
+
+        user_email = user.email
+        request_email = data.get('email')
+
+        if result := self._validate_new_email(user_email, request_email):
+            return {"detail": result}, status.HTTP_400_BAD_REQUEST
+
+        try:
+            serializer = serializer(data=data)
+            serializer.is_valid(raise_exception=True)
+            return None
+        except ValidationError as error:
+            # avoid error raised by unique values
+            if user_email == request_email:
+                return None
+            else:
+                return {"detail": error}, status.HTTP_400_BAD_REQUEST
 
     def _validate_empty_fields(self, data: dict) -> dict[str, str] | None:
         """Validates empty fields.
@@ -346,82 +436,54 @@ class UserUpdateManager:
 
         return errors if errors else None
 
-    def _check_permission(self,
-                          request_user: User,
-                          user: User) -> tuple[dict[str, str], Literal[400]] | Literal[False]:
-        """Checks permission to update user.
+    def _validate_partial_update(self, user: User, data: dict) -> Response | None:
+        if response_required := self._validate_required_fields(data):
+            return response_required
 
-        If user that send request trying update other user he should be superuser.
+        if validation := self._validate_password(user=user,
+                                                 password=data.get('password'),
+                                                 is_password_new=False):
+            return validation
 
-        Args:
-            requset_user: user that made request, `User` instance.
-            user: user that being changed, `User` instance.
+        return None
 
-        Returns:
-            If check fails: A tuple containing a dictionary with errors
-            of checking and an HTTP status code. Codes: 400.
-
-            If check passes: Just returns `False`.
-        """
-        if request_user.id == user.id or request_user.is_superuser:
-            return False
-        else:
-            return {"detail": self._no_permission_error}, status.HTTP_400_BAD_REQUEST
-
-    def _change_password(self, user: User, new_password: str) -> tuple[dict[str, str], Literal[200, 400]]:
-        """Changes password for user.
+    def _validate_new_email(self, user_email: str, request_email: str) -> dict[str, str] | None:
+        """Validate new password for user.
 
         Args:
-            user: user that being changed, `User` instance.
-            new_password: string object of new password for user.
+            user_email: string object of email from user that made request.
+            request_email: string object of email from request.
+                request_email means the email to which the existing one
+                will be changed.
 
         Returns:
-            A tuple containing a dictionary with information about the
-            updated data or with errors and an HTTP status code.
-            Codes: 200, 400.
+            If fails: A dictionary with errors.
+            If passes: Just returns None.
         """
-        response = self._validate_new_password(
-            new_password=new_password,
-            user=user
-        )
-        if response is None:
-            user.password = new_password
-            user.save()
-            self._updated_data['new_password'] = user.password
-            return self._updated_data, status.HTTP_200_OK
-        else:
-            return {"detail": response}, status.HTTP_400_BAD_REQUEST
 
-    @staticmethod
-    def _validate_data(user: User,
-                       data: dict,
-                       serializer: Serializer) -> tuple[dict[str, str], Literal[400]] | Literal[False]:
-        """Validates data using serializer.
-
-        Args:
-            user: user that being changed, `User` instance.
-            data: a dictionary with user changed data.
-            serializer: Serializer for user model. `Serializer` instance with
-                data from request.
-
-        Returns:
-            If fails: A tuple containing a dictionary with errors and an
-            HTTP status code.
-            Codes: 400.
-
-            If passes: Just returns False.
-        """
-        user_email = user.email
-        request_email = data.get('email')
-        try:
-            serializer = serializer(data=data)
-            serializer.is_valid(raise_exception=True)
-        except ValidationError as error:
-            # avoid error raised by unique values
+        if request_email:
+            result = EmailValidator.validate(request_email)
             if user_email == request_email:
-                return False
+                return {"email": self._previous_email_err}
+        else:
+            result = None
+
+        if result:
+            return {"email": result}
+
+        return None
+
+    def _validate_password(self, user: User, password: str, is_password_new: bool) -> dict[str, str] | None:
+        check_password = user.check_password(password)
+
+        if check_password:
+            if is_password_new:
+                return {"new_password": self._new_password_error}
             else:
-                return {"detail": error}, status.HTTP_400_BAD_REQUEST
+                return None
+        else:
+            if not is_password_new:
+                return {"password": "You provided wrong password, please try again."}
 
     def _validate_new_password(self, user: User, new_password: str) -> dict[str, str] | None:
         """Validate new password for user.
@@ -431,14 +493,14 @@ class UserUpdateManager:
             new_password: string object of new password for user.
 
         Returns:
-            If fails: A tuple containing a dictionary with error.
-
+            If fails: A dictionary with errors.
             If passes: Just returns None.
         """
-        check_password = user.check_password(new_password)
-        if check_password:
-            # returns this if new password is the same as old one
-            return {"new_password": self._new_password_error}
+        if validation := self._validate_password(user, new_password, True):
+            return validation
+
+        if result := PasswordValidator.validate(new_password, user):
+            return {"new_password": result}
 
         return None
 

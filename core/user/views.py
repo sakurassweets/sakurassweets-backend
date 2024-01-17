@@ -30,96 +30,72 @@ class UserViewSet(UpdateRetrieveDestroyListUserMixin,
     def get_serializer_class(self) -> Serializer:
         if self.action in ['list', 'retrieve'] and self.request.user.is_staff:
             return serializers.AdminUserSerializer
-
         if self.action in self.serializers_map:
             return self.serializers_map[self.action]
         else:
             return self.serializer_class
 
+    @cache_user_method(cache_key='user_list', timeout=60 * 60)
+    def list(self, request: HttpRequest, *args, **kwargs) -> Response:
+        return super().list(request, *args, **kwargs)
+
     @cache_user_method(cache_key='user_retrieve', timeout=60 * 60)
     def retrieve(self, request: HttpRequest, *args, **kwargs) -> Response:
-        """
-        Endpoint to retrieve user
-
-        **Output:** `id`, `user_url`, `last_login`, `email`,
-        `created_at`, `updated_at`, `is_superuser`, `is_staff`,
-        `is_active`
-
-        **Code:** `200`
-
-        **Has permissions:** Anyone
-        """
         return super().retrieve(request, *args, **kwargs)
 
     def update(self, request: HttpRequest, pk: int) -> Response:
+        """Updates user with `PUT` method.
+
+        Args:
+            request: a Django's `HttpRequest` object.
+            pk: integer, primary key (id) of user that being updated.
+
+        Returns:
+            `Response` object with json body (info or errors) and HTTP
+            status code. Codes: 200, 400.
         """
-        Endpoint to update user
-
-        PUT method required **ALL** fields to get successful update
-
-        **Input:** `email`, `password` (raw)
-
-        **Output:** `id`, `user_url`, `last_login`, `email`,
-        `created_at`, `updated_at`, `is_superuser`, `is_staff`,
-        `is_active`
-
-        **Code:** `200`
-
-        **Has permissions:** User itself or admin
-        """
-        return self._handle_update(request, pk, partial=False)
+        return self._handle_update(request=request, pk=pk, partial=False)
 
     def partial_update(self, request: HttpRequest, pk: int) -> Response:
+        """Updates user with `PATCH` method.
+
+        Args:
+            request: a Django's `HttpRequest` object.
+            pk: integer, primary key (id) of user that being updated.
+
+        Returns:
+            `Response` object with json body (info or errors) and HTTP
+            status code. Codes: 200, 400.
         """
-        Endpoint to update user
-
-        PATCH method required **ATLEAST ONE** field to get successful update
-
-        **Input:** Atleast one field
-
-        **Output:** `id`, `user_url`, `last_login`, `email`,
-        `created_at`, `updated_at`, `is_superuser`, `is_staff`,
-        `is_active`
-
-        **Code:** `200`
-
-        **Has permissions:** User itself or admin
-        """
-        return self._handle_update(request, pk, partial=True)
+        return self._handle_update(request=request, pk=pk, partial=True)
 
     def destroy(self, request: HttpRequest, pk: int) -> Response:
-        """
-        Endpoint to delete user
+        """Deletes user.
 
-        **Input:** `id`
+        Args:
+            request: a Django's `HttpRequest` object.
+            pk: integer, primary key (id) of user that being destroyed.
 
-        **Output:** Nothing
-
-        **Code:** `204`
-
-        **Has permissions:** User itself or admin
+        Returns:
+            `Response` object with json body (info or errors) and HTTP
+            status code. Codes: 204, 400.
         """
         manager = UserDeleteManager()
         response = manager.delete(request=request, pk=pk)
         return response
 
-    @cache_user_method(cache_key='user_list', timeout=60 * 60)
-    def list(self, request: HttpRequest, *args, **kwargs) -> Response:
-        """
-        Endpoint to list users
-
-        **Output:** Users list with fields: `id`, `user_url`, `last_login`, `email`,
-        `created_at`, `updated_at`, `is_superuser`, `is_staff`, `is_active`
-
-        **Code:** `200`
-
-        **Has permissions:** Anyone
-        """
-        return super().list(request, *args, **kwargs)
-
     def _handle_update(self, request: HttpRequest, pk: int, partial: bool) -> Response:
-        """
-        Common method to handle both full and partial updates.
+        """Handles both full and partial updates.
+
+        Args:
+            request: a Django's `HttpRequest` object.
+            pk: integer, primary key (id) of user that being updated.
+            partial: boolean, if True - user updating with partial_update
+                method (PATCH)
+
+        Returns:
+            `Response` object with json body (info or errors) and HTTP
+            status code. Codes: 200, 400.
         """
         serializer = self.get_serializer_class()
         manager = UserUpdateManager()
@@ -148,14 +124,14 @@ class CreateUserViewSet(mixins.CreateModelMixin,
     permission_classes = [permissions.AllowAny,]
 
     def create(self, request: HttpRequest) -> Response:
-        """
-        User register endpoint
+        """Creates user.
 
-        **Input:** `Email`, `Password`
+        Args:
+            request: a Django's `HttpRequest` object.
 
-        **Output:** `Access token`, `Refresh token`
-
-        **Permissions:** Anyone
+        Returns:
+            `Response` object with json body (info or errors) and HTTP
+            status code. Codes: 201, 400.
         """
         serializer = self.get_serializer(data=request.data)
 
