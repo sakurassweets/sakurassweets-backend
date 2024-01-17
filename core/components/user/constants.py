@@ -1,16 +1,13 @@
-# variables for password validation
 MIN_PASSWORD_LENGTH: int = 8
 MAX_PASSWORD_LENGTH: int = 40
 MAX_SIMILARITY: float = 0.55
 MIN_DIGITS: int = 1
-# required fields in input for user update
+# required fields in input for user update by PUT method
 REQUIRED_UPDATE_FIELDS: list = ['email', 'password']
 
 
-def constants_list_for_password_validation() -> dict:
-    """
-    returns mapping of constants for password validation
-    """
+def constants_list_for_password_validation() -> dict[str, int]:
+
     constants: dict = {
         "min_len": MIN_PASSWORD_LENGTH,
         "max_len": MAX_PASSWORD_LENGTH,
@@ -20,4 +17,4 @@ def constants_list_for_password_validation() -> dict:
     return constants
 
 
-PASSWORD_CONSTANTS: dict = constants_list_for_password_validation()
+PASSWORD_CONSTANTS = constants_list_for_password_validation()

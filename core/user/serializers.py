@@ -27,7 +27,7 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 
 
 class AdminUserSerializer(serializers.ModelSerializer):
-    """Provides all actions for admins, except `create` for User model.
+    """Provides all actions for admins, except `create` for `User` model.
 
     Admins have permission to extended list of fields
     """
@@ -39,7 +39,7 @@ class AdminUserSerializer(serializers.ModelSerializer):
 
 
 class ListUserSerializer(serializers.ModelSerializer):
-    """Provides all actions, except `create` for User model."""
+    """Provides all actions, except `create` for `User` model."""
     user_url = serializers.HyperlinkedIdentityField(view_name='user-detail')  # NOQA
 
     class Meta:
@@ -49,21 +49,21 @@ class ListUserSerializer(serializers.ModelSerializer):
 
 
 class CreateUserSerializer(serializers.ModelSerializer):
-    """Provides `create` action for User model."""
+    """Provides `create` action for `User` model."""
     class Meta:
         model = User
         fields = ['email', 'password']
 
 
 class UpdateUserSerializer(serializers.ModelSerializer):
-    """Provides `update` action for User model."""
+    """Provides `update` action for `User` model."""
     class Meta:
         model = User
         fields = ['email', 'is_staff', 'is_active']
 
 
 class PartialUpdateUserSerializer(serializers.ModelSerializer):
-    """Provides `partial_update` action for User model."""
+    """Provides `partial_update` action for `User` model."""
     class Meta:
         model = User
         fields = ['is_staff', 'is_active']

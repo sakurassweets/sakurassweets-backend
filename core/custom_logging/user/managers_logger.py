@@ -1,10 +1,11 @@
 import os
+from typing import Any
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 
-def initialize_user_managers_logger():
+def initialize_user_managers_logger() -> dict[str, Any]:
     logger = {
         "formatters": {
             "user_formatter": {

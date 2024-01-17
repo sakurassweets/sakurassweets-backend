@@ -1,3 +1,5 @@
+from collections import OrderedDict
+
 from rest_framework import serializers
 
 from cart.models import Cart, CartItem
@@ -18,12 +20,25 @@ class CartItemSerializer(serializers.ModelSerializer):
 
 
 class _CustomCartItemSerializer(CartItemSerializer):
+    """Provides only `product`, `product_url` and `cart_item_url` fields."""
 
     class Meta:
         model = CartItem
         fields = ['product', 'product_url', 'cart_item_url']
 
-    def to_representation(self, instance):
+    def to_representation(self, instance: CartItem) -> OrderedDict:
+        """Sets final representation of fields.
+
+        Method modifies some fields to properly display them,
+        this makes output readability and usability better.
+
+        Args:
+            instance: an serializeable object instance, `CartItem`
+                instance in this case.
+
+        Returns:
+            Ordered dictionary of representation.
+        """
         representation = super().to_representation(instance)
         representation['product'] = f'{instance.product.title}'  # NOQA
         return representation

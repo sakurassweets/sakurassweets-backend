@@ -1,5 +1,7 @@
-import re
 from abc import ABC, abstractmethod
+from typing import Literal
+import re
+
 from django.core.exceptions import ValidationError as DjangoValidationError
 
 from django.utils.translation import gettext as _
@@ -28,10 +30,15 @@ class EmailValidatorService(BaseEmailValidator):
         if len(self._errors) > 0:
             return self._return_errors()
 
-    def _validate_email(self) -> None:
-        """
+    def _validate_email(self) -> Literal[False] | None:
+        """Validates email.
+
         If email structure is ruined the next validations won't be triggered.
         If email has unallowed characters the next validations won't be triggered.
+
+        Returns:
+            If no validators: Returns `False`.
+            If validation provided: Returns None.
         """
         validators = self.__default_validators
 
@@ -53,11 +60,19 @@ class EmailValidatorService(BaseEmailValidator):
         self._errors.clear()
         return _errors
 
-    def __validate_email_structure(self, email: str) -> None:
-        """
-        Validates email structure before starting next validations cause
-        they depends on email structure and if it's ruined validation can be
-        ruined as well
+    def __validate_email_structure(self, email: str) -> bool:
+        """Validates email structure.
+
+        Validateds before starting next validations cause they depends
+        on email structure and if it's ruined validation can be
+        ruined as well.
+
+        Args:
+            email: String object of email that being validated.
+
+        Returns:
+            If passes: Just returns True.
+            If fails: Just returns False.
         """
         validator = EmailStructureValidator(email)
         try:
@@ -75,20 +90,12 @@ class EmailValidatorService(BaseEmailValidator):
 
     @staticmethod
     def __get_names() -> tuple[str, str]:
-        """
-        Get names of variables that used in exception handling
-        """
         email_name = _('Email name')
         domain_name = _('Email domain')
         return email_name, domain_name
 
     @staticmethod
     def __get_domain_name_and_address(domain: str) -> tuple[str, str]:
-        """
-        Get domain name and domain address that contains in domain.
-
-        ...@<domain_name>.<domain_address>
-        """
         domain_splitted = domain.split('.')
         domain_name = ''.join(domain_splitted[:-1])
         domain_address = domain_splitted[-1]
@@ -96,9 +103,6 @@ class EmailValidatorService(BaseEmailValidator):
 
     @property
     def __default_validators(self) -> list:
-        """
-        Returns default validators list after validating email structure
-        """
         if not self.__validate_email_structure(self.email):
             return False
 
@@ -117,11 +121,12 @@ class EmailValidatorService(BaseEmailValidator):
 
 
 class EmailDomainNameValidator(EmailValidator):
-    """
-    Validates if domain name start ot end with special characters
-    and if domain name has underscore
+    """Validates domain name.
 
-    Structure: <email_name>@<domain_name>.<domain_address>
+    Validate cases:
+        domain name don't start with special character.
+        domain name don't end with special character.
+        domain name don't have underscore.
     """
     _domain_name_underscore = _("Domain should not contain an underscore.")
 
@@ -148,10 +153,13 @@ class EmailDomainNameValidator(EmailValidator):
 
 
 class EmailRegexValidator(EmailValidator):
+    """Validates that email doesn't have any unallowed special characters.
+
+    Supports setting custom regex for validation while initializing.
     """
-    Validates if email has any unallowed special characters by RegEx
-    """
-    _error_message: str = _("Email contains some unallowed special characters.")  # NOQA
+
+    error_message: str = _("Email contains some unallowed special characters.")
+
     _email_regex: str = re.compile(r'^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+$')  # NOQA
     _help_text: str = _("Email should not contain unallowed special characters.")  # NOQA
 
@@ -163,7 +171,7 @@ class EmailRegexValidator(EmailValidator):
     def validate(self) -> None:
         if not self._email_regex.match(self.email):
             raise DjangoValidationError(
-                self._error_message
+                self.error_message
             )
 
     def get_help_text(self) -> str:
@@ -171,19 +179,25 @@ class EmailRegexValidator(EmailValidator):
 
 
 class EmailDomainAddressValidator(EmailValidator):
-    """
-    Validates that:
-    - domain address does not contain any special characters
-    - domain address does not contain any digits
-    - domain address longer than 2 characters and shorter than 6 characters
+    """Validates email domain address.
 
-    Structure: <email_name>@<domain_name>.<domain_address>
+    Validates cases:
+        Domain address does not contain any special characters.
+        Domain address does not contain any digits.
+        Domain address longer than 2 characters and shorter than 6 characters.
+
+    Email structure: <email_name>@<domain_name>.<domain_address>
     """
-    _domain_address_special_symbols: str = _("Domain address should not contain any special characters")  # NOQA
-    _domain_address_digits: str = _("Domain address should not contain any digits")  # NOQA
-    _not_enough_characters_in_domain_address: str = _("Domain address should contain at least 2 characters")  # NOQA
-    _too_many_characters_in_domain_address: str = _("Domain address should contain maximum 6 characters")  # NOQA
-    _help_text: str = _("Email domain address should not contain special characters, any digits, should contain at least 2 characters and maximum 6 characters")  # NOQA
+    error_messages: dict = {
+        "special_characters": _("Domain address should not contain any special characters"),
+        "no_digits": _("Domain address should not contain any digits"),
+        "not_enough_characters": _("Domain address should contain at least 2 characters"),
+        "too_many_characters": _("Domain address should contain maximum 6 characters"),
+    }
+
+    _help_text: str = _("Email domain address should not contain special"
+                        " characters, any digits, should contain at least"
+                        " 2 characters and maximum 6 characters")
     _object_name: str = _('Email domain address')
     _special_characters: list = ['-', '_', '.']
 
@@ -216,39 +230,42 @@ class EmailDomainAddressValidator(EmailValidator):
     def __validate_domain_address_special_characters(self) -> None:
         if any(c in self._special_characters for c in self.domain_address):
             raise DjangoValidationError(
-                self._domain_address_special_symbols
+                self.error_messages["special_characters"]
             )
 
     def __validate_domain_address_digits(self) -> None:
         if any(c.isdigit() for c in self.domain_address):
             raise DjangoValidationError(
-                self._domain_address_digits
+                self.error_messages["no_digits"]
             )
 
     def __validate_domain_address_length(self) -> None:
         if len(self.domain_address) < 2:
             raise DjangoValidationError(
-                self._not_enough_characters_in_domain_address
+                self.error_messages["not_enough_characters"]
             )
         if len(self.domain_address) > 6:
             raise DjangoValidationError(
-                self._too_many_characters_in_domain_address
+                self.error_messages["too_many_characters"]
             )
 
 
 class EmailStartOrEndWithValidator(EmailValidator):
-    """
-    Validates email objects that:
-    - object didn't start or end with special characters
-    - object have at least one non-digit character
+    """Validates email does not start ot end with special character.
 
-    Email objects is a objects from general email structure:
-    - <email_name>@<domain_name>.<domain_address>
+    Validate cases:
+        Object didn't start or end with special characters.
+        Object have at least one non-digit character.
 
-    Domain contains domain name and address
+    Email objects is a part from general email structure:
+        <email_name>@<domain_name>.<domain_address>
+
+    Domain contains domain name and address splitted by dot.
     """
-    _error_message: str = _("%(object)s can\'t start or end with '%(symbols)s' symbols.")  # NOQA
-    _no_characters_error: str = _("%(object)s should have at least one non-digit character.")  # NOQA
+    error_messages: dict = {
+        "cant_start_or_end": _("%(object)s can\'t start or end with '%(symbols)s' symbols."),
+        "no_characters": _("%(object)s should have at least one non-digit character.")
+    }
     _help_text: str = _("%(object)s shouldn't start or end with '%(symbols)s' symbols.")  # NOQA
     _special_characters: list = ['-', '_', '.']
 
@@ -269,7 +286,7 @@ class EmailStartOrEndWithValidator(EmailValidator):
     def _validate_characters_in_string(self) -> None:
         if not any(c.isalpha() for c in self.string):
             raise DjangoValidationError(
-                self._no_characters_error % {
+                self.error_messages["no_characters"] % {
                     "object": self.object_name,
                 }
             )
@@ -277,7 +294,7 @@ class EmailStartOrEndWithValidator(EmailValidator):
     def _validate_start_or_end_with_special_character(self) -> None:
         if self.string[0] in self._special_characters or self.string[-1] in self._special_characters:
             raise DjangoValidationError(
-                self._error_message % {
+                self.error_messages["cant_start_or_end"] % {
                     "object": self.object_name,
                     "symbols": self._special_characters
                 }
@@ -285,12 +302,19 @@ class EmailStartOrEndWithValidator(EmailValidator):
 
 
 class EmailStructureValidator(EmailValidator):
+    """Validates email structure.
+
+    Validates cases:
+        Email have only one '@' symbol.
+        Domain contains domain_name and domain_address splitted by dot.
+        Email parts didn't have 2 or more special characters in a row.
     """
-    Validates email structure. Validates that:
-    - Email have only one '@' symbol
-    - Domain contains domain_name and domain_address splitted by dot
-    - Email parts didn't have 2 or more special characters in a row
-    """
+    error_messages: dict = {
+        "too_many_at": _("Your email have %(value)d '@' symbols, only 1 allowed."),
+        "no_at": _("Your email doesn\'t have any '@' symbol."),
+        "domain_parts": _("Domain should contain domain name and domain address splitted by dot"),
+        "too_many_in_a_row": _("You'r %(object)s contains too many special characters in a row")
+    }
     too_many_at_error: str = _("Your email have %(value)d '@' symbols, only 1 allowed.")  # NOQA
     no_at_error: str = _("Your email doesn\'t have any '@' symbol.")  # NOQA
     domain_parts_error: str = _("Domain should contain domain name and domain address splitted by dot")  # NOQA
@@ -301,6 +325,11 @@ class EmailStructureValidator(EmailValidator):
         self.email = email
 
     def validate(self) -> None:
+        """Validates email structure.
+
+        Raises:
+            `DjangoValidationError` if validation fails.
+        """
         self._validate_at_symbols_amount()
         name, domain = self.email.split('@')
         self._validate_domain_structure(domain)
@@ -315,25 +344,25 @@ class EmailStructureValidator(EmailValidator):
         at_count = self.email.count('@')
         if at_count > 1:
             raise DjangoValidationError(
-                self.too_many_at_error % {"value": at_count}
+                self.error_messages["too_many_at"] % {"value": at_count}
             )
         if at_count < 1:
             raise DjangoValidationError(
-                self.no_at_error
+                self.error_messages["no_at"]
             )
 
     def _validate_domain_structure(self, domain: str) -> None:
 
         if len(domain.split('.')) < 2:
             raise DjangoValidationError(
-                self.domain_parts_error
+                self.error_messages["domain_parts"]
             )
 
     def _validate_name_special_symbols_in_a_row(self, name: str) -> None:
         if self.__validate_special_symbols_in_a_row(name):
             object_name = _('Email name')
             raise DjangoValidationError(
-                self.too_many_symbols_in_a_row % {
+                self.error_messages["too_many_in_a_row"] % {
                     "object": object_name
                 }
             )
@@ -342,7 +371,7 @@ class EmailStructureValidator(EmailValidator):
         if self.__validate_special_symbols_in_a_row(domain):
             object_name = _('Email domain')
             raise DjangoValidationError(
-                self.too_many_symbols_in_a_row % {
+                self.error_messages["too_many_in_a_row"] % {
                     "object": object_name
                 }
             )
