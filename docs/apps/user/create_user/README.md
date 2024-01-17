@@ -10,7 +10,7 @@
 
 **Permissions required**: `Allowed Anyone`
 
-```http
+```
   POST https://api.sakurassweets.asion.tk/register/
 ```
 

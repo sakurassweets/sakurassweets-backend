@@ -10,7 +10,7 @@
 
 **Permissions required**: `Administrator or user itself`
 
-```http
+```
   PUT https://api.sakurassweets.asion.tk/users/{id}/
 ```
 

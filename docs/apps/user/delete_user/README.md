@@ -10,13 +10,13 @@
 
 **Permissions required**: `Administrator or user itself`
 
-```http
+```
   DELETE https://api.sakurassweets.asion.tk/users/{id}/
 ```
 
 **Response:**
 
-```json
+```
 <empty response>
 ```
 

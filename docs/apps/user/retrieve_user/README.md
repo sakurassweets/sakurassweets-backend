@@ -10,7 +10,7 @@
 
 **Permissions required**: `Allowed Anyone`
 
-```http
+```
   GET https://api.sakurassweets.asion.tk/users/{id}/
 ```
 
