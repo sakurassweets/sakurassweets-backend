@@ -33,8 +33,12 @@ class _CustomImageSerializer(ImageSerializer):
 class ProductSerializer(serializers.ModelSerializer):
     """Provides all actions for `Product` model."""
     product_url = serializers.HyperlinkedIdentityField(view_name='product-detail')  # NOQA
-    product_type = ProductTypeSerializer()
-    price_currency = PriceCurrencySerializer()
+
+    product_type = serializers.PrimaryKeyRelatedField(
+        queryset=ProductType.objects.all(), many=False)
+    price_currency = serializers.PrimaryKeyRelatedField(
+        queryset=PriceCurrency.objects.all(), many=False)
+
     images = _CustomImageSerializer(many=True, read_only=True, source='image_set')  # NOQA
 
     class Meta:

@@ -112,11 +112,13 @@ class CartValidator:
             }
 
     def _validate_cart_not_exists(self) -> str | Literal[True]:
-        if Cart.objects.get(cart_owner=self.cart_owner_id):
+        try:
+            Cart.objects.get(cart_owner=self.cart_owner_id)
             return self.error_messages['cart_exists'] % {
                 "user": self.cart_owner
             }
-        return True
+        except Cart.DoesNotExist:
+            return True
 
     def __get_cart_owner_email(self) -> str:
         try:
