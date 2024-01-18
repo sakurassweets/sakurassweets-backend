@@ -26,14 +26,14 @@
 
 **!!! To update password, you should send `new_password` in request body**
 
-| Parameter      | Type     | Description       | Permission           |
-| :------------- | :------- | :---------------- | -------------------- |
-| `email`        | `string` | User email        | User itself or admin |
-| `password`     | `string` | User password     | User itself or admin |
-| `last_login`   | `string` | last login time   | Admin or staff       |
-| `is_superuser` | `string` | super user status | Admin                |
-| `is_staff`     | `string` | staff status      | Admin                |
-| `is_active`    | `string` | activity status   | Admin or staff       |
+| Parameter      | Type       | Description       | Permission           |
+| :------------- | :--------- | :---------------- | -------------------- |
+| `email`        | `string`   | User email        | User itself or admin |
+| `password`     | `string`   | User password     | User itself or admin |
+| `last_login`   | `DateTime` | last login time   | Admin or staff       |
+| `is_superuser` | `boolean`  | super user status | Admin                |
+| `is_staff`     | `boolean`  | staff status      | Admin                |
+| `is_active`    | `boolean`  | activity status   | Admin or staff       |
 
 > currently permissions isn't working properly, but this will be fixed
 

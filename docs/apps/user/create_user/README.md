@@ -19,7 +19,7 @@
 | `email`    | `string` | **Required**. User email    |
 | `password` | `string` | **Required**. User password |
 
-If all data is correct you will get JSON response:
+**Response:**
 
 ```json
 {
