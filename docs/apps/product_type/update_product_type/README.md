@@ -14,12 +14,6 @@
 
 Since product type has only one field and it's **required**, there's no sense to split PUT and PATCH methods. But recommended to choose proper method for you because changes in fields of product type can affect your requests.
 
-```json
-{
-  "title": "Мочі"
-}
-```
-
 **Fields that can be updated:**
 
 | Parameter | Type     | Description                         |
