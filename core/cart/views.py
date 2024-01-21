@@ -43,7 +43,7 @@ class CartItemViewSet(viewsets.ModelViewSet):
     def get_permissions(self) -> list[permissions.BasePermission]:
         if self.action in constants.SAFE_ACTIONS:
             return [permissions.AllowAny()]
-        elif self.action in constants.PRIVATE_ACTIONS:
+        elif self.action in constants.PRIVATE_ACTIONS or self.action == 'create':
             return [permissions.IsAuthenticated()]
         else:
             return []
