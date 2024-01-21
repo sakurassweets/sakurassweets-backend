@@ -6,6 +6,7 @@ from django.http.request import HttpRequest
 from cart.serializers import CartSerializer, CartItemSerializer
 from cart.models import Cart, CartItem
 from components.cart.validators import CartItemValidator, CartValidator
+from components.cart import permissions as custom_permissions
 from cart import constants
 
 
@@ -17,8 +18,10 @@ class CartViewSet(viewsets.ModelViewSet):
     def get_permissions(self) -> list[permissions.BasePermission]:
         if self.action in constants.SAFE_ACTIONS:
             return [permissions.AllowAny()]
-        elif self.action in constants.PRIVATE_ACTIONS:
+        elif self.action == 'create':
             return [permissions.IsAuthenticated()]
+        elif self.action in constants.PRIVATE_ACTIONS:
+            return [custom_permissions.IsCartOwnerOrStaff()]
         else:
             return []
 

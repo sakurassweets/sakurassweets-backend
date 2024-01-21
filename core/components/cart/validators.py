@@ -96,9 +96,9 @@ class CartValidator:
     def __init__(self, request: HttpRequest) -> None:
         self.request = request
         self.cart_owner_id = request.data['cart_owner']
-        self.cart_owner = self.__get_cart_owner_email()
 
     def validate_cart_creation(self):
+        self.cart_owner = self.__get_cart_owner_email()
         if isinstance(result := self._validate_cart_owner_exists(), str):
             return result
 
@@ -120,7 +120,7 @@ class CartValidator:
         except Cart.DoesNotExist:
             return True
 
-    def __get_cart_owner_email(self) -> str:
+    def __get_cart_owner_email(self) -> str | Literal[False]:
         try:
             cart_owner = User.objects.get(id=self.cart_owner_id)
             return cart_owner.email
