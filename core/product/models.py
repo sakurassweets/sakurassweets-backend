@@ -2,7 +2,10 @@ from django.db import models
 
 
 class ProductType(models.Model):
-    title = models.CharField('Тип продукту', max_length=255)
+    title = models.CharField('Тип продукту',
+                             max_length=255,
+                             blank=False,
+                             null=False)
 
     def __str__(self):
         return f'ID: {self.id} | Type: {self.title}'

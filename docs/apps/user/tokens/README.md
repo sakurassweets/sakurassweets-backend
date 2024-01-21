@@ -75,4 +75,4 @@
 
 - #### Check [How to create user](https://github.com/sakurassweets/sakurassweets-backend/docs/apps/user/create_user/README.md)
 
-#### This documentation show ways to manually use tokens.
+#### This documentation show ways to manually manage tokens.
