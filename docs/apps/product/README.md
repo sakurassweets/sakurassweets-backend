@@ -1,6 +1,6 @@
-## User model information
+## Product model information
 
-## User model fields
+## Product model fields
 
 | Field               | Field Type                  | Description                            | Parameters                                                |
 | :------------------ | :-------------------------- | :------------------------------------- | --------------------------------------------------------- |
