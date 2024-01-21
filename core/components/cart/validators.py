@@ -7,13 +7,13 @@ from cart.models import Cart
 from user.models import User
 
 
-class CartItemValidator:
+class CreateCartItemValidator:
 
     error_messages = {
         "high_quantity": "You can't add %(quantity)s of %(product)s, only %(quantity_in_stock)s left.",
         "already_in_cart": "%(product)s is already in your cart.",
-        "cart_exists": "Cart [ID: %(id)s] is not exists.",
-        "no_permission": "You can't add items in this cart."
+        "cart_exists": "Cart [ID: %(id)s] does not exists.",
+        "no_permission": "You can't manage items in this cart."
     }
 
     def __init__(self, request: HttpRequest) -> None:
@@ -22,8 +22,8 @@ class CartItemValidator:
         self.product_id = request.data.get('product')
         self.quantity = int(request.data.get('quantity'))
 
-    def validate_cart_item_creation(self) -> str | Literal[True]:
-        """Validates cart item creation.
+    def validate(self) -> str | Literal[True]:
+        """Validates cart item creating.
 
         You can create cart item only if it quantity >= of product
         quantity in stock
@@ -32,9 +32,10 @@ class CartItemValidator:
             If fails: String object that contains error that occures.
             If passes: Just returns `True`.
         """
-        self.cart = Cart.objects.get(id=self.cart_id) or None
-        if isinstance(result := self._validate_cart_exists(), str):
-            return result
+        if isinstance(cart := self._get_cart(), str):
+            return cart
+
+        self.cart = cart
 
         if isinstance(result := self._validate_user_is_cart_owner(), str):
             return result
@@ -76,12 +77,13 @@ class CartItemValidator:
 
         return True
 
-    def _validate_cart_exists(self) -> str | Literal[True]:
-        if not self.cart:
+    def _get_cart(self) -> str | Literal[True]:
+        try:
+            return Cart.objects.get(id=self.cart_id)
+        except Cart.DoesNotExist:
             return self.error_messages['cart_exists'] % {
                 "id": self.cart_id
             }
-        return True
 
     def __extract_list_of_products_in_cart(self) -> list[int]:
         """Extracts list of products in cart from cart object.
@@ -97,7 +99,7 @@ class CartItemValidator:
         return products_in_cart_list
 
 
-class CartValidator:
+class CreateCartValidator:
 
     error_messages = {
         "cart_exists": "Cart of user '%(user)s' already exists.",
@@ -108,7 +110,7 @@ class CartValidator:
         self.request = request
         self.cart_owner_id = request.data['cart_owner']
 
-    def validate_cart_creation(self):
+    def validate(self):
         self.cart_owner = self.__get_cart_owner_email()
         if isinstance(result := self._validate_cart_owner_exists(), str):
             return result
@@ -137,3 +139,38 @@ class CartValidator:
             return cart_owner.email
         except User.DoesNotExist:
             return False
+
+
+class UpdateCartItemValidator:
+    error_messages = {
+        "wrong_cart": "You can't move you'r items to another cart.",
+        "required_fields": "This field is required."
+    }
+    REQUIRED_FIELDS = ['product', 'quantity', 'cart']
+
+    def __init__(self, request: HttpRequest):
+        self.request = request
+
+    def validate(self):
+        if self.request.method == "PUT":
+            if isinstance(result := self._validate_required_fields(), dict):
+                return result
+
+        cart = Cart.objects.get(cart_owner=self.request.user)
+        request_cart = self.request.data.get('cart')
+
+        if not request_cart:
+            return True
+
+        if not cart.id == self.request.data.get('cart'):
+            return self.error_messages["wrong_cart"]
+
+        return True
+
+    def _validate_required_fields(self) -> dict[str, str] | None:
+        errors: dict = {}
+        for field in self.REQUIRED_FIELDS:
+            if field not in self.request.data:
+                errors[field] = self.error_messages["required_fields"]
+
+        return errors if errors else None
