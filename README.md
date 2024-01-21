@@ -6,10 +6,8 @@
 
 ### Build with:
 
-<img src="https://img.shields.io/badge/Python-244c6f?logo=python&logoColor=white&style=ShieldStyle" />
-<img src="https://img.shields.io/badge/Django-0c4b33?logo=django&logoColor=white&style=ShieldStyle" />
-<img src="https://img.shields.io/badge/Django%20Rest%20Framework-a30000?logo=django&logoColor=white&style=ShieldStyle" /> 
-<img src="https://img.shields.io/badge/Docker-ffffff?logo=docker&logoColor=White&style=ShieldStyle" />
+<img src="https://img.shields.io/badge/Python-244c6f?logo=python&logoColor=white&style=ShieldStyle"> <img src="https://img.shields.io/badge/Django-0c4b33?logo=django&logoColor=white&style=ShieldStyle" />
+<img src="https://img.shields.io/badge/Django%20Rest%20Framework-a30000?logo=django&logoColor=white&style=ShieldStyle" /> <img src="https://img.shields.io/badge/Docker-ffffff?logo=docker&logoColor=White&style=ShieldStyle" />
 
 ### Version Control and Development Tools used:
 

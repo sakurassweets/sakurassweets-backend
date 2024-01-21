@@ -16,8 +16,7 @@ class PriceCurrency(models.Model):
                                        unique=True,
                                        max_length=10,
                                        blank=False,
-                                       null=False,
-                                       default='₴')
+                                       null=False)
     currency = models.CharField('Валюта', unique=True, max_length=255, blank=False, null=False)  # NOQA
     country = models.CharField('Країна', max_length=255, blank=False, null=False)  # NOQA
 
@@ -39,7 +38,7 @@ class Product(models.Model):
                                        verbose_name='Валюта',
                                        on_delete=models.SET_NULL,
                                        blank=False,
-                                       null=True,)
+                                       null=True)
     product_type = models.ForeignKey(ProductType,
                                      verbose_name='Тип продукту',
                                      on_delete=models.SET_NULL,
