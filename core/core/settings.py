@@ -15,12 +15,14 @@ SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 
 DEBUG = bool(int(os.environ.get("DEBUG", default=0)))
 
-CSRF_TRUSTED_ORIGINS = os.environ.get("CSRF_TRUSTED", default="").split(',')
+csrf_trusted = os.environ.get("CSRF_TRUSTED", default="").split(',')
+CSRF_TRUSTED_ORIGINS = [host.strip() for host in csrf_trusted]
 
-HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", default="").split(',')
-ALLOWED_HOSTS = HOSTS
+hosts = os.environ.get("DJANGO_ALLOWED_HOSTS", default="").split(',')
+ALLOWED_HOSTS = [host.strip() for host in hosts]
 
-# CORS_ALLOWED_ORIGINS = os.environ.get("CORS_ORIGINS", default="").split(',')
+# cors_allowed = os.environ.get("CORS_ORIGINS", default="").split(',')
+# CORS_ALLOWED_ORIGINS = [origin.strip() for origin in cors_allowed]
 CORS_ALLOW_ALL_ORIGINS = True
 
 STORAGES = {
@@ -76,9 +78,6 @@ INSTALLED_APPS = [
 
     # CORS Headers
     'corsheaders',
-
-    # Swagger UI
-    'drf_yasg',
 ]
 
 MIDDLEWARE = [

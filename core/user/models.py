@@ -1,3 +1,4 @@
+from __future__ import annotations
 from django.contrib.auth.models import (
     AbstractBaseUser,
     BaseUserManager,
@@ -9,7 +10,7 @@ from django.db import models
 
 
 class CustomUserManager(BaseUserManager):
-    def create_user(self, email: str, password: str = None, **extra_fields):
+    def create_user(self, email: str, password: str = None, **extra_fields) -> User:
         if not email:
             raise ValueError('The Email field must be set')
         email = self.normalize_email(email)
@@ -20,7 +21,7 @@ class CustomUserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email: str, password: str = None, **extra_fields):
+    def create_superuser(self, email: str, password: str = None, **extra_fields) -> User:
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
 
@@ -47,7 +48,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"ID: {self.id} | Email: {self.email}"
 
     class Meta:

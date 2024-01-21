@@ -1,4 +1,5 @@
 import logging
+import os
 
 from django.contrib.auth.hashers import make_password
 from django.template.loader import render_to_string
@@ -11,6 +12,14 @@ logger = logging.getLogger('django')
 
 @shared_task
 def send_welcome_email(data: dict) -> None:
+    """Sends welcome email to user.
+
+    Args:
+        data: data: A dictionary with user data.
+    """
+    if not os.environ.get("SEND_EMAIL", False):
+        return None
+
     subject = 'Thanks for registering on Sakuras Sweets!'
     email = data['user_email']
     user = email.split('@')[0]
@@ -35,5 +44,4 @@ def send_welcome_email(data: dict) -> None:
 
 @shared_task
 def hash_password(password: str) -> str:
-    hashed_password = make_password(password)
-    return hashed_password
+    return make_password(password)

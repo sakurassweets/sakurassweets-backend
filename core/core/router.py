@@ -1,3 +1,7 @@
+"""Collects all routes into one router.
+
+Router include all endpoints that are will be displayed on API root.
+"""
 from django.urls import path, include
 
 from rest_framework.routers import DefaultRouter

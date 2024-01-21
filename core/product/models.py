@@ -2,7 +2,10 @@ from django.db import models
 
 
 class ProductType(models.Model):
-    title = models.CharField('Тип продукту', max_length=255)
+    title = models.CharField('Тип продукту',
+                             max_length=255,
+                             blank=False,
+                             null=False)
 
     def __str__(self):
         return f'ID: {self.id} | Type: {self.title}'
@@ -16,8 +19,7 @@ class PriceCurrency(models.Model):
                                        unique=True,
                                        max_length=10,
                                        blank=False,
-                                       null=False,
-                                       default='₴')
+                                       null=False)
     currency = models.CharField('Валюта', unique=True, max_length=255, blank=False, null=False)  # NOQA
     country = models.CharField('Країна', max_length=255, blank=False, null=False)  # NOQA
 
@@ -39,18 +41,18 @@ class Product(models.Model):
                                        verbose_name='Валюта',
                                        on_delete=models.SET_NULL,
                                        blank=False,
-                                       null=True,)
+                                       null=True)
     product_type = models.ForeignKey(ProductType,
                                      verbose_name='Тип продукту',
                                      on_delete=models.SET_NULL,
                                      blank=False,
                                      null=True,)
-    description = models.TextField('Опис', max_length=6000, blank=True, null=False)  # NOQA
+    description = models.TextField('Опис', max_length=6000, default='', blank=True, null=False)  # NOQA
     quantity_in_stock = models.PositiveIntegerField('Кількість на складі', blank=False, null=False)  # NOQA
     product_quantity = models.CharField('Обсяг продукту', max_length=255, blank=False, null=False)  # NOQA
     discount = models.PositiveSmallIntegerField('Знижка', default=0, blank=True, null=True)  # NOQA
-    rating = models.FloatField('Рейтинг', blank=True, null=True)
-    components = models.TextField('Склад', blank=True, null=True)
+    rating = models.FloatField('Рейтинг', default=0, blank=True, null=True)
+    components = models.TextField('Склад', default='', blank=True, null=True)
 
     def __str__(self):
         _title = self.title

@@ -32,12 +32,12 @@ class CartItem(models.Model):
                              verbose_name='Кошик',
                              on_delete=models.CASCADE,
                              null=True,
-                             blank=True)
+                             blank=False)
     product = models.ForeignKey(Product,
                                 verbose_name='Продукт',
                                 on_delete=models.CASCADE,
                                 null=True,
-                                blank=True)
+                                blank=False)
     quantity = models.PositiveIntegerField('Кількість',
                                            default=1,
                                            null=True,
