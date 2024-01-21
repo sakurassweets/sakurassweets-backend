@@ -37,7 +37,7 @@
 
 **Response:**
 
-In response you get all fields (will be fixed later). For example:
+In response you get all fields. For example:
 
 **Sent:**
 
