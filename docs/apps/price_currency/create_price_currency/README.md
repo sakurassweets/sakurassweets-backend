@@ -1,5 +1,3 @@
-## Create price currency reference
-
 ## Create price currency
 
 **Allow:** `GET, POST, HEAD, OPTIONS`

@@ -1,5 +1,3 @@
-## Retrieve Product reference
-
 ## Retrieve Product
 
 **Allow:** `GET, PUT, PATCH, DELETE, HEAD, OPTIONS`

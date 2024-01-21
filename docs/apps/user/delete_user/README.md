@@ -1,5 +1,3 @@
-## Delete user reference
-
 ## Delete user
 
 **Allow:** `GET, PUT, PATCH, DELETE, HEAD, OPTIONS`

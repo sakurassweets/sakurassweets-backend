@@ -1,5 +1,3 @@
-## Delete price currency reference
-
 ## Delete price currency
 
 **Allow:** `GET, PUT, PATCH, DELETE, HEAD, OPTIONS`

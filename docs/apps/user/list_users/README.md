@@ -1,5 +1,3 @@
-## List users reference
-
 ## List users
 
 **Allow:** `GET, HEAD, OPTIONS`

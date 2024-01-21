@@ -1,5 +1,3 @@
-## Create user reference
-
 ## Create user
 
 **Allow:** `POST, OPTIONS`

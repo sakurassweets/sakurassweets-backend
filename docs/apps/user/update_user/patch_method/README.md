@@ -1,5 +1,3 @@
-## Update user by PATCH reference
-
 ## Update user by PATCH
 
 **Allow:** `GET, PUT, PATCH, DELETE, HEAD, OPTIONS`

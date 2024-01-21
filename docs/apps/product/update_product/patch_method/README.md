@@ -1,5 +1,3 @@
-## Update Product by PATCH reference
-
 ## Update Product by PATCH
 
 **Allow:** `GET, PUT, PATCH, DELETE, HEAD, OPTIONS`

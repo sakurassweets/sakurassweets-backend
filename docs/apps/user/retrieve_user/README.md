@@ -1,5 +1,3 @@
-## Retrieve user reference
-
 ## Retrieve user
 
 **Allow:** `GET, PUT, PATCH, DELETE, HEAD, OPTIONS`

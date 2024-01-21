@@ -1,5 +1,3 @@
-## Delete Product reference
-
 ## Delete Product
 
 **Allow:** `GET, PUT, PATCH, DELETE, HEAD, OPTIONS`

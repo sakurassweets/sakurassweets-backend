@@ -1,5 +1,3 @@
-## Update price currency by PATCH reference
-
 ## Update price currency by PATCH
 
 **Allow:** `GET, PUT, PATCH, DELETE, HEAD, OPTIONS`

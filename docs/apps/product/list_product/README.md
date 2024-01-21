@@ -1,5 +1,3 @@
-## List Product reference
-
 ## List Product
 
 **Allow:** `GET, HEAD, OPTIONS`

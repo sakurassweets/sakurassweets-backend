@@ -1,5 +1,3 @@
-## Retrieve price currency reference
-
 ## Retrieve price currency
 
 **Allow:** `GET, PUT, PATCH, DELETE, HEAD, OPTIONS`

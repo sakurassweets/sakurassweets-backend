@@ -1,5 +1,3 @@
-## List price currencies reference
-
 ## List price currencies
 
 **Allow:** `GET, HEAD, OPTIONS`

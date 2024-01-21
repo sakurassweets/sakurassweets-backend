@@ -1,5 +1,3 @@
-## Create Product reference
-
 ## Create Product
 
 **Allow:** `GET, POST, HEAD, OPTIONS`
