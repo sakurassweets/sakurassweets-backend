@@ -24,4 +24,5 @@
 
 - `204` (No content)
 - `400` (Bad Request)
+- `403` (Forbidden)
 - `405` (Method now Allowed)

@@ -19,4 +19,4 @@
 
 Product title displays like "this" or this only. There's formatting to avoid double or more quotes.
 
-By default ordering is `"-id"` (first one is the latest).
+By default ordering is `"-id"` (first one is the newest).

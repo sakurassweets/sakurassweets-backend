@@ -63,6 +63,7 @@ In response you get data about changed fields. For example:
 
 - `200` (OK)
 - `400` (Bad request)
+- `403` (Forbidden)
 
 ## User updating validation rules
 

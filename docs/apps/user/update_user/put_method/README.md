@@ -20,14 +20,14 @@
 
 **!!! To update password, you should send `new_password` in request body**
 
-| Parameter      | Type       | Description       | Permission           |
-| :------------- | :--------- | :---------------- | -------------------- |
-| `email`        | `string`   | User email        | User itself or admin |
-| `password`     | `string`   | User password     | User itself or admin |
-| `last_login`   | `DateTime` | last login time   | Admin or staff       |
-| `is_superuser` | `boolean`  | super user status | Admin                |
-| `is_staff`     | `boolean`  | staff status      | Admin                |
-| `is_active`    | `boolean`  | activity status   | Admin or staff       |
+| Parameter      | Type       | Description                 | Permission           |
+| :------------- | :--------- | :-------------------------- | -------------------- |
+| `email`        | `string`   | **Required**. User email    | User itself or admin |
+| `password`     | `string`   | **Required**. User password | User itself or admin |
+| `last_login`   | `DateTime` | last login time             | Admin or staff       |
+| `is_superuser` | `boolean`  | super user status           | Admin                |
+| `is_staff`     | `boolean`  | staff status                | Admin                |
+| `is_active`    | `boolean`  | activity status             | Admin or staff       |
 
 > currently permissions isn't working properly, but this will be fixed
 
@@ -59,12 +59,9 @@ In response you get data about changed fields. For example:
 
 - `200` (OK)
 - `400` (Bad request)
+- `403` (Forbidden)
 
 ## User updating validation rules
-
-**Notes:**
-
-- required fields: `email`, `password`
 
 **Rules:**
 
