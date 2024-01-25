@@ -2,7 +2,6 @@ from django.db.models.signals import pre_save, post_save, post_delete
 from django.dispatch import receiver
 
 from components.general.caching.delete_cache_keys import delete_keys_with_prefix
-
 from user.models import User
 
 
@@ -22,13 +21,21 @@ def set_user_new_password_after_update(sender, instance: User, **kwargs) -> None
             instance.set_password(instance.password)
 
 
-@receiver(post_save, sender=User)
-def clear_cache_post_save(sender, instance: User, **kwargs) -> None:
-    pk = instance.id if instance.id else ''
-    delete_keys_with_prefix('user', pk=pk)
+names_map = {
+    "producttype": "product_type",
+    "pricecurrency": "price_currency",
+    "cartitem": "cart_item"
+}
 
 
-@receiver(post_delete, sender=User)
-def clear_cache_post_delete(sender, instance: User, **kwargs) -> None:
+def _get_cache_prefix(sender):
+    sender_name = sender._meta.model_name
+    prefix = names_map.get(sender_name, None) or sender_name
+    return prefix
+
+
+@receiver([post_save, post_delete])
+def clear_cache(sender, instance, **kwargs) -> None:
+    prefix = _get_cache_prefix(sender)
     pk = instance.id if instance.id else ''
-    delete_keys_with_prefix('user', pk=pk)
+    delete_keys_with_prefix(prefix, pk=pk)

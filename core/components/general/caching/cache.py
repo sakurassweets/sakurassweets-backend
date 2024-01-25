@@ -40,9 +40,9 @@ def cache_method(cache_key: str = None, timeout: int = 60 * 60) -> Response:
     """Caches the result of the function using Django's cache.
 
     Args:
-        cache_key: String object, should be named as `key_method`. For example:
+        cache_key: String object, should be named as `key_method`. For example:\
             `product_type_retrieve`, `product_type_list`, `user_retrieve`.
-        timeout: Integer, the duration for which the result should be cached.
+        timeout: Integer, the duration for which the result should be cached.\
             Time in `seconds`.
     Returns:
         `Response` object with cached data and status code.

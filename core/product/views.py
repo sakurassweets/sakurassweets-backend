@@ -40,10 +40,10 @@ class ProductViewset(viewsets.ModelViewSet):
     serializer_class = serializers.ProductSerializer
     permission_classes = [custom_permissions.IsAdminOrStaff,]
 
-    @cache_method(cache_key='product_retrieve', timeout=60 * 60 * 12)
+    @cache_method(cache_key='product_retrieve', timeout=25)
     def retrieve(self, request, *args, **kwargs):
         return super().retrieve(request, *args, **kwargs)
 
-    @cache_method(cache_key='product_list', timeout=60 * 60 * 12)
+    @cache_method(cache_key='product_list', timeout=25)
     def list(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)
