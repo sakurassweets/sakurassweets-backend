@@ -2,13 +2,13 @@ from typing import Literal
 import copy
 
 from django.utils.translation import gettext as _
-from django.http import HttpRequest
 from django.utils import timezone
 
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.exceptions import ValidationError
 from rest_framework.serializers import Serializer
 from rest_framework.response import Response
+from rest_framework.request import Request
 from rest_framework import status
 
 from celery.result import AsyncResult
@@ -162,11 +162,11 @@ class UserUpdateManager:
     _updated_data: dict = {}
 
     @log_user_update
-    def partial_update(self, *, request: HttpRequest, serializer: Serializer, pk: int) -> Response:
+    def partial_update(self, *, request: Request, serializer: Serializer, pk: int) -> Response:
         """Provides partial update of user, PATCH method.
 
         Args:
-            request: KeyWord arg only, a Django's `HttpRequest` object.
+            request: KeyWord arg only, a DRF's `Request` object.
             serializer: KeyWord arg only, Serializer for user model
                 to validate data. `Serializer` instance with data from request.
             pk: integer, primary key (id) of user that being updated.
@@ -185,11 +185,11 @@ class UserUpdateManager:
         return response
 
     @log_user_update
-    def update(self, *, request: HttpRequest, serializer: Serializer, pk: int) -> Response:
+    def update(self, *, request: Request, serializer: Serializer, pk: int) -> Response:
         """Provides update of user, PUT method.
 
         Args:
-            request: KeyWord arg only, a Django's `HttpRequest` object.
+            request: KeyWord arg only, a DRF's `Request` object.
             serializer: KeyWord arg only, Serializer for user model
                 to validate data. `Serializer` instance with data from request.
             pk: integer, primary key (id) of user that being updated.
@@ -262,14 +262,14 @@ class UserUpdateManager:
         return self._updated_data, status.HTTP_200_OK
 
     def _update_and_return_response(self,
-                                    request: HttpRequest,
+                                    request: Request,
                                     serializer: Serializer,
                                     pk: int,
                                     partial: bool = False) -> Response:
         """Provides user updating.
 
         Args:
-            request: KeyWord arg only, a Django's `HttpRequest` object.
+            request: KeyWord arg only, a DRF's `Request` object.
             serializer: KeyWord arg only, Serializer for user model
                 to validate data. `Serializer` instance with data from request.
             pk: integer, primary key (id) of user that being updated.
@@ -407,7 +407,7 @@ class UserUpdateManager:
             errors["error"] = self._empty_data_error
         else:
             for key, value in data.items():
-                if not value:
+                if value is None:
                     errors[key] = self._empty_field_error
 
         return errors if errors else None
@@ -511,11 +511,11 @@ class UserDeleteManager:
     _permission_error_message = _("You have no permission to delete this user")
 
     @log_user_deletion
-    def delete(self, *, request: HttpRequest, pk: int) -> Response:
+    def delete(self, *, request: Request, pk: int) -> Response:
         """Deletes user by primary key.
 
         Args:
-            request: KeyWord arg only, a Django's `HttpRequest` object.
+            request: KeyWord arg only, a DRF's `Request` object.
             pk: KeyWord arg only, integer, primary key (id) of user
                 that being deleted.
 

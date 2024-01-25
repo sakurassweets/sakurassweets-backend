@@ -1,4 +1,4 @@
-from django.http.request import HttpRequest
+from rest_framework.request import Request
 
 
 class UpdateImageValidator:
@@ -7,7 +7,7 @@ class UpdateImageValidator:
     }
     REQUIRED_FIELDS = ['image', 'main_image', 'related_to']
 
-    def __init__(self, request: HttpRequest):
+    def __init__(self, request: Request):
         self.request = request
 
     def validate(self):

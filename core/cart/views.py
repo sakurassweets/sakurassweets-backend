@@ -1,7 +1,7 @@
 from rest_framework import viewsets, permissions
 from rest_framework.response import Response
 from rest_framework.exceptions import ValidationError
-from django.http.request import HttpRequest
+from rest_framework.request import Request
 
 from cart.serializers import CartSerializer, CartItemSerializer
 from cart.models import Cart, CartItem
@@ -34,7 +34,7 @@ class CartViewSet(viewsets.ModelViewSet):
         else:
             return []
 
-    def create(self, request: HttpRequest, *args, **kwargs) -> Response:
+    def create(self, request: Request, *args, **kwargs) -> Response:
         validator = CreateCartValidator(request)
         _perform_validation(validator)
 
@@ -54,7 +54,7 @@ class CartItemViewSet(viewsets.ModelViewSet):
         else:
             return []
 
-    def create(self, request: HttpRequest, *args, **kwargs) -> Response:
+    def create(self, request: Request, *args, **kwargs) -> Response:
         validator = CreateCartItemValidator(request)
         _perform_validation(validator)
 

@@ -14,23 +14,48 @@ def delete_keys_with_prefix(prefix: str, pk: str) -> None:
     in same way.
 
     Args:
-        prefix: string object of cache prefix.
-        pk: string object of primary key of exact object that cached.
+        prefix: String object of cache prefix.
+        pk: String object of primary key of exact object that cached.
             For example: product_retrieve_5
     """
+    pk = str(pk)
     all_keys = cache.keys('*')
     keys_to_delete = [key for key in all_keys if key.startswith(prefix)]
     deleted_keys = set()
     for key in keys_to_delete:
         method = _extract_method_after_prefix(prefix, key)
-        # delete key for only specified pk
-        if key in [f'{prefix}_{method}_{pk}', f'{prefix}_{method}_{pk}_status_code']:
+        cache_pk = pk if pk in key else ''
+        if _is_valid_key(key, prefix, method, cache_pk) and key not in deleted_keys:
             cache.delete(key)
             deleted_keys.add(key)
-        # delete key if match prefix (for ex. product won't delete product_type keys)
-        elif key == f'{prefix}_{method}' and key not in deleted_keys:
-            cache.delete(key)
-            deleted_keys.add(key)
+
+
+def _is_valid_key(key: str, prefix: str, method: str, pk: str = None) -> bool:
+    """Validates cache key without pk.
+
+    Args:
+        key: String object of full cache key.
+        prefix: String object of prefix. For example:
+            `user` or `product`
+        method: String object of method. For example:
+            `retrieve` or `list`.
+        pk: String object of primary key. Can be `None` for keys
+            that doesn't have `pk`.
+    Returns:
+        Boolean that says is key valid (matches pattern) or not.
+    """
+    delete_prefix = f'{prefix}_{method}'
+    delete_prefix_admin = f'{prefix}_{method}_admin'
+
+    if pk:
+        delete_prefix = delete_prefix + f'_{pk}'
+        delete_prefix_admin = delete_prefix_admin + f'_{pk}'
+
+    KEY_TEMPLATES = [delete_prefix,
+                     f'{delete_prefix}_status_code',
+                     f'{delete_prefix_admin}',
+                     f'{delete_prefix_admin}_status_code',]
+    return key in KEY_TEMPLATES
 
 
 def _extract_method_after_prefix(prefix: str, full_key: str) -> str | None:

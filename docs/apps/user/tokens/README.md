@@ -71,6 +71,11 @@
 
 ## Notation
 
+#### Tokens lifetime:
+
+- **Access token:** 15 minutes
+- **Refresh token:** 60 days
+
 #### Also you can get tokens by creating user, but it's sligthly different from this documentation.
 
 - #### Check [How to create user](https://github.com/sakurassweets/sakurassweets-backend/docs/apps/user/create_user/README.md)

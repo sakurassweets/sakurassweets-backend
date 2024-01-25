@@ -1,11 +1,12 @@
-from django.http import HttpRequest
+from rest_framework.request import Request
 
 from rest_framework import viewsets, permissions, status, mixins
 from rest_framework.serializers import Serializer
 from rest_framework.response import Response
 
 from components.user.mixins import UpdateRetrieveDestroyListUserMixin
-from components.user.caching.caching_decorators import cache_user_method
+from components.user.constants import CACHE_TIMEOUT
+from components.general.caching.cache import cache_method
 
 from user.managers import (
     UserCreateManager,
@@ -35,19 +36,19 @@ class UserViewSet(UpdateRetrieveDestroyListUserMixin,
         else:
             return self.serializer_class
 
-    @cache_user_method(cache_key='user_list', timeout=60 * 60)
-    def list(self, request: HttpRequest, *args, **kwargs) -> Response:
+    @cache_method(cache_key='user_list', timeout=CACHE_TIMEOUT)
+    def list(self, request: Request, *args, **kwargs) -> Response:
         return super().list(request, *args, **kwargs)
 
-    @cache_user_method(cache_key='user_retrieve', timeout=60 * 60)
-    def retrieve(self, request: HttpRequest, *args, **kwargs) -> Response:
+    @cache_method(cache_key='user_retrieve', timeout=CACHE_TIMEOUT)
+    def retrieve(self, request: Request, *args, **kwargs) -> Response:
         return super().retrieve(request, *args, **kwargs)
 
-    def update(self, request: HttpRequest, pk: int) -> Response:
+    def update(self, request: Request, pk: int) -> Response:
         """Updates user with `PUT` method.
 
         Args:
-            request: a Django's `HttpRequest` object.
+            request: a DRF's `Request` object.
             pk: integer, primary key (id) of user that being updated.
 
         Returns:
@@ -56,11 +57,11 @@ class UserViewSet(UpdateRetrieveDestroyListUserMixin,
         """
         return self._handle_update(request=request, pk=pk, partial=False)
 
-    def partial_update(self, request: HttpRequest, pk: int) -> Response:
+    def partial_update(self, request: Request, pk: int) -> Response:
         """Updates user with `PATCH` method.
 
         Args:
-            request: a Django's `HttpRequest` object.
+            request: a DRF's `Request` object.
             pk: integer, primary key (id) of user that being updated.
 
         Returns:
@@ -69,11 +70,11 @@ class UserViewSet(UpdateRetrieveDestroyListUserMixin,
         """
         return self._handle_update(request=request, pk=pk, partial=True)
 
-    def destroy(self, request: HttpRequest, pk: int) -> Response:
+    def destroy(self, request: Request, pk: int) -> Response:
         """Deletes user.
 
         Args:
-            request: a Django's `HttpRequest` object.
+            request: a DRF's `Request` object.
             pk: integer, primary key (id) of user that being destroyed.
 
         Returns:
@@ -84,11 +85,11 @@ class UserViewSet(UpdateRetrieveDestroyListUserMixin,
         response = manager.delete(request=request, pk=pk)
         return response
 
-    def _handle_update(self, request: HttpRequest, pk: int, partial: bool) -> Response:
+    def _handle_update(self, request: Request, pk: int, partial: bool) -> Response:
         """Handles both full and partial updates.
 
         Args:
-            request: a Django's `HttpRequest` object.
+            request: a DRF's `Request` object.
             pk: integer, primary key (id) of user that being updated.
             partial: boolean, if True - user updating with partial_update
                 method (PATCH)
@@ -123,11 +124,11 @@ class CreateUserViewSet(mixins.CreateModelMixin,
     serializer_class = serializers.CreateUserSerializer
     permission_classes = [permissions.AllowAny,]
 
-    def create(self, request: HttpRequest) -> Response:
+    def create(self, request: Request) -> Response:
         """Creates user.
 
         Args:
-            request: a Django's `HttpRequest` object.
+            request: a DRF's `Request` object.
 
         Returns:
             `Response` object with json body (info or errors) and HTTP
