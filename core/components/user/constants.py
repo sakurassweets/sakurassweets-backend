@@ -4,6 +4,7 @@ MAX_SIMILARITY: float = 0.55
 MIN_DIGITS: int = 1
 # required fields in input for user update by PUT method
 REQUIRED_UPDATE_FIELDS: list = ['email', 'password']
+CACHE_TIMEOUT = 60 * 60
 
 
 def constants_list_for_password_validation() -> dict[str, int]:

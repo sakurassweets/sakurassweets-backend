@@ -1,6 +1,6 @@
 from typing import Literal
 
-from django.http.request import HttpRequest
+from rest_framework.request import Request
 
 from product.models import Product
 from cart.models import Cart
@@ -16,7 +16,7 @@ class CreateCartItemValidator:
         "no_permission": "You can't manage items in this cart."
     }
 
-    def __init__(self, request: HttpRequest) -> None:
+    def __init__(self, request: Request) -> None:
         self.request = request
         self.cart_id = request.data.get('cart')
         self.product_id = request.data.get('product')
@@ -106,7 +106,7 @@ class CreateCartValidator:
         "no_cart_owner": "User 'ID: %(id)s' does not exists and can't be assigned as cart owner."
     }
 
-    def __init__(self, request: HttpRequest) -> None:
+    def __init__(self, request: Request) -> None:
         self.request = request
         self.cart_owner_id = request.data['cart_owner']
 
@@ -148,7 +148,7 @@ class UpdateCartItemValidator:
     }
     REQUIRED_FIELDS = ['product', 'quantity', 'cart']
 
-    def __init__(self, request: HttpRequest):
+    def __init__(self, request: Request):
         self.request = request
 
     def validate(self):

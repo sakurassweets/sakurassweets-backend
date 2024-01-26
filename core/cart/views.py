@@ -1,11 +1,16 @@
 from rest_framework import viewsets, permissions
 from rest_framework.response import Response
 from rest_framework.exceptions import ValidationError
-from django.http.request import HttpRequest
+from rest_framework.request import Request
 
 from cart.serializers import CartSerializer, CartItemSerializer
 from cart.models import Cart, CartItem
-from components.cart.validators import CreateCartItemValidator, CreateCartValidator, UpdateCartItemValidator
+from components.cart.validators import (
+    CreateCartItemValidator,
+    CreateCartValidator,
+    UpdateCartItemValidator
+)
+from components.general.caching.cache import cache_method
 from components.cart import permissions as cart_permissions
 from components.cart_item import permissions as cart_item_permissions
 from cart import constants
@@ -34,7 +39,15 @@ class CartViewSet(viewsets.ModelViewSet):
         else:
             return []
 
-    def create(self, request: HttpRequest, *args, **kwargs) -> Response:
+    @cache_method(cache_key="cart_list", timeout=60 * 2)
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
+
+    @cache_method(cache_key="cart_retrieve", timeout=60 * 2)
+    def retrieve(self, request, *args, **kwargs):
+        return super().retrieve(request, *args, **kwargs)
+
+    def create(self, request: Request, *args, **kwargs) -> Response:
         validator = CreateCartValidator(request)
         _perform_validation(validator)
 
@@ -54,7 +67,15 @@ class CartItemViewSet(viewsets.ModelViewSet):
         else:
             return []
 
-    def create(self, request: HttpRequest, *args, **kwargs) -> Response:
+    @cache_method(cache_key="cart_item_list", timeout=60 * 2)
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
+
+    @cache_method(cache_key="cart_item_retrieve", timeout=60 * 2)
+    def retrieve(self, request, *args, **kwargs):
+        return super().retrieve(request, *args, **kwargs)
+
+    def create(self, request: Request, *args, **kwargs) -> Response:
         validator = CreateCartItemValidator(request)
         _perform_validation(validator)
 
