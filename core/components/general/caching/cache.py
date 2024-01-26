@@ -5,6 +5,21 @@ from rest_framework.exceptions import APIException
 from functools import wraps
 
 
+def _get_pk_key(kwargs):
+    pk = kwargs.get('pk', '')
+    return f"_{pk}" if pk else ''
+
+
+def _get_admin_key(request: Request):
+    user_is_staff = request.user.is_staff
+    return '_admin' if user_is_staff else ''
+
+
+def _get_page_key(request: Request):
+    page = request.query_params.get("page")
+    return f'_page_{page}' if page else ''
+
+
 def get_key(cache_key: str, args, kwargs) -> str:
     """Gets full cache key.
 
@@ -26,13 +41,11 @@ def get_key(cache_key: str, args, kwargs) -> str:
     if not request:
         raise APIException("'Request' variable not provided in request.")
 
-    user_is_staff = request.user.is_staff
-    pk = kwargs.get('pk', '')
+    pk = _get_pk_key(kwargs)
+    is_admin = _get_admin_key(request)
+    page = _get_page_key(request)
 
-    pk = f"_{pk}" if pk else ''
-    is_admin = '_admin' if user_is_staff else ''
-
-    key = cache_key + is_admin + pk
+    key = cache_key + is_admin + pk + page
     return key
 
 
