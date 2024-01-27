@@ -1,35 +1,16 @@
 #########################################################
-# Stage 1: Install dependencies and collect staticfiles #
+###### Stage 1: Run linter and collect staticfiles ######
 #########################################################
-FROM python:3.12 AS collectstatic
+FROM python:3.12-alpine AS collectstatic
 
 # Set work directory
 WORKDIR /app
 
-# Install dependencies
-RUN apt-get update && apt-get install -y ncat
-RUN apt-get update -y \
-    && apt-get install postgresql gcc python3-dev musl-dev -y
-
-# Copy only requirements and install them
-COPY core/requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
-
 # Copy project
 COPY core/ .
 
-# Set SECRET_KEY
-ENV SECRET_KEY=$DJANGO_SECRET_KEY
-
 # Run collectstatic
 RUN python manage.py collectstatic --noinput
-
-#########################################################
-################# Stage 2: Build stage ##################
-#########################################################
-FROM python:3.12 AS builder
-
-WORKDIR /app
 
 # Install linting tools
 RUN pip install --upgrade pip
@@ -42,14 +23,20 @@ COPY --from=collectstatic /app /app
 RUN flake8 --ignore=E501,F401 .
 
 #########################################################
-################ Stage 3: Runtime stage #################
+################ Stage 2: Runtime stage #################
 #########################################################
 FROM python:3.12-slim
 
 WORKDIR /app
 
-# Copy the installed dependencies from the builder stage
-COPY --from=builder /usr/local/lib/python3.12/site-packages /usr/local/lib/python3.12/site-packages
+# Install dependencies
+RUN apt-get update && apt-get install -y ncat
+RUN apt-get update -y \
+    && apt-get install postgresql gcc python3-dev musl-dev -y
+
+# Copy only requirements and install them
+COPY core/requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the project files from the builder stage
 COPY --from=builder /app /app
