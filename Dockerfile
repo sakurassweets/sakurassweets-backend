@@ -16,9 +16,6 @@ RUN python manage.py collectstatic --noinput
 RUN pip install --upgrade pip
 RUN pip install flake8
 
-# Copy the project files from the collectstatic stage
-COPY --from=collectstatic /app /app
-
 # Lint the code
 RUN flake8 --ignore=E501,F401 .
 
@@ -38,8 +35,8 @@ RUN apt-get update -y \
 COPY core/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the project files from the builder stage
-COPY --from=builder /app /app
+# Copy the project files from the collectstatic stage
+COPY --from=collectstatic /app /app
 
 EXPOSE 8000
 
