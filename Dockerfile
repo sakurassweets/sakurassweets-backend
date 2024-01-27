@@ -6,9 +6,6 @@ WORKDIR /app
 
 # Install dependencies
 RUN apk update && \
-    apk add --no-cache ncat
-
-RUN apk update && \
     apk add --no-cache postgresql gcc python3-dev musl-dev
 
 # Copy only requirements and install them
