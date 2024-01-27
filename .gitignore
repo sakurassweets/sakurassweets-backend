@@ -6,6 +6,7 @@ logs/*
 __pycache__
 db.sqlite3
 core/media/*
+core/staticfiles/
 .vscode
 local_settings.py
 *_new.html
