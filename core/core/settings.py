@@ -2,6 +2,8 @@ import os
 from datetime import timedelta
 from pathlib import Path
 
+from django.core.management.utils import get_random_secret_key
+
 from dotenv import load_dotenv
 
 from custom_logging.initializator import initialize_loggers
@@ -11,7 +13,8 @@ load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
+SECRET_KEY = os.environ.get(
+    "DJANGO_SECRET_KEY", default=get_random_secret_key())
 
 DEBUG = bool(int(os.environ.get("DEBUG", default=0)))
 
