@@ -27,7 +27,63 @@
 
 - [Documentation](https://github.com/sakurassweets/sakurassweets-backend/docs)
 
-### Installation
+## Installation with Docker and Docker Compose
+
+**Clone the repository:**
+
+```bash
+$ git clone https://github.com/sakurassweets/sakurassweets-backend
+```
+
+**Enter project folder:**
+
+```bash
+$ cd sakurassweets-backend
+```
+
+**Setup the .env file (check next topics)**
+
+**Build & Run project**
+
+```bash
+$ docker compose -f local.yml up -d --build
+```
+
+**Go to: [http://localhost:80](http://localhost:80)**
+
+### Using Docker you can create DB backups
+
+You can use commands only when container runs
+
+**Create backup:**
+
+```bash
+$ docker compose -f local.yml exec db backup
+```
+
+**List backups:**
+
+```bash
+$ docker compose -f local.yml exec db backups
+```
+
+**Restore DB from backup:**
+
+<1> - Filename of an existing backup.
+
+```bash
+$ docker compose -f local.yml exec db restore <1>
+```
+
+**Remove backup:**
+
+<1> - Filename of a backup to remove.
+
+```bash
+$ docker-compose -f local.yml exec db rmbackup <1>
+```
+
+## Local Installation
 
 **Clone the repository:**
 
@@ -126,7 +182,7 @@ Note: "0.0.0.0" as host means any IP used with provided port.
 - Find the `.env.example` file in project
 - Rename it to `.env` and open
 - Set _`DB_NAME`_, _`DB_USER`_, _`DB_PASS`_, to _`name`_, _`username`_ and _`password`_ that you've enetered on DB creation
-- Set _`DB_HOST`_ to `localhost` if you deploy project locally
+- Set _`DB_HOST`_ to `localhost` if you deploy project locally. For local Docker deployment: Set it to `db`.
 - Set _`DB_PORT`_ to `5432` (default for PostgreSQL)
 - Set _`DB_ENGINE`_ to you'r backend for DB. Default is `"django.db.backends.postgresql"` for PostgreSQL.
 
@@ -134,7 +190,7 @@ Note: "0.0.0.0" as host means any IP used with provided port.
 
 **Django variables:**
 
-- `DJANGO_SECRET_KEY`: Randomly generated secret key, you can enter anything in there, but i recommend just generate it. Used in JWT generation.
+- `DJANGO_SECRET_KEY`: Randomly generated secret key by default but recommended to add your own key (just generate it and paste in). Used in JWT generation.
 - `DJANGO_ALLOWED_HOSTS`: Hosts that can actually host project. Just set it to: `localhost, 127.0.0.1, 0.0.0.0` for local deployment.
 - `DEBUG`: Django debug mode. If something goes wrong django shows you debug message with problem. Set `1` to set it as `True`, and `0` for `False`
 - `CSRF_TRUSTED`: Trusted origins for CSRF operations. For example sending some data through POST request from input form on website. Set it to: `http://localhost, http://127.0.0.1, http://0.0.0.0` for local deployment.
@@ -142,7 +198,7 @@ Note: "0.0.0.0" as host means any IP used with provided port.
 
 **Email sending variables:**
 
-Note: To use email sending read [this](), if you don't want to do this just set _`SEND_EMAIL`_ to `False`.
+Note: To use email sending read [this](https://reintech.io/blog/setting-up-email-in-django-tutorial), if you don't want to do this just set _`SEND_EMAIL`_ to `False`.
 
 - `EMAIL_HOST`: In most cases the email from which emails will be sended to user.
 - `EMAIL_PASSWORD`: Password of **App** that allowed to send email using you'r `EMAIL_HOST`.
@@ -152,14 +208,14 @@ Note: To use email sending read [this](), if you don't want to do this just set 
 
 **Redis variables:**
 
-- `REDIS_HOST`: Means first part of redis address. For local development set it to `"127.0.0.1"`.
+- `REDIS_HOST`: Means first part of redis address. For local development set it to `"127.0.0.1"`. For local Docker deployment: Set it to `redis`.
 - `REDIS_PORT`: Default is `"6379"`, set it or another, it's up to you.
 - `REDIS_DB`: Redis DB number. Set only allowed DB number. If DB number 1 is used, better to set it to 2, however setting it as DB 1 still allowed. Same, up to you. **DB number 0 is allowed**.
 
 **Celery variables:**
 
-- `CELERY_BROKER`: Celery message broker url. If you use Redis and deploy project locally use default: `"redis://127.0.0.1:6379/0"`. Instead of 0 can be another DB number.
-- `CELERY_RESULTS`: Celery results broker url. Same as `CELERY_BROKER` set default value if deploy locally: `"redis://127.0.0.1:6379/0"`.
+- `CELERY_BROKER`: Celery message broker url. If you use Redis and deploy project locally use default: `"redis://127.0.0.1:6379/0"`. Instead of 0 can be another DB number. For local Docker deployment: Set it to `"redis://redis:6379/0"`.
+- `CELERY_RESULTS`: Celery results broker url. Same as `CELERY_BROKER` set default value if deploy locally: `"redis://127.0.0.1:6379/0"`. For local Docker deployment: Set it to `"redis://redis:6379/0"`.
 
 **Gunicorn variables:**
 Note: Set it only if you actually use gunicorn. Currently gunicorn is hard to use on Windows or even unavailable. If you want to use gunicorn it should be linux or Docker container.
