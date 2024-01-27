@@ -1,29 +1,7 @@
-#########################################################
-###### Stage 1: Run linter and collect staticfiles ######
-#########################################################
-FROM python:3.12-alpine AS collectstatic
+
+FROM python:3.12-alpine
 
 # Set work directory
-WORKDIR /app
-
-# Copy project
-COPY core/ .
-
-# Run collectstatic
-RUN python manage.py collectstatic --noinput
-
-# Install linting tools
-RUN pip install --upgrade pip
-RUN pip install flake8
-
-# Lint the code
-RUN flake8 --ignore=E501,F401 .
-
-#########################################################
-################ Stage 2: Runtime stage #################
-#########################################################
-FROM python:3.12-slim
-
 WORKDIR /app
 
 # Install dependencies
@@ -35,8 +13,18 @@ RUN apt-get update -y \
 COPY core/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the project files from the collectstatic stage
-COPY --from=collectstatic /app /app
+# Install linting tools
+RUN pip install --upgrade pip
+RUN pip install flake8
+
+# Copy project
+COPY core/ .
+
+# Lint the code
+RUN flake8 --ignore=E501,F401 .
+
+# Run collectstatic
+RUN python manage.py collectstatic --noinput
 
 EXPOSE 8000
 
