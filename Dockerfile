@@ -5,9 +5,11 @@ FROM python:3.12-alpine
 WORKDIR /app
 
 # Install dependencies
-RUN apt-get update && apt-get install -y ncat
-RUN apt-get update -y \
-    && apt-get install postgresql gcc python3-dev musl-dev -y
+RUN apk update && \
+    apk add --no-cache ncat
+
+RUN apk update && \
+    apk add --no-cache postgresql gcc python3-dev musl-dev
 
 # Copy only requirements and install them
 COPY core/requirements.txt .
