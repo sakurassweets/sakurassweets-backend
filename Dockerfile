@@ -18,6 +18,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy project
 COPY core/ .
 
+# Set SECRET_KEY
+ENV SECRET_KEY=$DJANGO_SECRET_KEY
+
 # Run collectstatic
 RUN python manage.py collectstatic --noinput
 
