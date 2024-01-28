@@ -86,4 +86,6 @@ USER django
 
 EXPOSE 8000
 
+HEALTHCHECK CMD curl --fail http://localhost:8000/ || exit 1
+
 ENTRYPOINT ["/entrypoint"]
