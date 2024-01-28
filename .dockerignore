@@ -11,5 +11,7 @@ docs
 README
 LICENSE
 dump.rdb
-core/logs/
+core/logs/user/
+core/logs/gunicorn_access.log/
+core/logs/gunicorn_error.log/
 core/local/uk/LC_MESSAGES/django.mo

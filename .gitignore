@@ -1,5 +1,7 @@
 # Django #
-logs/*
+logs/user/*
+logs/gunicorn_access.log
+logs/gunicorn_error.log
 *.log
 *.pot
 *.pyc
