@@ -4,7 +4,7 @@
 ### View backups.
 ###
 ### Usage:
-###     $ docker compose -f local.yml exec db backups
+###     $ docker compose -f production.yml exec db backups
 
 
 set -o errexit

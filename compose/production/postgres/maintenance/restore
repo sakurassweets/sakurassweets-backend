@@ -7,7 +7,7 @@
 ###     <1> filename of an existing backup.
 ###
 ### Usage:
-###     $ docker compose -f local.yml exec db restore <1>
+###     $ docker compose -f production.yml exec db restore <1>
 
 
 set -o errexit
@@ -25,13 +25,13 @@ if [[ -z ${1+x} ]]; then
 fi
 
 backup_filename="${BACKUP_DIR_PATH}/${1}"
-message_welcome "Restoring the '${POSTGRES_DB}' database from the '${backup_filename}' backup..."
+message_welcome "Restoring the '${PROJECT_DB}' database from the '${backup_filename}' backup..."
 
 export PGHOST="${POSTGRES_HOST}"
 export PGPORT="${POSTGRES_PORT}"
 export PGUSER="${POSTGRES_USER}"
 export PGPASSWORD="${POSTGRES_PASSWORD}"
-export PGDATABASE="${POSTGRES_DB}"
+export PGDATABASE="${PROJECT_DB}"
 
 message_info "Dropping the database..."
 dropdb "${PGDATABASE}"
@@ -40,6 +40,6 @@ message_info "Creating a new database..."
 createdb --owner="${POSTGRES_USER}"
 
 message_info "Applying the backup to the new database..."
-gunzip -c "${backup_filename}" | psql "${POSTGRES_DB}"
+gunzip -c "${backup_filename}" | psql "${PROJECT_DB}"
 
-message_success "The '${POSTGRES_DB}' database has been restored from the '${backup_filename}' backup."
+message_success "The '${PROJECT_DB}' database has been restored from the '${backup_filename}' backup."
