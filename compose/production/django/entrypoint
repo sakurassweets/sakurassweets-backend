@@ -51,4 +51,15 @@ END
 
 >&2 echo 'PostgreSQL is available'
 
+python << END
+import os
+
+assert os.path.isfile("/app/core/logs/django/backend.log")
+assert os.path.isfile("/app/core/logs/user/user_create.log")
+assert os.path.isfile("/app/core/logs/user/user_delete.log")
+assert os.path.isfile("/app/core/logs/user/user_update.log")
+END
+
+>&2 echo 'All logfiles exists'
+
 exec "$@"
