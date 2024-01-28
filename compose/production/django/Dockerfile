@@ -29,8 +29,6 @@ ENV PYTHONDONTWRITEBYTECODE 1
 
 WORKDIR ${APP_HOME}
 
-RUN addgroup --system docker && adduser --system --group debian
-
 
 # Install required system dependencies
 RUN apt-get update && apt-get install --no-install-recommends -y \
@@ -54,30 +52,25 @@ RUN pip install --no-cache-dir --no-index --find-links=/wheels/ /wheels/* \
 RUN pip install --upgrade pip
 RUN pip install flake8
 
-COPY --chown=debian:docker ./compose/production/django/entrypoint /entrypoint
+COPY ./compose/production/django/entrypoint /entrypoint
 RUN sed -i 's/\r$//g' /entrypoint
 RUN chmod +x /entrypoint
 
-COPY --chown=debian:docker ./compose/production/django/start /start
+COPY ./compose/production/django/start /start
 RUN sed -i 's/\r$//g' /start
 RUN chmod +x /start
 
-COPY --chown=debian:docker ./compose/production/django/celery/worker/start /start-celeryworker
+COPY ./compose/production/django/celery/worker/start /start-celeryworker
 RUN sed -i 's/\r$//g' /start-celeryworker
 RUN chmod +x /start-celeryworker
 
 RUN flake8 --ignore=E501,F401 .
 
 # copy application code to WORKDIR
-COPY --chown=debian:docker . ${APP_HOME}
-
-# make django owner of the WORKDIR directory as well.
-RUN chown -R debian:docker ${APP_HOME}
-
-USER debian
+COPY . ${APP_HOME}
 
 # Create logfiles
-RUN mkdir -p /app/core/logs/django && chown -R debian:docker /app/core && touch /app/core/logs/django/backend.log
+RUN mkdir -p /app/core/logs/django && touch /app/core/logs/django/backend.log
 RUN mkdir -p /app/core/logs/user 
 RUN touch /app/core/logs/user/user_create.log
 RUN touch /app/core/logs/user/user_delete.log
