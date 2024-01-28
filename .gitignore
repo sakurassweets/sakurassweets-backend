@@ -1,7 +1,8 @@
 # Django #
-core/logs/user/*
-core/logs/gunicorn_access.log
-core/logs/gunicorn_error.log
+logs/user/*
+logs/gunicorn_access.log
+logs/gunicorn_error.log
+*.log
 *.pot
 *.pyc
 __pycache__
