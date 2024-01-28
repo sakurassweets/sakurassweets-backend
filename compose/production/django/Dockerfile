@@ -57,6 +57,7 @@ RUN pip install flake8
 
 # Create logfiles
 RUN mkdir -p /app/core/logs/django && chown -R django:django /app/core/logs && touch /app/core/logs/django/backend.log
+
 RUN mkdir -p /app/core/logs/user 
 RUN touch /app/core/logs/user/user_create.log
 RUN touch /app/core/logs/user/user_delete.log
