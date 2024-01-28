@@ -1,0 +1,12 @@
+.gitignore
+.github
+.git
+.venv
+.env.example
+.env.db.example
+.vscode
+
+docs
+README
+LICENSE
+dump.rdb

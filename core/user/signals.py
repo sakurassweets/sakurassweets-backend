@@ -37,5 +37,8 @@ def _get_cache_prefix(sender):
 @receiver([post_save, post_delete])
 def clear_cache(sender, instance, **kwargs) -> None:
     prefix = _get_cache_prefix(sender)
-    pk = instance.id if instance.id else ''
-    delete_keys_with_prefix(prefix, pk=pk)
+    try:
+        pk = instance.id if instance.id else ''
+        delete_keys_with_prefix(prefix, pk=pk)
+    except AttributeError:
+        pass
