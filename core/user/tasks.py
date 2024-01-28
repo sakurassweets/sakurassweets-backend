@@ -17,7 +17,8 @@ def send_welcome_email(data: dict) -> None:
     Args:
         data: data: A dictionary with user data.
     """
-    if not os.environ.get("SEND_EMAIL", False):
+    send_email = str(os.getenv("SEND_EMAIL")).lower()
+    if not send_email == 'true' or send_email == '1':
         return None
 
     subject = 'Thanks for registering on Sakuras Sweets!'

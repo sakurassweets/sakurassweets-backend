@@ -1,0 +1,75 @@
+#################################################################################################
+#################################################################################################
+## PLEASE DON'T USE THIS DOCKER COMPOSE YAML. THIS FILE USED ONLY ON ACTUAL PROJECT AND MISSED ##
+### SOME FIELDS (DB FOR EXAMPLE). ALSO THIS FILE PROVIDE DIFFERENT CONFIGURATION. YOU CAN USE ###
+##### THE LOCAL.YML, IT'S PRETTY MUSH THE SAME AS PRODUCTION SO THERE'S NO PROBLEMS WITH IT #####
+#################################################################################################
+#################################################################################################
+
+version: '3.8'
+
+services:
+  django: &django
+    image: ghcr.io/sakurassweets/sakurassweets-backend:main
+    restart: always
+    volumes:
+      - sakuras_sweets_media_volume:/app/core/media
+      - sakuras_sweets_logs_volume:/app/core/logs
+    expose:
+      - 8000
+    env_file:
+      - ./.env
+    depends_on:
+      - db
+      - redis
+    command: /start
+    networks:
+      - sakuras_sweets
+      - db_network
+
+  redis:
+    image: redis:7.2.3
+    container_name: sakuras_sweets_redis
+    restart: always
+    networks:
+      - sakuras_sweets
+    volumes:
+      - sakuras_sweets_redis_data:/data
+
+  celeryworker:
+    <<: *django
+    image: sakuras_sweets_celeryworker
+    container_name: sakuras_sweets_celeryworker
+    command: /start-celeryworker
+
+  nginx:
+    build:
+      context: .
+      dockerfile: ./nginx/Dockerfile
+    image: sakuras_sweets_backend_nginx
+    depends_on:
+      - django
+    volumes:
+      - ./app/static/:/core/static/
+      - sakuras_sweets_media_volume:/usr/share/nginx/media
+    ports:
+      - 8000:8000
+    networks:
+      - sakuras_sweets
+  
+  sakuras_sweets_frontend:
+    image: ghcr.io/sakurassweets/sakurassweets-frontend:main
+    container_name: sakuras_sweets_frontend
+    restart: always
+    ports:
+      - "8080:8080"
+  
+
+networks:
+  sakuras_sweets:
+    driver: bridge
+
+volumes:
+  sakuras_sweets_redis_data:
+  sakuras_sweets_logs_volume:
+  sakuras_sweets_media_volume:

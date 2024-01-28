@@ -1,8 +1,11 @@
-import os
 from typing import Any
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
+
+USER_CREATE_FILENAME = BASE_DIR / "logs/user/user_create.log"
+USER_DELETE_FILENAME = BASE_DIR / "logs/user/user_delete.log"
+USER_UPDATE_FILENAME = BASE_DIR / "logs/user/user_update.log"
 
 
 def initialize_user_managers_logger() -> dict[str, Any]:
@@ -17,19 +20,19 @@ def initialize_user_managers_logger() -> dict[str, Any]:
             "user_create_file": {
                 "level": "INFO",
                 "class": "logging.FileHandler",
-                "filename": os.path.join(BASE_DIR, "logs/user/user_create.log"),
+                "filename": USER_CREATE_FILENAME,
                 "formatter": "user_formatter",
             },
             "user_delete_file": {
                 "level": "INFO",
                 "class": "logging.FileHandler",
-                "filename": os.path.join(BASE_DIR, "logs/user/user_delete.log"),
+                "filename": USER_DELETE_FILENAME,
                 "formatter": "user_formatter",
             },
             "user_update_file": {
                 "level": "INFO",
                 "class": "logging.FileHandler",
-                "filename": os.path.join(BASE_DIR, "logs/user/user_update.log"),
+                "filename": USER_UPDATE_FILENAME,
                 "formatter": "user_formatter",
             }
         },

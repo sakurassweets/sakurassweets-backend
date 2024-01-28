@@ -1,0 +1,15 @@
+.gitignore
+.gitkeep
+.github
+.git
+.venv
+.env.example
+.env.db.example
+.vscode
+
+docs
+README
+LICENSE
+dump.rdb
+core/logs/
+core/local/uk/LC_MESSAGES/django.mo

@@ -1,0 +1,77 @@
+version: '3.8'
+
+services:
+  django: &django
+    build:
+      context: .
+      dockerfile: ./compose/local/django/Dockerfile
+    restart: always
+    image: sakuras_sweets_backend
+    volumes:
+      - sakuras_sweets_media_volume:/app/core/media
+      - sakuras_sweets_logs_volume:/app/core/logs
+    expose:
+      - 8000
+    env_file:
+      - ./.env
+    depends_on:
+      - db
+      - redis
+    command: /start
+    networks:
+      - sakuras_sweets
+  
+  db:
+    build:
+      context: .
+      dockerfile: ./compose/local/postgres/Dockerfile
+    image: db
+    container_name: db
+    restart: always
+    volumes:
+      - sakuras_sweets_db_volume:/var/lib/postgresql/data
+      - ./compose/local/postgres/backups:/backups
+    ports:
+      - 5432:5432
+    networks:
+      - sakuras_sweets
+    env_file:
+      - ./.env.db
+
+  redis:
+    image: redis:7.2.3
+    restart: always
+    networks:
+      - sakuras_sweets
+    volumes:
+      - sakuras_sweets_redis_data:/data
+
+  celeryworker:
+    <<: *django
+    image: sakuras_sweets_celeryworker
+    command: /start-celeryworker
+
+  nginx:
+    build:
+      context: .
+      dockerfile: ./compose/local/nginx/Dockerfile
+    image: sakuras_sweets_backend_nginx
+    depends_on:
+      - django
+    volumes:
+      - ./core/static/:/core/static/
+      - sakuras_sweets_media_volume:/usr/share/nginx/media
+    ports:
+      - 80:80
+    networks:
+      - sakuras_sweets
+
+networks:
+  sakuras_sweets:
+    driver: bridge
+
+volumes:
+  sakuras_sweets_redis_data:
+  sakuras_sweets_logs_volume:
+  sakuras_sweets_media_volume:
+  sakuras_sweets_db_volume:

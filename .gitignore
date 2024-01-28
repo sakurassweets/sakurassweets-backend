@@ -14,6 +14,7 @@ debug_toolbar
 data/C*
 data/u*
 # Backup files # 
+backups/
 *.bak 
 *.rdb
 *.orig

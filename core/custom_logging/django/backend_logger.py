@@ -1,8 +1,9 @@
-import os
 from typing import Any
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
+
+FILENAME = BASE_DIR / "logs/django/backend.log"
 
 
 def initialize_backend_logger() -> dict[str, Any]:
@@ -24,7 +25,7 @@ def initialize_backend_logger() -> dict[str, Any]:
             "file": {
                 "level": "INFO",
                 "class": "logging.FileHandler",
-                "filename": os.path.join(BASE_DIR, "logs/django/backend.log"),
+                "filename": FILENAME,
                 "formatter": "main",
             },
         },

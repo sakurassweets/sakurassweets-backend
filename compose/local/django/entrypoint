@@ -1,0 +1,54 @@
+#!/bin/bash
+
+set -o errexit
+set -o pipefail
+set -o nounset
+
+
+
+# N.B. If only .env files supported variable expansion...
+export CELERY_BROKER_URL="${CELERY_BROKER}"
+
+export DATABASE_URL="postgres://${DB_USER}:${DB_PASS}@${DB_HOST}:${DB_PORT}"
+
+python << END
+import os
+import sys
+import time
+from dotenv import load_dotenv
+import psycopg2
+
+load_dotenv()
+DB_NAME = os.getenv("DB_NAME")
+DB_USER = os.getenv("DB_USER")
+DB_PASS = os.getenv("DB_PASS")
+DB_HOST = os.getenv("DB_HOST")
+DB_PORT = os.getenv("DB_PORT")
+
+suggest_unrecoverable_after = 30
+start = time.time()
+
+while True:
+    try:
+        psycopg2.connect(
+            dbname=DB_NAME,
+            user=DB_USER,
+            password=DB_PASS,
+            host=DB_HOST,
+            port=DB_PORT,
+        )
+        break
+    except psycopg2.OperationalError as error:
+        sys.stderr.write("Waiting for PostgreSQL to become available...\n")
+
+        if time.time() - start > suggest_unrecoverable_after:
+            sys.stderr.write(
+                "  This is taking longer than expected. The following exception may be indicative of an unrecoverable error: '{}'\n".format(error))
+            break
+
+    time.sleep(1)
+END
+
+>&2 echo 'PostgreSQL is available'
+
+exec "$@"
