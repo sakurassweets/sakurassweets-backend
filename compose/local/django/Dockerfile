@@ -55,6 +55,13 @@ RUN pip install --no-cache-dir --no-index --find-links=/wheels/ /wheels/* \
 RUN pip install --upgrade pip
 RUN pip install flake8
 
+# Create logfiles
+RUN mkdir -p /app/core/logs/django && touch /app/core/logs/django/backend.log
+RUN mkdir -p /app/core/logs/user 
+RUN touch /app/core/logs/user/user_create.log
+RUN touch /app/core/logs/user/user_delete.log
+RUN touch /app/core/logs/user/user_update.log
+
 COPY --chown=django:django ./compose/local/django/entrypoint /entrypoint
 RUN sed -i 's/\r$//g' /entrypoint
 RUN chmod +x /entrypoint
@@ -73,11 +80,9 @@ RUN flake8 --ignore=E501,F401 .
 COPY --chown=django:django . ${APP_HOME}
 
 # make django owner of the WORKDIR directory as well.
-RUN chown django:django ${APP_HOME}
+RUN chown -R django:django ${APP_HOME}
 
 USER django
-
-RUN python ./core/manage.py compilemessages
 
 EXPOSE 8000
 

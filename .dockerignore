@@ -1,4 +1,5 @@
 .gitignore
+.gitkeep
 .github
 .git
 .venv
@@ -10,3 +11,5 @@ docs
 README
 LICENSE
 dump.rdb
+core/logs/
+core/local/uk/LC_MESSAGES/django.mo
