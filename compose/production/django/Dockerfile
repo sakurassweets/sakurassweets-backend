@@ -29,7 +29,7 @@ ENV PYTHONDONTWRITEBYTECODE 1
 
 WORKDIR ${APP_HOME}
 
-RUN addgroup --system django && adduser --system --group django
+RUN addgroup --system debian && adduser --system --group debian
 
 
 # Install required system dependencies
@@ -55,7 +55,7 @@ RUN pip install --upgrade pip
 RUN pip install flake8
 
 # Create logfiles
-RUN mkdir -p /app/core/logs/django && chown -R django:django /app/core && touch /app/core/logs/django/backend.log
+RUN mkdir -p /app/core/logs/django && chown -R debian:debian /app/core && touch /app/core/logs/django/backend.log
 RUN mkdir -p /app/core/logs/user 
 RUN touch /app/core/logs/user/user_create.log
 RUN touch /app/core/logs/user/user_delete.log
@@ -69,27 +69,27 @@ RUN chmod 775 /app/core/logs/user/user_delete.log
 RUN chmod 775 /app/core/logs/user/user_update.log
 
 
-COPY --chown=django:django ./compose/production/django/entrypoint /entrypoint
+COPY --chown=debian:debian ./compose/production/django/entrypoint /entrypoint
 RUN sed -i 's/\r$//g' /entrypoint
 RUN chmod +x /entrypoint
 
-COPY --chown=django:django ./compose/production/django/start /start
+COPY --chown=debian:debian ./compose/production/django/start /start
 RUN sed -i 's/\r$//g' /start
 RUN chmod +x /start
 
-COPY --chown=django:django ./compose/production/django/celery/worker/start /start-celeryworker
+COPY --chown=debian:debian ./compose/production/django/celery/worker/start /start-celeryworker
 RUN sed -i 's/\r$//g' /start-celeryworker
 RUN chmod +x /start-celeryworker
 
 RUN flake8 --ignore=E501,F401 .
 
 # copy application code to WORKDIR
-COPY --chown=django:django . ${APP_HOME}
+COPY --chown=debian:debian . ${APP_HOME}
 
 # make django owner of the WORKDIR directory as well.
-RUN chown -R django:django ${APP_HOME}
+RUN chown -R debian:debian ${APP_HOME}
 
-USER django
+USER debian
 
 EXPOSE 8000
 
