@@ -54,21 +54,6 @@ RUN pip install --no-cache-dir --no-index --find-links=/wheels/ /wheels/* \
 RUN pip install --upgrade pip
 RUN pip install flake8
 
-# Create logfiles
-RUN mkdir -p /app/core/logs/django && chown -R debian:debian /app/core && touch /app/core/logs/django/backend.log
-RUN mkdir -p /app/core/logs/user 
-RUN touch /app/core/logs/user/user_create.log
-RUN touch /app/core/logs/user/user_delete.log
-RUN touch /app/core/logs/user/user_update.log
-
-# Grant write permissions to the user 'django'
-RUN chmod 775 /app/core/logs/django/
-RUN chmod 775 /app/core/logs/django/backend.log
-RUN chmod 775 /app/core/logs/user/user_create.log
-RUN chmod 775 /app/core/logs/user/user_delete.log
-RUN chmod 775 /app/core/logs/user/user_update.log
-
-
 COPY --chown=debian:debian ./compose/production/django/entrypoint /entrypoint
 RUN sed -i 's/\r$//g' /entrypoint
 RUN chmod +x /entrypoint
@@ -90,6 +75,20 @@ COPY --chown=debian:debian . ${APP_HOME}
 RUN chown -R debian:debian ${APP_HOME}
 
 USER debian
+
+# Create logfiles
+RUN mkdir -p /app/core/logs/django && chown -R debian:debian /app/core && touch /app/core/logs/django/backend.log
+RUN mkdir -p /app/core/logs/user 
+RUN touch /app/core/logs/user/user_create.log
+RUN touch /app/core/logs/user/user_delete.log
+RUN touch /app/core/logs/user/user_update.log
+
+# Grant write permissions to the user 'django'
+RUN chmod 775 /app/core/logs/django/
+RUN chmod 775 /app/core/logs/django/backend.log
+RUN chmod 775 /app/core/logs/user/user_create.log
+RUN chmod 775 /app/core/logs/user/user_delete.log
+RUN chmod 775 /app/core/logs/user/user_update.log
 
 EXPOSE 8000
 
