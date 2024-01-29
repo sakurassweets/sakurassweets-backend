@@ -1,4 +1,4 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, filters
 
 from components.general.logging.backend_decorators import log_db_query
 from components.product import permissions as custom_permissions
@@ -64,6 +64,11 @@ class ProductViewset(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = serializers.ProductSerializer
     permission_classes = [custom_permissions.IsAdminOrStaff,]
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ["title", "description", "components"]
+    ordering_fields = ["id", "price", "quantity_in_stock",
+                       "rating", "discount", "title"]
+    ordering = ["-id"]
 
     @cache_method(cache_key='product_retrieve', timeout=25)
     def retrieve(self, request, *args, **kwargs):

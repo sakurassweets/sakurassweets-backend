@@ -12,6 +12,25 @@
   GET https://api.sakurassweets.asion.tk/products/
 ```
 
+**Filters:**
+
+- **Search filter:**
+
+  - **Search type:** `icontains`. That means that filter search for any field that contains query value (mochi in this case)
+  - **Usage:**
+
+  ```
+  GET https://api.sakurassweets.asion.tk/products/?search=mochi
+  ```
+
+  - **Search fields:**
+    - `title`, `description`, `components`
+
+- **Ordering filter:**
+
+  - `id`, `price`, `quantity_in_stock`, `rating`, `discount`, `title`
+  - All field can be searched like `id` or `-id`. `-` means in reverse order. For exaple: in `id` case - from newer to older, in `price` case - from higher to lower
+
 **Response:**
 
 ```json
