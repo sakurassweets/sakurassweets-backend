@@ -1,5 +1,6 @@
 from rest_framework import viewsets
 
+from components.general.logging.backend_decorators import log_db_query
 from components.product import permissions as custom_permissions
 from components.general.caching.cache import cache_method
 
@@ -20,6 +21,18 @@ class PriceCurrencyViewset(viewsets.ModelViewSet):
     def list(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)
 
+    @log_db_query
+    def create(self, request, *args, **kwargs):
+        return super().create(request, *args, **kwargs)
+
+    @log_db_query
+    def update(self, request, *args, **kwargs):
+        return super().update(request, *args, **kwargs)
+
+    @log_db_query
+    def partial_update(self, request, *args, **kwargs):
+        return super().partial_update(request, *args, **kwargs)
+
 
 class ProductTypeViewset(viewsets.ModelViewSet):
     queryset = ProductType.objects.all()
@@ -34,6 +47,18 @@ class ProductTypeViewset(viewsets.ModelViewSet):
     def list(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)
 
+    @log_db_query
+    def create(self, request, *args, **kwargs):
+        return super().create(request, *args, **kwargs)
+
+    @log_db_query
+    def update(self, request, *args, **kwargs):
+        return super().update(request, *args, **kwargs)
+
+    @log_db_query
+    def partial_update(self, request, *args, **kwargs):
+        return super().partial_update(request, *args, **kwargs)
+
 
 class ProductViewset(viewsets.ModelViewSet):
     queryset = Product.objects.all()
@@ -47,3 +72,15 @@ class ProductViewset(viewsets.ModelViewSet):
     @cache_method(cache_key='product_list', timeout=25)
     def list(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)
+
+    @log_db_query
+    def create(self, request, *args, **kwargs):
+        return super().create(request, *args, **kwargs)
+
+    @log_db_query
+    def update(self, request, *args, **kwargs):
+        return super().update(request, *args, **kwargs)
+
+    @log_db_query
+    def partial_update(self, request, *args, **kwargs):
+        return super().partial_update(request, *args, **kwargs)

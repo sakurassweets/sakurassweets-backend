@@ -161,7 +161,6 @@ class UserUpdateManager:
     _required_fields: list = constants.REQUIRED_UPDATE_FIELDS
     _updated_data: dict = {}
 
-    @log_user_update
     def partial_update(self, *, request: Request, serializer: Serializer, pk: int) -> Response:
         """Provides partial update of user, PATCH method.
 
@@ -184,7 +183,6 @@ class UserUpdateManager:
         self._updated_data.clear()
         return response
 
-    @log_user_update
     def update(self, *, request: Request, serializer: Serializer, pk: int) -> Response:
         """Provides update of user, PUT method.
 
@@ -261,6 +259,7 @@ class UserUpdateManager:
 
         return self._updated_data, status.HTTP_200_OK
 
+    @log_user_update
     def _update_and_return_response(self,
                                     request: Request,
                                     serializer: Serializer,

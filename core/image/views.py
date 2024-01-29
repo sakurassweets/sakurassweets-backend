@@ -3,6 +3,7 @@ from rest_framework.request import Request
 
 from image.serializers import ImageSerializer
 from image.models import Image
+from components.general.logging.backend_decorators import log_db_query
 from components.image.validators import UpdateImageValidator
 from components.general.caching.cache import cache_method
 
@@ -26,6 +27,7 @@ class ImageViewSet(viewsets.ModelViewSet):
     def retrieve(self, request: Request, *args, **kwargs):
         return super().retrieve(request, *args, **kwargs)
 
+    @log_db_query
     def create(self, request: Request, *args, **kwargs):
         if isinstance(result := self._validate_main_image(request), str):
             raise exceptions.ValidationError({"detail": result},
@@ -33,6 +35,7 @@ class ImageViewSet(viewsets.ModelViewSet):
 
         return super().create(request, *args, **kwargs)
 
+    @log_db_query
     def update(self, request: Request, *args, **kwargs):
         validator = UpdateImageValidator(request)
 
@@ -41,6 +44,10 @@ class ImageViewSet(viewsets.ModelViewSet):
                                              code=status.HTTP_400_BAD_REQUEST)
 
         return super().update(request, *args, **kwargs)
+
+    @log_db_query
+    def partial_update(self, request, *args, **kwargs):
+        return super().partial_update(request, *args, **kwargs)
 
     @staticmethod
     def _validate_main_image(request: Request) -> str | None:
@@ -55,7 +62,7 @@ class ImageViewSet(viewsets.ModelViewSet):
             String with error if something wrong, else `None`.
         """
         related_to_id = request.data.get('related_to')
-        if not request.data.get('main_image').lower() == "true":
+        if request.data.get('main_image') is None:
             return None
 
         has_main_image = Image.objects.filter(related_to=related_to_id, main_image=True)  # NOQA

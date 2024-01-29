@@ -53,7 +53,7 @@ def log_user_update(func):
                     "request_user_id": request.user.id,
                     "email": user['email'],
                     "code": code,
-                    "changes": result.data['data'].keys()
+                    "changes": dict(result.data['data'].items())
                 }
                 logger.info(info_message)
 
