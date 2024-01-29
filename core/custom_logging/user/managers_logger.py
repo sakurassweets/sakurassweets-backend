@@ -12,7 +12,7 @@ def initialize_user_managers_logger() -> dict[str, Any]:
     logger = {
         "formatters": {
             "user_formatter": {
-                "format": "{levelname} - [{asctime}] [{process} | {thread}] {message}",
+                "format": "{levelname} - [{asctime}] [{process}]: {message}",
                 "style": "{",
             },
         },
