@@ -78,6 +78,6 @@
 
 #### Also you can get tokens by creating user, but it's sligthly different from this documentation.
 
-- #### Check [How to create user](https://github.com/sakurassweets/sakurassweets-backend/docs/apps/user/create_user/README.md)
+- #### Check [How to create user](https://github.com/sakurassweets/sakurassweets-backend/tree/main/docs/apps/user/create_user)
 
 #### This documentation show ways to manually manage tokens.
