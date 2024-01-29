@@ -8,8 +8,8 @@ services:
     restart: always
     image: sakuras_sweets_backend
     volumes:
-      - sakuras_sweets_media_volume:/app/core/media
-      - sakuras_sweets_logs_volume:/app/core/logs
+      - ./core/media/:/app/core/media
+      - ./core/logs/:/app/core/logs
     expose:
       - 8000
     env_file:
@@ -60,7 +60,7 @@ services:
       - django
     volumes:
       - ./core/static/:/core/static/
-      - sakuras_sweets_media_volume:/usr/share/nginx/media
+      - ./core/media/:/usr/share/nginx/media
     ports:
       - 80:80
     networks:
@@ -72,6 +72,4 @@ networks:
 
 volumes:
   sakuras_sweets_redis_data:
-  sakuras_sweets_logs_volume:
-  sakuras_sweets_media_volume:
   sakuras_sweets_db_volume:
