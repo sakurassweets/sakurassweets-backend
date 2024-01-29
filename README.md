@@ -25,7 +25,7 @@
 
 ### API Documentation:
 
-- [Documentation](https://github.com/sakurassweets/sakurassweets-backend/docs)
+- [Documentation](https://github.com/sakurassweets/sakurassweets-backend/tree/main/docs)
 
 ## Installation with Docker and Docker Compose
 
