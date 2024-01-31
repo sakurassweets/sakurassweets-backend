@@ -73,7 +73,7 @@ class ProductViewset(viewsets.ModelViewSet):
                        filters.OrderingFilter,
                        DjangoFilterBackend]
     filterset_fields = ["product_type", "price_currency", "price",
-                        "quantity_in_stock", "rating", "price_currency_symbol"]
+                        "quantity_in_stock", "rating"]
     search_fields = ["title", "description", "components"]
     ordering_fields = ["id", "price", "quantity_in_stock",
                        "rating", "discount", "title"]
