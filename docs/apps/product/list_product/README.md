@@ -14,6 +14,17 @@
 
 **Filters:**
 
+- **Default filter:**
+
+  - **Filter fields:** `product_type`, `price_currency`, `price`, `quantity_in_stock`, `rating`, `price_currency_symbol`
+  - **Usage:**
+
+  ```
+  GET https://api.sakurassweets.asion.tk/products/?rating=5
+  ```
+
+  > will add in future ability to search by gt, gte, lt, lte (greater/lower than | or equal)
+
 - **Search filter:**
 
   - **Search type:** `icontains`. That means that filter search for any field that contains query value (mochi in this case)
