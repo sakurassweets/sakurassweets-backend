@@ -20,7 +20,13 @@ def _get_page_key(request: Request):
     return f'_page_{page}' if page else ''
 
 
-def get_key(cache_key: str, args, kwargs) -> str:
+def _get_request(args):
+    for arg in args:
+        if isinstance(arg, Request):
+            return arg
+
+
+def get_key(cache_key: str, request: Request, kwargs) -> str:
     """Gets full cache key.
 
     Creates different keys based on user permissions since admins can see
@@ -33,10 +39,6 @@ def get_key(cache_key: str, args, kwargs) -> str:
     Returns:
         String object of full key for cache.
     """
-    request = None
-    for arg in args:
-        if isinstance(arg, Request):
-            request = arg
 
     if not request:
         raise APIException("'Request' variable not provided in request.")
@@ -75,7 +77,13 @@ def cache_method(cache_key: str = None, timeout: int = 60 * 60) -> Response:
             Returns:
                 `Response` object with cached data and status code.
             """
-            key = get_key(cache_key, args, kwargs)
+            request = _get_request(args)
+            key = get_key(cache_key, request, kwargs)
+
+            if request.query_params:
+                result = func(*args, **kwargs)
+                return Response(result.data, status=result.status_code)
+
             cached_data = cache.get(key, None)
             if cached_data is not None:
                 cached_status_code = cache.get(key + '_status_code')

@@ -15,7 +15,7 @@ def send_welcome_email(data: dict) -> None:
     """Sends welcome email to user.
 
     Args:
-        data: data: A dictionary with user data.
+        data: A dictionary with user data.
     """
     send_email = str(os.getenv("SEND_EMAIL")).lower()
     if not send_email == 'true' or send_email == '1':

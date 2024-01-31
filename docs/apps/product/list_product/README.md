@@ -12,6 +12,40 @@
   GET https://api.sakurassweets.asion.tk/products/
 ```
 
+**Filters:**
+
+- **Default filter:**
+
+  - **Filter fields:** `product_type`, `price_currency`, `price`, `quantity_in_stock`, `rating`, `price_currency_symbol`
+  - **Usage:**
+
+  ```
+  GET https://api.sakurassweets.asion.tk/products/?rating=5
+  ```
+
+  > will add in future ability to search by gt, gte, lt, lte (greater/lower than | or equal)
+
+- **Search filter:**
+
+  - **Search type:** `icontains`. That means that filter search for any field that contains query value (mochi in this case)
+  - **Search fields:** `title`, `description`, `components`
+  - **Usage:**
+
+  ```
+  GET https://api.sakurassweets.asion.tk/products/?search=mochi
+  ```
+
+- **Ordering filter:**
+
+  - **Ordering fields:** `id`, `price`, `quantity_in_stock`, `rating`, `discount`, `title`
+  - **Usage:**
+
+  ```
+  GET https://api.sakurassweets.asion.tk/products/?ordering=-rating
+  ```
+
+  - All field can be searched like `id` or `-id`. `-` means in reverse order. For exaple: in `id` case - from newer to older, in `price` case - from higher to lower
+
 **Response:**
 
 ```json

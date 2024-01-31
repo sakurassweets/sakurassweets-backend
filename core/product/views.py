@@ -1,4 +1,5 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, filters
+from django_filters.rest_framework.backends import DjangoFilterBackend
 
 from components.general.logging.backend_decorators import log_db_query
 from components.product import permissions as custom_permissions
@@ -64,6 +65,19 @@ class ProductViewset(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = serializers.ProductSerializer
     permission_classes = [custom_permissions.IsAdminOrStaff,]
+    # Cache
+    cache_key = "product"
+    timeout = 25
+    # Filters
+    filter_backends = [filters.SearchFilter,
+                       filters.OrderingFilter,
+                       DjangoFilterBackend]
+    filterset_fields = ["product_type", "price_currency", "price",
+                        "quantity_in_stock", "rating", "price_currency_symbol"]
+    search_fields = ["title", "description", "components"]
+    ordering_fields = ["id", "price", "quantity_in_stock",
+                       "rating", "discount", "title"]
+    ordering = ["-id"]
 
     @cache_method(cache_key='product_retrieve', timeout=25)
     def retrieve(self, request, *args, **kwargs):
