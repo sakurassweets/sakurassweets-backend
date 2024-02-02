@@ -10,7 +10,6 @@ from components.cart.validators import (
     CreateCartValidator,
     UpdateCartItemValidator
 )
-from components.general.logging.backend_decorators import log_db_query
 from components.general.caching.cache import cache_method
 from components.cart import permissions as cart_permissions
 from components.cart_item import permissions as cart_item_permissions
@@ -48,20 +47,11 @@ class CartViewSet(viewsets.ModelViewSet):
     def retrieve(self, request, *args, **kwargs):
         return super().retrieve(request, *args, **kwargs)
 
-    @log_db_query
     def create(self, request: Request, *args, **kwargs) -> Response:
         validator = CreateCartValidator(request)
         _perform_validation(validator)
 
         return super().create(request, *args, **kwargs)
-
-    @log_db_query
-    def update(self, request, *args, **kwargs):
-        return super().update(request, *args, **kwargs)
-
-    @log_db_query
-    def partial_update(self, request, *args, **kwargs):
-        return super().partial_update(request, *args, **kwargs)
 
 
 class CartItemViewSet(viewsets.ModelViewSet):
@@ -85,21 +75,18 @@ class CartItemViewSet(viewsets.ModelViewSet):
     def retrieve(self, request, *args, **kwargs):
         return super().retrieve(request, *args, **kwargs)
 
-    @log_db_query
     def create(self, request: Request, *args, **kwargs) -> Response:
         validator = CreateCartItemValidator(request)
         _perform_validation(validator)
 
         return super().create(request, *args, **kwargs)
 
-    @log_db_query
     def partial_update(self, request, *args, **kwargs):
         validator = UpdateCartItemValidator(request)
         _perform_validation(validator)
 
         return super().partial_update(request, *args, **kwargs)
 
-    @log_db_query
     def update(self, request, *args, **kwargs):
 
         validator = UpdateCartItemValidator(request)
