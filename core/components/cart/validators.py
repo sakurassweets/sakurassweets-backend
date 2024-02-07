@@ -156,11 +156,18 @@ class UpdateCartItemValidator:
             if isinstance(result := self._validate_required_fields(), dict):
                 return result
 
-        cart = Cart.objects.get(cart_owner=self.request.user)
         request_cart = self.request.data.get('cart')
 
         if not request_cart:
             return True
+
+        if self.request.user.is_staff:
+            return True
+
+        try:
+            cart = Cart.objects.get(cart_owner=self.request.user)
+        except Cart.DoesNotExist:
+            return self.error_messages["wrong_cart"]
 
         if not cart.id == self.request.data.get('cart'):
             return self.error_messages["wrong_cart"]

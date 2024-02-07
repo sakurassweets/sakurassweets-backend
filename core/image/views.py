@@ -1,14 +1,16 @@
-from rest_framework import viewsets, permissions, exceptions, status
+from rest_framework import permissions, exceptions, status
 from rest_framework.request import Request
 
 from image.serializers import ImageSerializer
 from image.models import Image
 from components.image.validators import UpdateImageValidator
-from components.general.caching.cache import cache_method
+from components.general.caching.viewsets import CacheModelViewSet
 
 
-class ImageViewSet(viewsets.ModelViewSet):
+class ImageViewSet(CacheModelViewSet):
     queryset = Image.objects.all()
+    cache_key = "image"
+    timeout = 60 * 5
     serializer_class = ImageSerializer
     permission_classes = [permissions.IsAdminUser()]
 
@@ -17,14 +19,6 @@ class ImageViewSet(viewsets.ModelViewSet):
             return [permissions.AllowAny()]
         else:
             return self.permission_classes
-
-    @cache_method(cache_key="image_list", timeout=60 * 5)
-    def list(self, request: Request, *args, **kwargs):
-        return super().list(request, *args, **kwargs)
-
-    @cache_method(cache_key="image_retrieve", timeout=60 * 5)
-    def retrieve(self, request: Request, *args, **kwargs):
-        return super().retrieve(request, *args, **kwargs)
 
     def create(self, request: Request, *args, **kwargs):
         if isinstance(result := self._validate_main_image(request), str):

@@ -1,4 +1,4 @@
-from rest_framework import viewsets, permissions
+from rest_framework import permissions
 from rest_framework.response import Response
 from rest_framework.exceptions import ValidationError
 from rest_framework.request import Request
@@ -10,9 +10,10 @@ from components.cart.validators import (
     CreateCartValidator,
     UpdateCartItemValidator
 )
-from components.general.caching.cache import cache_method
 from components.cart import permissions as cart_permissions
 from components.cart_item import permissions as cart_item_permissions
+from components.general.caching.viewsets import CacheModelViewSet
+
 from cart import constants
 
 
@@ -24,8 +25,10 @@ def _perform_validation(validator):
     return True
 
 
-class CartViewSet(viewsets.ModelViewSet):
+class CartViewSet(CacheModelViewSet):
     queryset = Cart.objects.all()
+    cache_key = "cart"
+    timeout = 60 * 2
     serializer_class = CartSerializer
     permission_classes = [permissions.AllowAny]
 
@@ -39,14 +42,6 @@ class CartViewSet(viewsets.ModelViewSet):
         else:
             return []
 
-    @cache_method(cache_key="cart_list", timeout=60 * 2)
-    def list(self, request, *args, **kwargs):
-        return super().list(request, *args, **kwargs)
-
-    @cache_method(cache_key="cart_retrieve", timeout=60 * 2)
-    def retrieve(self, request, *args, **kwargs):
-        return super().retrieve(request, *args, **kwargs)
-
     def create(self, request: Request, *args, **kwargs) -> Response:
         validator = CreateCartValidator(request)
         _perform_validation(validator)
@@ -54,8 +49,10 @@ class CartViewSet(viewsets.ModelViewSet):
         return super().create(request, *args, **kwargs)
 
 
-class CartItemViewSet(viewsets.ModelViewSet):
+class CartItemViewSet(CacheModelViewSet):
     queryset = CartItem.objects.all()
+    cache_key = "cart_item"
+    timeout = 60 * 2
     serializer_class = CartItemSerializer
     permission_classes = [permissions.AllowAny]
 
@@ -66,14 +63,6 @@ class CartItemViewSet(viewsets.ModelViewSet):
             return [cart_item_permissions.IsCartOwnerOrStaff()]
         else:
             return []
-
-    @cache_method(cache_key="cart_item_list", timeout=60 * 2)
-    def list(self, request, *args, **kwargs):
-        return super().list(request, *args, **kwargs)
-
-    @cache_method(cache_key="cart_item_retrieve", timeout=60 * 2)
-    def retrieve(self, request, *args, **kwargs):
-        return super().retrieve(request, *args, **kwargs)
 
     def create(self, request: Request, *args, **kwargs) -> Response:
         validator = CreateCartItemValidator(request)
