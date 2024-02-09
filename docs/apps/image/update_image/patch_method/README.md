@@ -9,7 +9,7 @@
 **Permissions required**: `Administrator and Staff only`
 
 ```
-  PATCH https://api.sakurassweets.asion.tk/images/{id}/
+  PATCH https://api.sakurassweets.asion.dev/images/{id}/
 ```
 
 `PATCH` method allows you to change fields by sending only field that you wanna change and new value. For example:
@@ -45,8 +45,8 @@ In response you get data about changed fields. For example:
 ```json
 {
   "id": 1,
-  "image_url": "https://api.sakurassweets.asion.tk/images/1/",
-  "image": "https://api.sakurassweets.asion.tk/media/product_1/jk-placeholder-image.jpg",
+  "image_url": "https://api.sakurassweets.asion.dev/images/1/",
+  "image": "https://api.sakurassweets.asion.dev/media/product_1/jk-placeholder-image.jpg",
   "main_image": true,
   "related_to": 6
 }

@@ -9,7 +9,7 @@
 **Permissions required**: `Administrators and Staff only`
 
 ```
-  PUT/PATCH https://api.sakurassweets.asion.tk/carts/{id}/
+  PUT/PATCH https://api.sakurassweets.asion.dev/carts/{id}/
 ```
 
 Since crat has only one field and it's **required**, there's no sense to split PUT and PATCH methods. But recommended to choose proper method for you because changes in fields of product type can affect your requests.
@@ -38,16 +38,16 @@ Since crat has only one field and it's **required**, there's no sense to split P
   "items": [
     {
       "product": "\"Мармелад Японський\"",
-      "product_url": "https://api.sakurassweets.asion.tk/products/1/",
-      "cart_item_url": "https://api.sakurassweets.asion.tk/cart-items/47/"
+      "product_url": "https://api.sakurassweets.asion.dev/products/1/",
+      "cart_item_url": "https://api.sakurassweets.asion.dev/cart-items/47/"
     },
     {
       "product": "123123122233asd222",
-      "product_url": "https://api.sakurassweets.asion.tk/products/3/",
-      "cart_item_url": "https://api.sakurassweets.asion.tk/cart-items/45/"
+      "product_url": "https://api.sakurassweets.asion.dev/products/3/",
+      "cart_item_url": "https://api.sakurassweets.asion.dev/cart-items/45/"
     }
   ],
-  "cart_url": "https://api.sakurassweets.asion.tk/carts/1/",
+  "cart_url": "https://api.sakurassweets.asion.dev/carts/1/",
   "cart_owner": 12
 }
 ```

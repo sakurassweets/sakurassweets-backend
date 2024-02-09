@@ -9,7 +9,7 @@
 **Permissions required**: `Administrator or cart owner`
 
 ```
-  DELETE https://api.sakurassweets.asion.tk/carts/{id}/
+  DELETE https://api.sakurassweets.asion.dev/carts/{id}/
 ```
 
 **Response:**

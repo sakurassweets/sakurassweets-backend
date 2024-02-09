@@ -9,7 +9,7 @@
 **Permissions required**: `Allowed Anyone`
 
 ```
-  GET https://api.sakurassweets.asion.tk/users/{id}/
+  GET https://api.sakurassweets.asion.dev/users/{id}/
 ```
 
 **Response:**
@@ -17,7 +17,7 @@
 ```json
 {
   "id": 2,
-  "user_url": "http://api.sakurassweets.asion.tk/users/2/",
+  "user_url": "http://api.sakurassweets.asion.dev/users/2/",
   "email": "testuser2@mail.com",
   "last_login": "2024-01-13T16:12:04.199075+02:00",
   "is_staff": true,

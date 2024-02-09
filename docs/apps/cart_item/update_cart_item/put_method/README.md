@@ -9,7 +9,7 @@
 **Permissions required**: `Administrators and cart owner only`
 
 ```
-  PUT https://api.sakurassweets.asion.tk/cart-items/{id}/
+  PUT https://api.sakurassweets.asion.dev/cart-items/{id}/
 ```
 
 `PUT` method enforce you to send all **required** fields even if you don't change them.
@@ -41,8 +41,8 @@ In response you get all fields. For example:
 ```json
 {
   "id": 47,
-  "product_url": "https://api.sakurassweets.asion.tk/cart-items/products/1/",
-  "cart_item_url": "https://api.sakurassweets.asion.tk/cart-items/cart-items/47/",
+  "product_url": "https://api.sakurassweets.asion.dev/cart-items/products/1/",
+  "cart_item_url": "https://api.sakurassweets.asion.dev/cart-items/cart-items/47/",
   "quantity": 20,
   "cart": 1,
   "product": "\"Мармелад Японський\""

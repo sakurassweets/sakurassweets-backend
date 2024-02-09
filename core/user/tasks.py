@@ -24,7 +24,7 @@ def send_welcome_email(data: dict) -> None:
     subject = 'Thanks for registering on Sakuras Sweets!'
     email = data['user_email']
     user = email.split('@')[0]
-    website_url = 'https://sakurassweets.asion.tk/'
+    website_url = 'https://sakurassweets.asion.dev/'
     email_template = render_to_string('user/user_welcome_email.html', {
         "user": user,
         "website_url": website_url

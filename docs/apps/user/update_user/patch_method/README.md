@@ -9,7 +9,7 @@
 **Permissions required**: `Administrator or user itself`
 
 ```
-  PATCH https://api.sakurassweets.asion.tk/users/{id}/
+  PATCH https://api.sakurassweets.asion.dev/users/{id}/
 ```
 
 `PATCH` method allows you to change fields by sending only field that you wanna change and new value. For example:

@@ -9,7 +9,7 @@
 **Permissions required**: `Allowed Anyone`
 
 ```
-  GET https://api.sakurassweets.asion.tk/product-types/
+  GET https://api.sakurassweets.asion.dev/product-types/
 ```
 
 **Response:**
@@ -22,12 +22,12 @@
   "results": [
     {
       "id": 2,
-      "product_type_url": "https://api.sakurassweets.asion.tk/product-types/2/",
+      "product_type_url": "https://api.sakurassweets.asion.dev/product-types/2/",
       "title": "Шоколад"
     },
     {
       "id": 1,
-      "product_type_url": "https://api.sakurassweets.asion.tk/product-types/1/",
+      "product_type_url": "https://api.sakurassweets.asion.dev/product-types/1/",
       "title": "Мармелад"
     }
   ]

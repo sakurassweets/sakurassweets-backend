@@ -9,7 +9,7 @@
 **Permissions required**: `Allowed Anyone`
 
 ```
-  GET https://api.sakurassweets.asion.tk/products/{id}/
+  GET https://api.sakurassweets.asion.dev/products/{id}/
 ```
 
 **Response:**
@@ -17,12 +17,12 @@
 ```json
 {
   "id": 1,
-  "product_url": "https://api.sakurassweets.asion.tk/products/1/",
+  "product_url": "https://api.sakurassweets.asion.dev/products/1/",
   "product_type": "Мармелад",
   "price_currency": "UAH",
   "images": [
     {
-      "image": "https://api.sakurassweets.asion.tk/media/product_1/jk-placeholder-image.jpg"
+      "image": "https://api.sakurassweets.asion.dev/media/product_1/jk-placeholder-image.jpg"
     }
   ],
   "title": "\"Мармелад Японський\"",

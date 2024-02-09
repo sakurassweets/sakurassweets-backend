@@ -9,7 +9,7 @@
 **Permissions required**: `Authenticated only`
 
 ```
-  POST https://api.sakurassweets.asion.tk/products/
+  POST https://api.sakurassweets.asion.dev/products/
 ```
 
 | Parameter  | Type      | Description                                                                 |
@@ -35,8 +35,8 @@
 ```json
 {
   "id": 49,
-  "product_url": "https://api.sakurassweets.asion.tk/products/1/",
-  "cart_item_url": "https://api.sakurassweets.asion.tk/cart-items/49/",
+  "product_url": "https://api.sakurassweets.asion.dev/products/1/",
+  "cart_item_url": "https://api.sakurassweets.asion.dev/cart-items/49/",
   "quantity": 100,
   "cart": 3,
   "product": "\"Мармелад Японський\""

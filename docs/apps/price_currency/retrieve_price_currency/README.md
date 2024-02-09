@@ -9,7 +9,7 @@
 **Permissions required**: `Allowed Anyone`
 
 ```
-  GET https://api.sakurassweets.asion.tk/price-currencies/{id}/
+  GET https://api.sakurassweets.asion.dev/price-currencies/{id}/
 ```
 
 **Response:**
@@ -17,7 +17,7 @@
 ```json
 {
   "id": 1,
-  "price_currency_url": "https://api.sakurassweets.asion.tk/price-currencies/1/",
+  "price_currency_url": "https://api.sakurassweets.asion.dev/price-currencies/1/",
   "currency_symbol": "₴",
   "currency": "UAH",
   "country": "ukraine"

@@ -9,7 +9,7 @@
 **Permissions required**: `Administrators and Staff only`
 
 ```
-  POST https://api.sakurassweets.asion.tk/price-currencies/
+  POST https://api.sakurassweets.asion.dev/price-currencies/
 ```
 
 | Parameter         | Type     | Description                                               |
@@ -35,7 +35,7 @@
 ```json
 {
   "id": 7,
-  "price_currency_url": "https://api.sakurassweets.asion.tk/price-currencies/7/",
+  "price_currency_url": "https://api.sakurassweets.asion.dev/price-currencies/7/",
   "currency_symbol": "T",
   "currency": "test",
   "country": "Country"

@@ -9,7 +9,7 @@
 **Permissions required**: `Administrators and Staff only`
 
 ```
-  PATCH https://api.sakurassweets.asion.tk/price-currencies/{id}/
+  PATCH https://api.sakurassweets.asion.dev/price-currencies/{id}/
 ```
 
 `PATCH` method allows you to change fields by sending only field that you wanna change and new value. For example:

@@ -9,7 +9,7 @@
 **Permissions required**: `Administrator or user itself`
 
 ```
-  DELETE https://api.sakurassweets.asion.tk/product-types//{id}/
+  DELETE https://api.sakurassweets.asion.dev/product-types//{id}/
 ```
 
 **Response:**

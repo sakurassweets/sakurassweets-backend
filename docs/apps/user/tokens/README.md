@@ -11,7 +11,7 @@
 **Permissions required**: `Allowed Anyone`
 
 ```
-  POST https://api.sakurassweets.asion.tk/login/
+  POST https://api.sakurassweets.asion.dev/login/
 ```
 
 | Parameter  | Type     | Description                 |
@@ -46,7 +46,7 @@
 **Permissions required**: `Allowed Anyone`
 
 ```
-  POST https://api.sakurassweets.asion.tk/refresh/
+  POST https://api.sakurassweets.asion.dev/refresh/
 ```
 
 | Parameter | Type     | Description                      |

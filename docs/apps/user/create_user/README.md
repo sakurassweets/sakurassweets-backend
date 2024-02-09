@@ -9,7 +9,7 @@
 **Permissions required**: `Allowed Anyone`
 
 ```
-  POST https://api.sakurassweets.asion.tk/register/
+  POST https://api.sakurassweets.asion.dev/register/
 ```
 
 | Parameter  | Type     | Description                 |

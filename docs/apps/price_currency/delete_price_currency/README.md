@@ -9,7 +9,7 @@
 **Permissions required**: `Administrator or user itself`
 
 ```
-  DELETE https://api.sakurassweets.asion.tk/price-currencies/{id}/
+  DELETE https://api.sakurassweets.asion.dev/price-currencies/{id}/
 ```
 
 **Response:**

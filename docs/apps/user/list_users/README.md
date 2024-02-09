@@ -9,7 +9,7 @@
 **Permissions required**: `Allowed Anyone`
 
 ```
-  GET https://api.sakurassweets.asion.tk/users/
+  GET https://api.sakurassweets.asion.dev/users/
 ```
 
 **Response:**
@@ -22,7 +22,7 @@
   "results": [
     {
       "id": 2,
-      "user_url": "http://api.sakurassweets.asion.tk/users/2/",
+      "user_url": "http://api.sakurassweets.asion.dev/users/2/",
       "email": "testuser2@mail.com",
       "last_login": "2024-01-13T16:12:04.199075+02:00",
       "is_staff": true,
@@ -30,7 +30,7 @@
     }
         {
       "id": 1,
-      "user_url": "http://api.sakurassweets.asion.tk/users/1/",
+      "user_url": "http://api.sakurassweets.asion.dev/users/1/",
       "email": "testuser1@mail.com",
       "last_login": "2024-01-13T16:12:04.199075+02:00",
       "is_staff": false,

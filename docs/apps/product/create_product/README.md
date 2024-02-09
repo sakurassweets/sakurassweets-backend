@@ -9,7 +9,7 @@
 **Permissions required**: `Administrators and Staff only`
 
 ```
-  POST https://api.sakurassweets.asion.tk/products/
+  POST https://api.sakurassweets.asion.dev/products/
 ```
 
 | Parameter           | Type      | Description                                                         |
@@ -45,7 +45,7 @@
 ```json
 {
   "id": 6,
-  "product_url": "https://api.sakurassweets.asion.tk/products/6/",
+  "product_url": "https://api.sakurassweets.asion.dev/products/6/",
   "product_type": "Мармелад",
   "price_currency": "USD",
   "images": [],

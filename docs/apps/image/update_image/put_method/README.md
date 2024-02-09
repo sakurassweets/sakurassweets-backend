@@ -9,7 +9,7 @@
 **Permissions required**: `Administrator and Staff only`
 
 ```
-  PUT https://api.sakurassweets.asion.tk/images/{id}/
+  PUT https://api.sakurassweets.asion.dev/images/{id}/
 ```
 
 **This method is not recommended to use with Image model right now**
@@ -41,8 +41,8 @@
 ```json
 {
   "id": 1,
-  "image_url": "https://api.sakurassweets.asion.tk/images/1/",
-  "image": "https://api.sakurassweets.asion.tk/media/product_3/jk-placeholder-image_VvPgMwp.jpg",
+  "image_url": "https://api.sakurassweets.asion.dev/images/1/",
+  "image": "https://api.sakurassweets.asion.dev/media/product_3/jk-placeholder-image_VvPgMwp.jpg",
   "main_image": false,
   "related_to": 3
 }

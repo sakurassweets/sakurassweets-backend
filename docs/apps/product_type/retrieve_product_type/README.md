@@ -9,7 +9,7 @@
 **Permissions required**: `Allowed Anyone`
 
 ```
-  GET https://api.sakurassweets.asion.tk/product-types/{id}/
+  GET https://api.sakurassweets.asion.dev/product-types/{id}/
 ```
 
 **Response:**
@@ -17,7 +17,7 @@
 ```json
 {
   "id": 1,
-  "product_type_url": "https://api.sakurassweets.asion.tk/product-types/1/",
+  "product_type_url": "https://api.sakurassweets.asion.dev/product-types/1/",
   "title": "Мармелад"
 }
 ```

@@ -9,7 +9,7 @@
 **Permissions required**: `Allowed Anyone`
 
 ```
-  GET https://api.sakurassweets.asion.tk/cart-items/{id}/
+  GET https://api.sakurassweets.asion.dev/cart-items/{id}/
 ```
 
 **Response:**
@@ -17,8 +17,8 @@
 ```json
 {
   "id": 50,
-  "product_url": "https://api.sakurassweets.asion.tk/products/1/",
-  "cart_item_url": "https://api.sakurassweets.asion.tk/cart-items/50/",
+  "product_url": "https://api.sakurassweets.asion.dev/products/1/",
+  "cart_item_url": "https://api.sakurassweets.asion.dev/cart-items/50/",
   "quantity": 100,
   "cart": 13,
   "product": "\"Мармелад Японський\""

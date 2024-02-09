@@ -9,7 +9,7 @@
 **Permissions required**: `Authenticated only`
 
 ```
-  POST https://api.sakurassweets.asion.tk/carts/
+  POST https://api.sakurassweets.asion.dev/carts/
 ```
 
 | Parameter    | Type | Description                                           |
@@ -32,7 +32,7 @@
 {
   "id": 8,
   "items": [],
-  "cart_url": "https://api.sakurassweets.asion.tk/carts/8/",
+  "cart_url": "https://api.sakurassweets.asion.dev/carts/8/",
   "cart_owner": 12
 }
 ```

@@ -9,7 +9,7 @@
 **Permissions required**: `Administrators and Staff only`
 
 ```
-  DELETE https://api.sakurassweets.asion.tk/products/{id}/
+  DELETE https://api.sakurassweets.asion.dev/products/{id}/
 ```
 
 **Response:**

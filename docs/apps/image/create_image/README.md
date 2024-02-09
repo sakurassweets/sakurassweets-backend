@@ -9,7 +9,7 @@
 **Permissions required**: `Administrators and Staff only`
 
 ```
-  POST https://api.sakurassweets.asion.tk/images/
+  POST https://api.sakurassweets.asion.dev/images/
 ```
 
 | Parameter    | Type                         | Description                                                                             |
@@ -35,8 +35,8 @@
 ```json
 {
   "id": 7,
-  "image_url": "https://api.sakurassweets.asion.tk/images/7/",
-  "image": "https://api.sakurassweets.asion.tk/media/product_3/jk-placeholder-image_LOB0DLt.jpg",
+  "image_url": "https://api.sakurassweets.asion.dev/images/7/",
+  "image": "https://api.sakurassweets.asion.dev/media/product_3/jk-placeholder-image_LOB0DLt.jpg",
   "main_image": true,
   "related_to": 3
 }

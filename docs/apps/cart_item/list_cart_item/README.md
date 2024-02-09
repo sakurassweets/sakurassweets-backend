@@ -9,7 +9,7 @@
 **Permissions required**: `Allowed Anyone`
 
 ```
-  GET https://api.sakurassweets.asion.tk/cart-items/
+  GET https://api.sakurassweets.asion.dev/cart-items/
 ```
 
 **Response:**
@@ -22,16 +22,16 @@
   "results": [
     {
       "id": 49,
-      "product_url": "https://api.sakurassweets.asion.tk/products/1/",
-      "cart_item_url": "https://api.sakurassweets.asion.tk/cart-items/49/",
+      "product_url": "https://api.sakurassweets.asion.dev/products/1/",
+      "cart_item_url": "https://api.sakurassweets.asion.dev/cart-items/49/",
       "quantity": 100,
       "cart": 3,
       "product": "\"Мармелад Японський\""
     },
     {
       "id": 45,
-      "product_url": "https://api.sakurassweets.asion.tk/products/3/",
-      "cart_item_url": "https://api.sakurassweets.asion.tk/cart-items/45/",
+      "product_url": "https://api.sakurassweets.asion.dev/products/3/",
+      "cart_item_url": "https://api.sakurassweets.asion.dev/cart-items/45/",
       "quantity": 12,
       "cart": 1,
       "product": "Test"

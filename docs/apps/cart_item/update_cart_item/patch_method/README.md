@@ -9,7 +9,7 @@
 **Permissions required**: `Administrators and cart owner only`
 
 ```
-  PATCH https://api.sakurassweets.asion.tk/cart-items/{id}/
+  PATCH https://api.sakurassweets.asion.dev/cart-items/{id}/
 ```
 
 `PATCH` method allows you to change fields by sending only field that you wanna change and new value. For example:
@@ -45,8 +45,8 @@ In response you get all fields. For example:
 ```json
 {
   "id": 47,
-  "product_url": "https://api.sakurassweets.asion.tk/cart-items/products/1/",
-  "cart_item_url": "https://api.sakurassweets.asion.tk/cart-items/cart-items/47/",
+  "product_url": "https://api.sakurassweets.asion.dev/cart-items/products/1/",
+  "cart_item_url": "https://api.sakurassweets.asion.dev/cart-items/cart-items/47/",
   "quantity": 20,
   "cart": 1,
   "product": "\"Мармелад Японський\""

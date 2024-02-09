@@ -9,7 +9,7 @@
 **Permissions required**: `Administrators and Staff only`
 
 ```
-  PUT/PATCH https://api.sakurassweets.asion.tk/product-types/{id}/
+  PUT/PATCH https://api.sakurassweets.asion.dev/product-types/{id}/
 ```
 
 Since product type has only one field and it's **required**, there's no sense to split PUT and PATCH methods. But recommended to choose proper method for you because changes in fields of product type can affect your requests.

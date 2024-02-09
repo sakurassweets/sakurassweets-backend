@@ -9,7 +9,7 @@
 **Permissions required**: `Allowed Anyone`
 
 ```
-  GET https://api.sakurassweets.asion.tk/price-currencies/
+  GET https://api.sakurassweets.asion.dev/price-currencies/
 ```
 
 **Response:**
@@ -22,14 +22,14 @@
   "results": [
     {
       "id": 6,
-      "price_currency_url": "https://api.sakurassweets.asion.tk/price-currencies/6/",
+      "price_currency_url": "https://api.sakurassweets.asion.dev/price-currencies/6/",
       "currency_symbol": "$",
       "currency": "USD",
       "country": "USA"
     },
     {
       "id": 1,
-      "price_currency_url": "https://api.sakurassweets.asion.tk/price-currencies/1/",
+      "price_currency_url": "https://api.sakurassweets.asion.dev/price-currencies/1/",
       "currency_symbol": "₴",
       "currency": "UAH",
       "country": "ukraine"

@@ -9,7 +9,7 @@
 **Permissions required**: `Administrators and Staff only`
 
 ```
-  PUT https://api.sakurassweets.asion.tk/products/{id}/
+  PUT https://api.sakurassweets.asion.dev/products/{id}/
 ```
 
 `PUT` method enforce you to send all **required** fields even if you don't change them.
