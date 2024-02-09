@@ -1,9 +1,6 @@
 from django.core.cache import cache
 
 from components.general.constants import CACHE_KEY_REGEX
-import logging
-
-logger = logging.getLogger('django')
 
 
 def delete_keys_with_prefix(prefix: str, pk: str) -> None:
@@ -32,6 +29,5 @@ def delete_keys_with_prefix(prefix: str, pk: str) -> None:
                 continue
             if match_dict["pk"] and (not match_dict["pk"] == pk):
                 continue
-            logger.warn(f"############ DELETED KEY: // {key} //")
             cache.delete(key)
             deleted_keys.add(key)
