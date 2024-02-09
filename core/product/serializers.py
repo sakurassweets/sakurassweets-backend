@@ -61,7 +61,7 @@ class ProductSerializer(serializers.ModelSerializer):
         representation = super().to_representation(instance)
         __currency = instance.price_currency
         __product_type = instance.product_type
-        representation['discount'] = f'{instance.discount} %'
+        representation['discount'] = f'{instance.discount}%'
         representation['product_type'] = 'UNDEFINED' if __product_type is None else __product_type.title
         representation['price_currency'] = 'UNDEFINED' if __currency is None else __currency.currency
         representation['price_currency_symbol'] = 'UNDEFINED' if __currency is None else __currency.currency_symbol

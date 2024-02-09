@@ -1,3 +1,5 @@
+from django.db.models import Count
+
 from rest_framework import filters
 from django_filters.rest_framework.backends import DjangoFilterBackend
 
@@ -18,7 +20,7 @@ class PriceCurrencyViewset(CacheModelViewSet):
 
 
 class ProductTypeViewset(CacheModelViewSet):
-    queryset = ProductType.objects.all()
+    queryset = ProductType.objects.annotate(num_products=Count('products')).order_by('-num_products')  # NOQA
     cache_key = "product_type"
     timeout = 60 * 60 * 12
     serializer_class = serializers.ProductTypeSerializer
@@ -37,7 +39,7 @@ class ProductViewset(CacheModelViewSet):
         filters.OrderingFilter,
         DjangoFilterBackend,
     ]
-    filterset_class = ProductFilter
+    filterset_class = ProductFilter  # Custom filter
     filterset_fields = [
         "product_type", "price_currency", "price", "quantity_in_stock", "rating"
     ]

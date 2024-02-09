@@ -10,9 +10,6 @@ class ProductType(models.Model):
     def __str__(self):
         return f'ID: {self.id} | Type: {self.title}'
 
-    class Meta:
-        ordering = ['-id']
-
 
 class PriceCurrency(models.Model):
     currency_symbol = models.CharField('Валютний символ',
@@ -46,7 +43,8 @@ class Product(models.Model):
                                      verbose_name='Тип продукту',
                                      on_delete=models.SET_NULL,
                                      blank=False,
-                                     null=True,)
+                                     null=True,
+                                     related_name='products')
     description = models.TextField('Опис', max_length=6000, default='', blank=True, null=False)  # NOQA
     quantity_in_stock = models.PositiveIntegerField('Кількість на складі', blank=False, null=False)  # NOQA
     product_quantity = models.CharField('Обсяг продукту', max_length=255, blank=False, null=False)  # NOQA
