@@ -2,9 +2,10 @@ from rest_framework import filters
 from django_filters.rest_framework.backends import DjangoFilterBackend
 
 from components.product import permissions as custom_permissions
+from components.general.caching.viewsets import CacheModelViewSet
 
 from product.models import Product, ProductType, PriceCurrency
-from components.general.caching.viewsets import CacheModelViewSet
+from product.custom_filters import ProductFilter
 from product import serializers
 
 
@@ -34,8 +35,9 @@ class ProductViewset(CacheModelViewSet):
     filter_backends = [
         filters.SearchFilter,
         filters.OrderingFilter,
-        DjangoFilterBackend
+        DjangoFilterBackend,
     ]
+    filterset_class = ProductFilter
     filterset_fields = [
         "product_type", "price_currency", "price", "quantity_in_stock", "rating"
     ]

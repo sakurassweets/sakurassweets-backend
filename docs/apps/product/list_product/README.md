@@ -9,7 +9,7 @@
 **Permissions required**: `Allowed Anyone`
 
 ```
-  GET https://api.sakurassweets.asion.tk/products/
+  GET https://api.sakurassweets.asion.dev/products/
 ```
 
 **Filters:**
@@ -20,7 +20,7 @@
   - **Usage:**
 
   ```
-  GET https://api.sakurassweets.asion.tk/products/?rating=5
+  GET https://api.sakurassweets.asion.dev/products/?rating=5
   ```
 
   > will add in future ability to search by gt, gte, lt, lte (greater/lower than | or equal)
@@ -32,7 +32,16 @@
   - **Usage:**
 
   ```
-  GET https://api.sakurassweets.asion.tk/products/?search=mochi
+  GET https://api.sakurassweets.asion.dev/products/?search=mochi
+  ```
+
+- **Greater/lower than equals filter:**
+  - Filtering by greater/lower than equals method.
+  - **Filter fields:** `price`, `rating`, `quantity_in_stock`
+  - **Usage:** `{field}__lte` (lower than equals) or `{field}__gte` (greater than equals)
+
+  ```
+  GET https://api.sakurassweets.asion.dev/products/?price__lte=2000
   ```
 
 - **Ordering filter:**
@@ -41,7 +50,7 @@
   - **Usage:**
 
   ```
-  GET https://api.sakurassweets.asion.tk/products/?ordering=-rating
+  GET https://api.sakurassweets.asion.dev/products/?ordering=-rating
   ```
 
   - All field can be searched like `id` or `-id`. `-` means in reverse order. For exaple: in `id` case - from newer to older, in `price` case - from higher to lower
@@ -56,12 +65,12 @@
   "results": [
     {
       "id": 2,
-      "product_url": "https://api.sakurassweets.asion.tk/products/2/",
+      "product_url": "https://api.sakurassweets.asion.dev/products/2/",
       "product_type": "Мармелад",
       "price_currency": "UAH",
       "images": [
         {
-          "image": "https://api.sakurassweets.asion.tk/media/product_2/jk-placeholder-image.jpg"
+          "image": "https://api.sakurassweets.asion.dev/media/product_2/jk-placeholder-image.jpg"
         }
       ],
       "title": "123123122233asd222",
@@ -76,12 +85,12 @@
     },
     {
       "id": 1,
-      "product_url": "https://api.sakurassweets.asion.tk/products/1/",
+      "product_url": "https://api.sakurassweets.asion.dev/products/1/",
       "product_type": "Мармелад",
       "price_currency": "UAH",
       "images": [
         {
-          "image": "https://api.sakurassweets.asion.tk/media/product_1/jk-placeholder-image.jpg"
+          "image": "https://api.sakurassweets.asion.dev/media/product_1/jk-placeholder-image.jpg"
         }
       ],
       "title": "\"Мармелад Японський\"",
