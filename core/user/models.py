@@ -29,7 +29,7 @@ class CustomUserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-    email = models.CharField("Email", unique=True, validators=[])
+    email = models.CharField("Email", max_length=128, unique=True, validators=[])
     password = models.CharField("Пароль", max_length=128)
 
     created_at = models.DateTimeField("Створено", auto_now_add=True)

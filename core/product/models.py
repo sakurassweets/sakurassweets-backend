@@ -28,7 +28,7 @@ class PriceCurrency(models.Model):
 
 
 class Product(models.Model):
-    title = models.CharField('Назва', max_length=255, blank=False, null=False)
+    title = models.CharField('Назва', max_length=70, blank=False, null=False)
     price = models.DecimalField('Ціна',
                                 max_digits=8,
                                 decimal_places=2,
@@ -45,12 +45,12 @@ class Product(models.Model):
                                      blank=False,
                                      null=True,
                                      related_name='products')
-    description = models.TextField('Опис', max_length=6000, default='', blank=True, null=False)  # NOQA
+    description = models.TextField('Опис', max_length=500, default='', blank=True, null=False)  # NOQA
     quantity_in_stock = models.PositiveIntegerField('Кількість на складі', blank=False, null=False)  # NOQA
     product_quantity = models.CharField('Обсяг продукту', max_length=255, blank=False, null=False)  # NOQA
     discount = models.PositiveSmallIntegerField('Знижка', default=0, blank=True, null=True)  # NOQA
     rating = models.FloatField('Рейтинг', default=0, blank=True, null=True)
-    components = models.TextField('Склад', default='', blank=True, null=True)
+    components = models.TextField('Склад', max_length=500, default='', blank=True, null=True)
 
     def __str__(self):
         _title = self.title
