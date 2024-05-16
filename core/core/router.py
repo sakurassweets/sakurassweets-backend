@@ -18,6 +18,7 @@ from product.views import (
     ProductTypeViewset
 )
 from cart.views import CartViewSet, CartItemViewSet
+from product_rating.views import RatingViewSet
 
 
 router = DefaultRouter()
@@ -30,6 +31,7 @@ router.register(r'price-currencies', PriceCurrencyViewset,
 router.register(r'images', ImageViewSet, basename='image')
 router.register(r'carts', CartViewSet, basename='cart')
 router.register(r'cart-items', CartItemViewSet, basename='cart-item')
+router.register(r'ratings', RatingViewSet, basename='rating')
 
 urlpatterns = [
     path('', include(router.urls)),

@@ -1,3 +1,4 @@
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 
 
@@ -49,7 +50,16 @@ class Product(models.Model):
     quantity_in_stock = models.PositiveIntegerField('Кількість на складі', blank=False, null=False)  # NOQA
     product_quantity = models.CharField('Обсяг продукту', max_length=255, blank=False, null=False)  # NOQA
     discount = models.PositiveSmallIntegerField('Знижка', default=0, blank=True, null=True)  # NOQA
-    rating = models.FloatField('Рейтинг', default=0, blank=True, null=True)
+    rating = models.FloatField(
+        'Рейтинг',
+        default=0,
+        blank=True,
+        null=True,
+        validators=[
+            MinValueValidator(1.0),
+            MaxValueValidator(5.0)
+        ]
+    )
     components = models.TextField('Склад', max_length=500, default='', blank=True, null=True)
 
     def __str__(self):
