@@ -52,15 +52,16 @@ class Product(models.Model):
     discount = models.PositiveSmallIntegerField('Знижка', default=0, blank=True, null=True)  # NOQA
     rating = models.FloatField(
         'Рейтинг',
-        default=0,
+        default=0.0,
         blank=True,
         null=True,
         validators=[
-            MinValueValidator(1.0),
+            MinValueValidator(0.0),
             MaxValueValidator(5.0)
         ]
     )
     components = models.TextField('Склад', max_length=500, default='', blank=True, null=True)
+    manufacturer = models.CharField('Виробник', max_length=100, blank=False, null=False)
 
     def __str__(self):
         _title = self.title
