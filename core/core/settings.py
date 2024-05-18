@@ -73,6 +73,7 @@ INSTALLED_APPS = [
     'product.apps.ProductConfig',
     'image.apps.ImageConfig',
     'cart.apps.CartConfig',
+    'product_rating.apps.ProductRatingConfig',
 
     # REST Framework
     'rest_framework',
