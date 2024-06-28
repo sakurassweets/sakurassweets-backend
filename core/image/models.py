@@ -21,5 +21,11 @@ class Image(models.Model):
     def __str__(self):
         return f'ID: {self.id} | Related to: {self.related_to.title} | Filename: {self.image.name}'
 
+    def get_name(self):
+        return self.image.name
+
+    def set_main_image(self, value: bool):
+        self.main_image = value
+
     class Meta:
         ordering = ['-id']

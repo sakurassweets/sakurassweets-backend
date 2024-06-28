@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 
@@ -62,6 +63,7 @@ class Product(models.Model):
     )
     components = models.TextField('Склад', max_length=500, default='', blank=True, null=True)
     manufacturer = models.CharField('Виробник', max_length=100, blank=False, null=False)
+    is_published = models.BooleanField('Опубліковано', default=False, null=False, blank=False)
 
     def __str__(self):
         _title = self.title
@@ -73,6 +75,23 @@ class Product(models.Model):
             _title = f'{_title}"'
 
         return f'ID: {self.id} | Title: {_title}'
+
+    # def clean(self):
+    #     # This method is kept for any non-DB dependent validation
+    #     pass
+
+    # def validate_related_objects(self):
+    #     if self.is_published:
+    #         images = self.image_set.all()
+    #         has_main_image = images.filter(main_image=True).exists()
+    #         if not images.exists() or not has_main_image:
+    #             self.is_published = False
+    #             self.save()
+
+    def save(self, *args, **kwargs):
+        self.full_clean()  # This will call the clean method
+        super().save(*args, **kwargs)
+        # self.validate_related_objects()
 
     class Meta:
         ordering = ['-id']
