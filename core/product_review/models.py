@@ -12,7 +12,7 @@ def validate_rating(value):
         raise ValidationError('Rating must be 1, 2, 3, 4, or 5')
 
 
-class ProductRating(models.Model):
+class ProductReview(models.Model):
     RATING_CHOICES = (
         (1, '1'),
         (2, '2'),
@@ -35,15 +35,15 @@ class ProductRating(models.Model):
         choices=RATING_CHOICES,
         validators=[MinValueValidator(1), MaxValueValidator(5)]
     )
-    opinion = models.TextField(verbose_name='Відгук', null=True, blank=True, max_length=500)
+    text = models.TextField(verbose_name='Відгук', null=True, blank=True, max_length=500)
 
     def save(self, *args, **kwargs):
-        super(ProductRating, self).save(*args, **kwargs)
+        super(ProductReview, self).save(*args, **kwargs)
         self.update_product_rating()
 
     def update_product_rating(self):
         product = self.product
-        ratings = ProductRating.objects.filter(product=product)
+        ratings = ProductReview.objects.filter(product=product)
         avg_product_rating = ratings.aggregate(Avg("rating"))['rating__avg']
 
         if avg_product_rating is not None:

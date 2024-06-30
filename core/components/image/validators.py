@@ -1,11 +1,12 @@
 from rest_framework.request import Request
+# from image.models import Image
 
 
 class UpdateImageValidator:
     error_messages = {
-        "required_fields": "This field is required."
+        "required_fields": "This field is required.",
     }
-    REQUIRED_FIELDS = ['image', 'main_image', 'related_to']
+    REQUIRED_FIELDS = ['image', 'related_to']
 
     def __init__(self, request: Request):
         self.request = request

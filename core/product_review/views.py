@@ -1,7 +1,8 @@
 from rest_framework import viewsets
-from .serializers import RatingListSerializer
+from .serializers import ReviewListSerializer
+from components.review import permissions as custom_permissions
 
-from .models import ProductRating
+from .models import ProductReview
 
 
 """
@@ -15,7 +16,8 @@ For future development # NOQA
 #     product.save()  # Save the updated product rating
 
 
-class RatingViewSet(viewsets.ModelViewSet):
-    queryset = ProductRating.objects.select_related('product').prefetch_related('user')
-    serializer_class = RatingListSerializer
+class ReviewViewSet(viewsets.ModelViewSet):
+    queryset = ProductReview.objects.select_related('product').prefetch_related('user')
+    serializer_class = ReviewListSerializer
+    permission_classes = [custom_permissions.IsReviewOwnerOrStaff]
 

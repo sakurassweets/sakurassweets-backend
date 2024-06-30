@@ -24,10 +24,11 @@ class PriceCurrencySerializer(serializers.ModelSerializer):
 
 class _CustomImageSerializer(ImageSerializer):
     """Provides only `image` field of `Image` model."""
+    image_url = serializers.HyperlinkedIdentityField(view_name='image-detail')
 
     class Meta(ImageSerializer.Meta):
         model = Image
-        fields = ['image']
+        fields = ['image', 'image_url', 'main_image']
 
 
 class ProductSerializer(serializers.ModelSerializer):
