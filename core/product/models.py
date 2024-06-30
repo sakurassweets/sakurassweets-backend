@@ -76,18 +76,6 @@ class Product(models.Model):
 
         return f'ID: {self.id} | Title: {_title}'
 
-    # def clean(self):
-    #     # This method is kept for any non-DB dependent validation
-    #     pass
-
-    # def validate_related_objects(self):
-    #     if self.is_published:
-    #         images = self.image_set.all()
-    #         has_main_image = images.filter(main_image=True).exists()
-    #         if not images.exists() or not has_main_image:
-    #             self.is_published = False
-    #             self.save()
-
     def save(self, *args, **kwargs):
         self.full_clean()  # This will call the clean method
         super().save(*args, **kwargs)
