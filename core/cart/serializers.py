@@ -2,12 +2,13 @@ from collections import OrderedDict
 
 from rest_framework import serializers
 
-from cart.models import Cart, CartItem
+from .models import Cart, CartItem
 
 
 class CartItemSerializer(serializers.ModelSerializer):
     product_url = serializers.HyperlinkedRelatedField(view_name='product-detail', read_only=True, source='product')  # NOQA
     cart_item_url = serializers.HyperlinkedIdentityField(view_name='cart-item-detail')  # NOQA
+    cart = serializers.PrimaryKeyRelatedField(queryset=Cart.objects.select_related('cart_owner'), many=False)
 
     class Meta:
         model = CartItem

@@ -9,7 +9,7 @@ from components.general.caching.viewsets import CacheModelViewSet
 
 
 class ImageViewSet(CacheModelViewSet):
-    queryset = Image.objects.all()
+    queryset = Image.objects.select_related('related_to').all()
     cache_key = "image"
     timeout = 60 * 5
     serializer_class = ImageSerializer
