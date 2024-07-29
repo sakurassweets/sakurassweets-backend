@@ -5,7 +5,7 @@ from .models import Product
 
 
 @receiver(post_save, sender=Product)
-def ensure_product_has_main_image(sender, instance, **kwargs):
+def ensure_published_product_has_main_image(sender, instance, **kwargs):
     if instance.is_published:
         product_images = instance.image_set.all()
         has_images = product_images.exists()
