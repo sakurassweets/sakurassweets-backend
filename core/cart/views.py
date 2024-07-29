@@ -4,7 +4,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.request import Request
 
 from cart.serializers import CartSerializer, CartItemSerializer
-from cart.models import Cart, CartItem
+from .models import Cart, CartItem
 from components.cart.validators import (
     CreateCartItemValidator,
     CreateCartValidator,
@@ -26,7 +26,7 @@ def _perform_validation(validator):
 
 
 class CartViewSet(CacheModelViewSet):
-    queryset = Cart.objects.all()
+    queryset = Cart.objects.select_related('cart_owner').prefetch_related('cartitem_set__product', 'cartitem_set')
     cache_key = "cart"
     timeout = 60 * 2
     serializer_class = CartSerializer
@@ -50,7 +50,7 @@ class CartViewSet(CacheModelViewSet):
 
 
 class CartItemViewSet(CacheModelViewSet):
-    queryset = CartItem.objects.all()
+    queryset = CartItem.objects.select_related('product', 'cart')
     cache_key = "cart_item"
     timeout = 60 * 2
     serializer_class = CartItemSerializer

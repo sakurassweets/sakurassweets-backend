@@ -28,7 +28,7 @@ class ProductTypeViewset(CacheModelViewSet):
 
 
 class ProductViewset(CacheModelViewSet):
-    queryset = Product.objects.all()
+    queryset = Product.objects.select_related('product_type', 'price_currency').prefetch_related('image_set').all()
     cache_key = "product"
     timeout = 25
     serializer_class = serializers.ProductSerializer

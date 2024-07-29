@@ -35,7 +35,8 @@ class Product(models.Model):
                                 max_digits=8,
                                 decimal_places=2,
                                 blank=False,
-                                null=False)
+                                null=False,
+                                validators=[MinValueValidator(0.01)])
     price_currency = models.ForeignKey(PriceCurrency,
                                        verbose_name='Валюта',
                                        on_delete=models.SET_NULL,
