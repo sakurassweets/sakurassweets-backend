@@ -2,7 +2,7 @@ from collections import OrderedDict
 
 from rest_framework import serializers
 
-from .models import Cart, CartItem
+from cart.models import Cart, CartItem
 
 
 class CartItemSerializer(serializers.ModelSerializer):

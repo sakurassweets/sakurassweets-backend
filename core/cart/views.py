@@ -4,7 +4,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.request import Request
 
 from cart.serializers import CartSerializer, CartItemSerializer
-from .models import Cart, CartItem
+from cart.models import Cart, CartItem
 from components.cart.validators import (
     CreateCartItemValidator,
     CreateCartValidator,
